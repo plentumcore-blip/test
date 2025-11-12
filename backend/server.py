@@ -252,7 +252,7 @@ async def get_current_user(request: Request):
     except JWTError:
         raise HTTPException(status_code=401, detail="Invalid token")
 
-async def require_role(allowed_roles: List[UserRole]):
+def require_role(allowed_roles: List[UserRole]):
     async def role_checker(user: dict = Depends(get_current_user)):
         if user["role"] not in [r.value for r in allowed_roles]:
             raise HTTPException(status_code=403, detail="Insufficient permissions")
