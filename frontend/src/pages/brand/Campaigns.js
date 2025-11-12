@@ -115,13 +115,22 @@ export default function BrandCampaigns() {
                       </div>
                     </div>
                   </div>
-                  <button
-                    data-testid={`view-applications-btn-${campaign.id}`}
-                    onClick={() => navigate(`/brand/campaigns/${campaign.id}/applications`)}
-                    className="btn-secondary"
-                  >
-                    View Applications
-                  </button>
+                  <div className="flex flex-col gap-2">
+                    <button
+                      data-testid={`view-applications-btn-${campaign.id}`}
+                      onClick={() => navigate(`/brand/campaigns/${campaign.id}/applications`)}
+                      className="btn-secondary text-sm"
+                    >
+                      View Applications
+                    </button>
+                    <button
+                      data-testid={`edit-landing-page-btn-${campaign.id}`}
+                      onClick={() => navigate(`/brand/campaigns/${campaign.id}/landing-page`)}
+                      className="btn-secondary text-sm"
+                    >
+                      Landing Page
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}
