@@ -112,6 +112,13 @@ class BrandMemberRole(str, Enum):
     ADMIN = "admin"
     MEMBER = "member"
 
+class PayoutStatus(str, Enum):
+    PENDING = "pending"
+    PROCESSING = "processing"
+    PAID = "paid"
+    FAILED = "failed"
+    CANCELLED = "cancelled"
+
 # Models
 class User(BaseModel):
     model_config = ConfigDict(extra="ignore")
