@@ -1,34 +1,116 @@
-.App-logo {
-    height: 40vmin;
-    pointer-events: none;
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-    .App-logo {
-        animation: App-logo-spin infinite 20s linear;
-    }
+body {
+  font-family: 'Inter', sans-serif;
+  background: #FFFFFF;
+  color: #0B1220;
+  line-height: 1.6;
 }
 
-.App-header {
-    background-color: #0f0f10;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: calc(10px + 2vmin);
-    color: white;
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Space Grotesk', sans-serif;
 }
 
-.App-link {
-    color: #61dafb;
+.gradient-primary {
+  background: linear-gradient(135deg, #1F66FF 0%, #0E2C7E 100%);
 }
 
-@keyframes App-logo-spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
+.gradient-light {
+  background: linear-gradient(135deg, #E8F1FF 0%, #FFFFFF 100%);
+}
+
+.btn-primary {
+  background: #1F66FF;
+  color: #FFFFFF;
+  padding: 0.75rem 1.5rem;
+  border-radius: 16px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(31, 102, 255, 0.2);
+}
+
+.btn-primary:hover {
+  background: #0E2C7E;
+  box-shadow: 0 6px 20px rgba(31, 102, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  background: #E8F1FF;
+  color: #1F66FF;
+  padding: 0.75rem 1.5rem;
+  border-radius: 16px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+  background: #d0e3ff;
+}
+
+.card {
+  background: #FFFFFF;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(11, 18, 32, 0.08);
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  box-shadow: 0 8px 24px rgba(11, 18, 32, 0.12);
+}
+
+.input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 2px solid #E8F1FF;
+  border-radius: 16px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background: #FFFFFF;
+  color: #0B1220;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #1F66FF;
+  box-shadow: 0 0 0 3px rgba(31, 102, 255, 0.1);
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.badge-success {
+  background: rgba(18, 183, 106, 0.1);
+  color: #12B76A;
+}
+
+.badge-warning {
+  background: rgba(247, 144, 9, 0.1);
+  color: #F79009;
+}
+
+.badge-error {
+  background: rgba(217, 45, 32, 0.1);
+  color: #D92D20;
+}
+
+.badge-primary {
+  background: rgba(31, 102, 255, 0.1);
+  color: #1F66FF;
 }
