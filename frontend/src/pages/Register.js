@@ -35,7 +35,7 @@ export default function Register() {
       // Navigate based on role
       if (role === 'admin') navigate('/admin/dashboard');
       else if (role === 'brand') navigate('/brand/dashboard');
-      else if (role === 'influencer') navigate('/influencer/dashboard');
+      else if (role === 'influencer') navigate('/influencer/profile-setup');
     } catch (error) {
       toast.error(error.response?.data?.detail || 'Registration failed');
     } finally {
