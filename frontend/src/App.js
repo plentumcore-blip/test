@@ -178,6 +178,14 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/influencer/payouts"
+            element={
+              <ProtectedRoute allowedRoles={['influencer']}>
+                <InfluencerPayouts />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
         <Toaster position="top-right" richColors />
       </BrowserRouter>
