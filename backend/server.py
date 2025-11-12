@@ -1,15 +1,23 @@
-from fastapi import FastAPI, APIRouter
-from dotenv import load_dotenv
+from fastapi import FastAPI, APIRouter, HTTPException, Depends, Response, Request, status, Query, UploadFile, File
+from fastapi.responses import RedirectResponse, StreamingResponse
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
+from dotenv import load_dotenv
+from pathlib import Path
+from pydantic import BaseModel, Field, ConfigDict, EmailStr, field_validator
+from typing import List, Optional, Dict, Any
+from datetime import datetime, timezone, timedelta
+from jose import JWTError, jwt
+from passlib.context import CryptContext
 import os
 import logging
-from pathlib import Path
-from pydantic import BaseModel, Field, ConfigDict
-from typing import List
 import uuid
-from datetime import datetime, timezone
-
+import hashlib
+import io
+import csv
+from enum import Enum
+import re
+import aiofiles
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -19,54 +27,782 @@ mongo_url = os.environ['MONGO_URL']
 client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ['DB_NAME']]
 
-# Create the main app without a prefix
-app = FastAPI()
+# Security
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+SECRET_KEY = os.environ.get('JWT_SECRET', 'your-secret-key-change-in-production')
+ALGORITHM = "HS256"
+ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7  # 7 days
+IP_HASH_SALT = os.environ.get('IP_HASH_SALT', 'salt-for-ip-hashing')
 
-# Create a router with the /api prefix
-api_router = APIRouter(prefix="/api")
+# Storage
+STORAGE_DIR = Path("/app/storage")
+STORAGE_DIR.mkdir(exist_ok=True)
+(STORAGE_DIR / "screenshots").mkdir(exist_ok=True)
+(STORAGE_DIR / "emails").mkdir(exist_ok=True)
 
+# Enums
+class UserRole(str, Enum):
+    ADMIN = "admin"
+    BRAND = "brand"
+    INFLUENCER = "influencer"
 
-# Define Models
-class StatusCheck(BaseModel):
-    model_config = ConfigDict(extra="ignore")  # Ignore MongoDB's _id field
-    
+class UserStatus(str, Enum):
+    PENDING = "pending"
+    ACTIVE = "active"
+    SUSPENDED = "suspended"
+    DELETED = "deleted"
+
+class BrandStatus(str, Enum):
+    PENDING = "pending"
+    APPROVED = "approved"
+    REJECTED = "rejected"
+
+class InfluencerStatus(str, Enum):
+    PENDING = "pending"
+    APPROVED = "approved"
+    REJECTED = "rejected"
+
+class CampaignStatus(str, Enum):
+    DRAFT = "draft"
+    PUBLISHED = "published"
+    LIVE = "live"
+    CLOSED = "closed"
+
+class ApplicationStatus(str, Enum):
+    APPLIED = "applied"
+    SHORTLISTED = "shortlisted"
+    ACCEPTED = "accepted"
+    DECLINED = "declined"
+
+class AssignmentStatus(str, Enum):
+    PURCHASE_REQUIRED = "purchase_required"
+    PURCHASE_REVIEW = "purchase_review"
+    PURCHASE_APPROVED = "purchase_approved"
+    POSTING = "posting"
+    COMPLETED = "completed"
+
+class PurchaseProofStatus(str, Enum):
+    PENDING = "pending"
+    UNDER_REVIEW = "under_review"
+    APPROVED = "approved"
+    CHANGES_REQUESTED = "changes_requested"
+    REJECTED = "rejected"
+
+class DeliverableType(str, Enum):
+    POST = "post"
+    STORY = "story"
+    REEL = "reel"
+    VIDEO = "video"
+
+class SocialPlatform(str, Enum):
+    INSTAGRAM = "instagram"
+    YOUTUBE = "youtube"
+    TIKTOK = "tiktok"
+    TWITTER = "twitter"
+
+class ReviewStatus(str, Enum):
+    PENDING = "pending"
+    UNDER_REVIEW = "under_review"
+    APPROVED = "approved"
+    CHANGES_REQUESTED = "changes_requested"
+    REJECTED = "rejected"
+
+class BrandMemberRole(str, Enum):
+    OWNER = "owner"
+    ADMIN = "admin"
+    MEMBER = "member"
+
+# Models
+class User(BaseModel):
+    model_config = ConfigDict(extra="ignore")
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
-    client_name: str
-    timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    email: EmailStr
+    password_hash: str
+    role: UserRole
+    status: UserStatus = UserStatus.PENDING
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    deleted_at: Optional[datetime] = None
 
-class StatusCheckCreate(BaseModel):
-    client_name: str
-
-# Add your routes to the router instead of directly to app
-@api_router.get("/")
-async def root():
-    return {"message": "Hello World"}
-
-@api_router.post("/status", response_model=StatusCheck)
-async def create_status_check(input: StatusCheckCreate):
-    status_dict = input.model_dump()
-    status_obj = StatusCheck(**status_dict)
+class UserRegister(BaseModel):
+    email: EmailStr
+    password: str
+    role: UserRole
     
-    # Convert to dict and serialize datetime to ISO string for MongoDB
-    doc = status_obj.model_dump()
-    doc['timestamp'] = doc['timestamp'].isoformat()
-    
-    _ = await db.status_checks.insert_one(doc)
-    return status_obj
+class UserLogin(BaseModel):
+    email: EmailStr
+    password: str
 
-@api_router.get("/status", response_model=List[StatusCheck])
-async def get_status_checks():
-    # Exclude MongoDB's _id field from the query results
-    status_checks = await db.status_checks.find({}, {"_id": 0}).to_list(1000)
-    
-    # Convert ISO string timestamps back to datetime objects
-    for check in status_checks:
-        if isinstance(check['timestamp'], str):
-            check['timestamp'] = datetime.fromisoformat(check['timestamp'])
-    
-    return status_checks
+class Brand(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    user_id: str
+    company_name: str
+    website: Optional[str] = None
+    description: Optional[str] = None
+    logo_url: Optional[str] = None
+    status: BrandStatus = BrandStatus.PENDING
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
-# Include the router in the main app
+class Influencer(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    user_id: str
+    name: str
+    bio: Optional[str] = None
+    avatar_url: Optional[str] = None
+    status: InfluencerStatus = InfluencerStatus.PENDING
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class Campaign(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    brand_id: str
+    title: str
+    description: str
+    amazon_attribution_url: str
+    purchase_window_start: datetime
+    purchase_window_end: datetime
+    post_window_start: datetime
+    post_window_end: datetime
+    status: CampaignStatus = CampaignStatus.DRAFT
+    asin_allowlist: Optional[List[str]] = None
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    
+    @field_validator('amazon_attribution_url')
+    def validate_amazon_url(cls, v):
+        if not v:
+            raise ValueError('Amazon Attribution URL is required')
+        if not (re.search(r'amazon\.[a-z.]+', v.lower()) or 'amzn.to' in v.lower()):
+            raise ValueError('URL must be a valid Amazon link (amazon.* or amzn.to)')
+        return v
+
+class Assignment(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    campaign_id: str
+    influencer_id: str
+    application_id: str
+    status: AssignmentStatus = AssignmentStatus.PURCHASE_REQUIRED
+    amazon_attribution_url: Optional[str] = None  # Override campaign URL
+    redirect_token: str = Field(default_factory=lambda: str(uuid.uuid4()).replace('-', '')[:16])
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class PurchaseProof(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    assignment_id: str
+    order_id: str
+    order_date: datetime
+    asin: Optional[str] = None
+    total: Optional[float] = None
+    screenshot_urls: List[str] = []
+    status: PurchaseProofStatus = PurchaseProofStatus.PENDING
+    review_notes: Optional[str] = None
+    reviewed_by: Optional[str] = None
+    reviewed_at: Optional[datetime] = None
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class ClickLog(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    assignment_id: str
+    ip_hash: str
+    user_agent: Optional[str] = None
+    clicked_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+# Create app
+app = FastAPI()
+api_router = APIRouter(prefix="/api/v1")
+
+# Helper functions
+def hash_password(password: str) -> str:
+    return pwd_context.hash(password)
+
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    return pwd_context.verify(plain_password, hashed_password)
+
+def create_access_token(data: dict):
+    to_encode = data.copy()
+    expire = datetime.now(timezone.utc) + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    to_encode.update({"exp": expire})
+    return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+
+def hash_ip(ip: str) -> str:
+    return hashlib.sha256(f"{ip}{IP_HASH_SALT}".encode()).hexdigest()
+
+async def get_current_user(request: Request):
+    token = request.cookies.get("access_token")
+    if not token:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        user_id: str = payload.get("sub")
+        if user_id is None:
+            raise HTTPException(status_code=401, detail="Invalid token")
+        user = await db.users.find_one({"id": user_id, "deleted_at": None})
+        if user is None:
+            raise HTTPException(status_code=401, detail="User not found")
+        return user
+    except JWTError:
+        raise HTTPException(status_code=401, detail="Invalid token")
+
+async def require_role(allowed_roles: List[UserRole]):
+    async def role_checker(user: dict = Depends(get_current_user)):
+        if user["role"] not in [r.value for r in allowed_roles]:
+            raise HTTPException(status_code=403, detail="Insufficient permissions")
+        return user
+    return role_checker
+
+async def log_audit(user_id: str, action: str, entity_type: str, entity_id: str, details: dict = None):
+    audit_log = {
+        "id": str(uuid.uuid4()),
+        "user_id": user_id,
+        "action": action,
+        "entity_type": entity_type,
+        "entity_id": entity_id,
+        "details": details or {},
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
+    await db.audit_logs.insert_one(audit_log)
+
+# Auth Routes
+@api_router.post("/auth/register")
+async def register(user_data: UserRegister, response: Response):
+    # Check if user exists
+    existing = await db.users.find_one({"email": user_data.email, "deleted_at": None})
+    if existing:
+        raise HTTPException(status_code=400, detail="Email already registered")
+    
+    # Create user
+    user = User(
+        email=user_data.email,
+        password_hash=hash_password(user_data.password),
+        role=user_data.role,
+        status=UserStatus.ACTIVE if user_data.role == UserRole.ADMIN else UserStatus.PENDING
+    )
+    
+    doc = user.model_dump()
+    doc['created_at'] = doc['created_at'].isoformat()
+    doc['updated_at'] = doc['updated_at'].isoformat()
+    await db.users.insert_one(doc)
+    
+    # Create role-specific profile
+    if user_data.role == UserRole.BRAND:
+        brand = Brand(user_id=user.id, company_name=user_data.email.split('@')[0])
+        brand_doc = brand.model_dump()
+        brand_doc['created_at'] = brand_doc['created_at'].isoformat()
+        brand_doc['updated_at'] = brand_doc['updated_at'].isoformat()
+        await db.brands.insert_one(brand_doc)
+    elif user_data.role == UserRole.INFLUENCER:
+        influencer = Influencer(user_id=user.id, name=user_data.email.split('@')[0])
+        inf_doc = influencer.model_dump()
+        inf_doc['created_at'] = inf_doc['created_at'].isoformat()
+        inf_doc['updated_at'] = inf_doc['updated_at'].isoformat()
+        await db.influencers.insert_one(inf_doc)
+    
+    # Create token
+    access_token = create_access_token(data={"sub": user.id, "role": user.role.value})
+    response.set_cookie(
+        key="access_token",
+        value=access_token,
+        httponly=True,
+        max_age=ACCESS_TOKEN_EXPIRE_MINUTES * 60,
+        samesite="lax"
+    )
+    
+    return {"message": "Registration successful", "user": {"id": user.id, "email": user.email, "role": user.role}}
+
+@api_router.post("/auth/login")
+async def login(credentials: UserLogin, response: Response):
+    user = await db.users.find_one({"email": credentials.email, "deleted_at": None})
+    if not user or not verify_password(credentials.password, user["password_hash"]):
+        raise HTTPException(status_code=401, detail="Invalid credentials")
+    
+    if user["status"] == UserStatus.SUSPENDED:
+        raise HTTPException(status_code=403, detail="Account suspended")
+    
+    access_token = create_access_token(data={"sub": user["id"], "role": user["role"]})
+    response.set_cookie(
+        key="access_token",
+        value=access_token,
+        httponly=True,
+        max_age=ACCESS_TOKEN_EXPIRE_MINUTES * 60,
+        samesite="lax"
+    )
+    
+    return {"message": "Login successful", "user": {"id": user["id"], "email": user["email"], "role": user["role"]}}
+
+@api_router.post("/auth/logout")
+async def logout(response: Response):
+    response.delete_cookie(key="access_token")
+    return {"message": "Logged out"}
+
+@api_router.get("/auth/me")
+async def get_me(user: dict = Depends(get_current_user)):
+    user_data = {"id": user["id"], "email": user["email"], "role": user["role"], "status": user["status"]}
+    
+    # Get profile
+    if user["role"] == "brand":
+        brand = await db.brands.find_one({"user_id": user["id"]}, {"_id": 0})
+        user_data["profile"] = brand
+    elif user["role"] == "influencer":
+        influencer = await db.influencers.find_one({"user_id": user["id"]}, {"_id": 0})
+        user_data["profile"] = influencer
+    
+    return user_data
+
+# Campaigns
+@api_router.post("/campaigns")
+async def create_campaign(campaign_data: Dict[str, Any], user: dict = Depends(require_role([UserRole.BRAND]))):
+    brand = await db.brands.find_one({"user_id": user["id"]})
+    if not brand:
+        raise HTTPException(status_code=404, detail="Brand profile not found")
+    
+    campaign = Campaign(
+        brand_id=brand["id"],
+        title=campaign_data["title"],
+        description=campaign_data["description"],
+        amazon_attribution_url=campaign_data["amazon_attribution_url"],
+        purchase_window_start=datetime.fromisoformat(campaign_data["purchase_window_start"]),
+        purchase_window_end=datetime.fromisoformat(campaign_data["purchase_window_end"]),
+        post_window_start=datetime.fromisoformat(campaign_data["post_window_start"]),
+        post_window_end=datetime.fromisoformat(campaign_data["post_window_end"]),
+        asin_allowlist=campaign_data.get("asin_allowlist")
+    )
+    
+    doc = campaign.model_dump()
+    doc['purchase_window_start'] = doc['purchase_window_start'].isoformat()
+    doc['purchase_window_end'] = doc['purchase_window_end'].isoformat()
+    doc['post_window_start'] = doc['post_window_start'].isoformat()
+    doc['post_window_end'] = doc['post_window_end'].isoformat()
+    doc['created_at'] = doc['created_at'].isoformat()
+    doc['updated_at'] = doc['updated_at'].isoformat()
+    
+    await db.campaigns.insert_one(doc)
+    await log_audit(user["id"], "create", "campaign", campaign.id)
+    
+    return {"id": campaign.id, "message": "Campaign created"}
+
+@api_router.get("/campaigns")
+async def list_campaigns(
+    page: int = Query(1, ge=1),
+    page_size: int = Query(20, ge=1, le=100),
+    status: Optional[str] = None,
+    user: dict = Depends(get_current_user)
+):
+    skip = (page - 1) * page_size
+    query = {}
+    
+    if user["role"] == "brand":
+        brand = await db.brands.find_one({"user_id": user["id"]})
+        query["brand_id"] = brand["id"]
+    elif user["role"] == "influencer":
+        query["status"] = CampaignStatus.LIVE.value
+    
+    if status:
+        query["status"] = status
+    
+    campaigns = await db.campaigns.find(query, {"_id": 0}).skip(skip).limit(page_size).to_list(page_size)
+    total = await db.campaigns.count_documents(query)
+    
+    return {
+        "data": campaigns,
+        "page": page,
+        "page_size": page_size,
+        "total": total
+    }
+
+@api_router.get("/campaigns/{campaign_id}")
+async def get_campaign(campaign_id: str, user: dict = Depends(get_current_user)):
+    campaign = await db.campaigns.find_one({"id": campaign_id}, {"_id": 0})
+    if not campaign:
+        raise HTTPException(status_code=404, detail="Campaign not found")
+    return campaign
+
+@api_router.put("/campaigns/{campaign_id}/publish")
+async def publish_campaign(campaign_id: str, user: dict = Depends(require_role([UserRole.BRAND]))):
+    campaign = await db.campaigns.find_one({"id": campaign_id})
+    if not campaign:
+        raise HTTPException(status_code=404, detail="Campaign not found")
+    
+    brand = await db.brands.find_one({"user_id": user["id"]})
+    if campaign["brand_id"] != brand["id"]:
+        raise HTTPException(status_code=403, detail="Not authorized")
+    
+    await db.campaigns.update_one(
+        {"id": campaign_id},
+        {"$set": {"status": CampaignStatus.PUBLISHED.value, "updated_at": datetime.now(timezone.utc).isoformat()}}
+    )
+    
+    await log_audit(user["id"], "publish", "campaign", campaign_id)
+    return {"message": "Campaign published"}
+
+# Applications
+@api_router.post("/applications")
+async def apply_to_campaign(application_data: Dict[str, Any], user: dict = Depends(require_role([UserRole.INFLUENCER]))):
+    influencer = await db.influencers.find_one({"user_id": user["id"]})
+    if not influencer:
+        raise HTTPException(status_code=404, detail="Influencer profile not found")
+    
+    # Check if already applied
+    existing = await db.applications.find_one({
+        "campaign_id": application_data["campaign_id"],
+        "influencer_id": influencer["id"]
+    })
+    if existing:
+        raise HTTPException(status_code=400, detail="Already applied")
+    
+    application = {
+        "id": str(uuid.uuid4()),
+        "campaign_id": application_data["campaign_id"],
+        "influencer_id": influencer["id"],
+        "status": ApplicationStatus.APPLIED.value,
+        "answers": application_data.get("answers", {}),
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "updated_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    await db.applications.insert_one(application)
+    await log_audit(user["id"], "apply", "application", application["id"])
+    
+    return {"id": application["id"], "message": "Application submitted"}
+
+@api_router.get("/campaigns/{campaign_id}/applications")
+async def list_applications(
+    campaign_id: str,
+    user: dict = Depends(require_role([UserRole.BRAND, UserRole.ADMIN]))
+):
+    applications = await db.applications.find({"campaign_id": campaign_id}, {"_id": 0}).to_list(1000)
+    
+    # Enrich with influencer data
+    for app in applications:
+        influencer = await db.influencers.find_one({"id": app["influencer_id"]}, {"_id": 0})
+        app["influencer"] = influencer
+    
+    return {"data": applications}
+
+@api_router.put("/applications/{application_id}/status")
+async def update_application_status(
+    application_id: str,
+    status_data: Dict[str, Any],
+    user: dict = Depends(require_role([UserRole.BRAND]))
+):
+    application = await db.applications.find_one({"id": application_id})
+    if not application:
+        raise HTTPException(status_code=404, detail="Application not found")
+    
+    await db.applications.update_one(
+        {"id": application_id},
+        {"$set": {
+            "status": status_data["status"],
+            "notes": status_data.get("notes"),
+            "updated_at": datetime.now(timezone.utc).isoformat()
+        }}
+    )
+    
+    # Create assignment if accepted
+    if status_data["status"] == ApplicationStatus.ACCEPTED.value:
+        assignment = Assignment(
+            campaign_id=application["campaign_id"],
+            influencer_id=application["influencer_id"],
+            application_id=application_id
+        )
+        
+        assign_doc = assignment.model_dump()
+        assign_doc['created_at'] = assign_doc['created_at'].isoformat()
+        assign_doc['updated_at'] = assign_doc['updated_at'].isoformat()
+        await db.assignments.insert_one(assign_doc)
+    
+    await log_audit(user["id"], "update_status", "application", application_id, {"status": status_data["status"]})
+    return {"message": "Application updated"}
+
+# Assignments & Amazon Links
+@api_router.get("/assignments")
+async def list_assignments(
+    user: dict = Depends(get_current_user)
+):
+    query = {}
+    
+    if user["role"] == "influencer":
+        influencer = await db.influencers.find_one({"user_id": user["id"]})
+        query["influencer_id"] = influencer["id"]
+    elif user["role"] == "brand":
+        brand = await db.brands.find_one({"user_id": user["id"]})
+        campaigns = await db.campaigns.find({"brand_id": brand["id"]}, {"_id": 0, "id": 1}).to_list(1000)
+        campaign_ids = [c["id"] for c in campaigns]
+        query["campaign_id"] = {"$in": campaign_ids}
+    
+    assignments = await db.assignments.find(query, {"_id": 0}).to_list(1000)
+    
+    # Enrich
+    for assignment in assignments:
+        campaign = await db.campaigns.find_one({"id": assignment["campaign_id"]}, {"_id": 0})
+        assignment["campaign"] = campaign
+    
+    return {"data": assignments}
+
+@api_router.get("/assignments/{assignment_id}/amazon-link")
+async def get_amazon_link(assignment_id: str, user: dict = Depends(require_role([UserRole.INFLUENCER]))):
+    assignment = await db.assignments.find_one({"id": assignment_id})
+    if not assignment:
+        raise HTTPException(status_code=404, detail="Assignment not found")
+    
+    influencer = await db.influencers.find_one({"user_id": user["id"]})
+    if assignment["influencer_id"] != influencer["id"]:
+        raise HTTPException(status_code=403, detail="Not authorized")
+    
+    # Generate redirect URL
+    base_url = os.environ.get('REACT_APP_BACKEND_URL', 'http://localhost:8001')
+    redirect_url = f"{base_url}/a/{assignment['redirect_token']}"
+    
+    return {"redirect_url": redirect_url, "token": assignment["redirect_token"]}
+
+# Public redirect endpoint (no /api/v1 prefix)
+@app.get("/a/{token}")
+async def redirect_amazon(token: str, request: Request):
+    assignment = await db.assignments.find_one({"redirect_token": token})
+    if not assignment:
+        raise HTTPException(status_code=404, detail="Invalid link")
+    
+    # Log click
+    client_ip = request.client.host
+    user_agent = request.headers.get("user-agent", "")
+    
+    click_log = ClickLog(
+        assignment_id=assignment["id"],
+        ip_hash=hash_ip(client_ip),
+        user_agent=user_agent
+    )
+    
+    click_doc = click_log.model_dump()
+    click_doc['clicked_at'] = click_doc['clicked_at'].isoformat()
+    await db.amazon_click_logs.insert_one(click_doc)
+    
+    # Get Amazon URL
+    amazon_url = assignment.get("amazon_attribution_url")
+    if not amazon_url:
+        campaign = await db.campaigns.find_one({"id": assignment["campaign_id"]})
+        amazon_url = campaign["amazon_attribution_url"]
+    
+    return RedirectResponse(url=amazon_url, status_code=302)
+
+# Purchase Proofs
+@api_router.post("/assignments/{assignment_id}/purchase-proof")
+async def submit_purchase_proof(
+    assignment_id: str,
+    proof_data: Dict[str, Any],
+    user: dict = Depends(require_role([UserRole.INFLUENCER]))
+):
+    assignment = await db.assignments.find_one({"id": assignment_id})
+    if not assignment:
+        raise HTTPException(status_code=404, detail="Assignment not found")
+    
+    influencer = await db.influencers.find_one({"user_id": user["id"]})
+    if assignment["influencer_id"] != influencer["id"]:
+        raise HTTPException(status_code=403, detail="Not authorized")
+    
+    # Create purchase proof
+    purchase_proof = PurchaseProof(
+        assignment_id=assignment_id,
+        order_id=proof_data["order_id"],
+        order_date=datetime.fromisoformat(proof_data["order_date"]),
+        asin=proof_data.get("asin"),
+        total=proof_data.get("total"),
+        screenshot_urls=proof_data.get("screenshot_urls", [])
+    )
+    
+    proof_doc = purchase_proof.model_dump()
+    proof_doc['order_date'] = proof_doc['order_date'].isoformat()
+    proof_doc['created_at'] = proof_doc['created_at'].isoformat()
+    proof_doc['updated_at'] = proof_doc['updated_at'].isoformat()
+    
+    await db.purchase_proofs.insert_one(proof_doc)
+    
+    # Update assignment status
+    await db.assignments.update_one(
+        {"id": assignment_id},
+        {"$set": {"status": AssignmentStatus.PURCHASE_REVIEW.value, "updated_at": datetime.now(timezone.utc).isoformat()}}
+    )
+    
+    await log_audit(user["id"], "submit", "purchase_proof", purchase_proof.id)
+    
+    return {"id": purchase_proof.id, "message": "Purchase proof submitted"}
+
+@api_router.get("/purchase-proofs/{proof_id}")
+async def get_purchase_proof(proof_id: str, user: dict = Depends(get_current_user)):
+    proof = await db.purchase_proofs.find_one({"id": proof_id}, {"_id": 0})
+    if not proof:
+        raise HTTPException(status_code=404, detail="Purchase proof not found")
+    
+    # Mask order_id for non-owners
+    if user["role"] not in ["admin", "brand"]:
+        assignment = await db.assignments.find_one({"id": proof["assignment_id"]})
+        influencer = await db.influencers.find_one({"user_id": user["id"]})
+        if not influencer or assignment["influencer_id"] != influencer["id"]:
+            proof["order_id"] = "****" + proof["order_id"][-4:]
+    
+    return proof
+
+@api_router.put("/purchase-proofs/{proof_id}/review")
+async def review_purchase_proof(
+    proof_id: str,
+    review_data: Dict[str, Any],
+    user: dict = Depends(require_role([UserRole.BRAND, UserRole.ADMIN]))
+):
+    proof = await db.purchase_proofs.find_one({"id": proof_id})
+    if not proof:
+        raise HTTPException(status_code=404, detail="Purchase proof not found")
+    
+    await db.purchase_proofs.update_one(
+        {"id": proof_id},
+        {"$set": {
+            "status": review_data["status"],
+            "review_notes": review_data.get("notes"),
+            "reviewed_by": user["id"],
+            "reviewed_at": datetime.now(timezone.utc).isoformat(),
+            "updated_at": datetime.now(timezone.utc).isoformat()
+        }}
+    )
+    
+    # Update assignment if approved
+    if review_data["status"] == PurchaseProofStatus.APPROVED.value:
+        await db.assignments.update_one(
+            {"id": proof["assignment_id"]},
+            {"$set": {"status": AssignmentStatus.PURCHASE_APPROVED.value, "updated_at": datetime.now(timezone.utc).isoformat()}}
+        )
+    
+    await log_audit(user["id"], "review", "purchase_proof", proof_id, {"status": review_data["status"]})
+    
+    return {"message": "Purchase proof reviewed"}
+
+# Verification Queue
+@api_router.get("/verification-queue")
+async def get_verification_queue(
+    queue_type: str = Query(..., regex="^(purchase|post)$"),
+    status: Optional[str] = None,
+    user: dict = Depends(require_role([UserRole.ADMIN, UserRole.BRAND]))
+):
+    if queue_type == "purchase":
+        query = {}
+        if status:
+            query["status"] = status
+        else:
+            query["status"] = {"$in": [PurchaseProofStatus.PENDING.value, PurchaseProofStatus.UNDER_REVIEW.value]}
+        
+        proofs = await db.purchase_proofs.find(query, {"_id": 0}).to_list(1000)
+        return {"data": proofs}
+    
+    return {"data": []}
+
+# Reports & CSV
+@api_router.get("/reports/clicks")
+async def export_clicks_csv(user: dict = Depends(require_role([UserRole.BRAND, UserRole.ADMIN]))):
+    clicks = await db.amazon_click_logs.find({}, {"_id": 0}).to_list(10000)
+    
+    output = io.StringIO()
+    writer = csv.DictWriter(output, fieldnames=["id", "assignment_id", "ip_hash", "user_agent", "clicked_at"])
+    writer.writeheader()
+    writer.writerows(clicks)
+    
+    output.seek(0)
+    return StreamingResponse(
+        io.BytesIO(output.getvalue().encode()),
+        media_type="text/csv",
+        headers={"Content-Disposition": "attachment; filename=clicks.csv"}
+    )
+
+# Admin - User Approval
+@api_router.put("/admin/users/{user_id}/approve")
+async def approve_user(
+    user_id: str,
+    approval_data: Dict[str, Any],
+    user: dict = Depends(require_role([UserRole.ADMIN]))
+):
+    target_user = await db.users.find_one({"id": user_id})
+    if not target_user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    # Update user status
+    await db.users.update_one(
+        {"id": user_id},
+        {"$set": {"status": UserStatus.ACTIVE.value, "updated_at": datetime.now(timezone.utc).isoformat()}}
+    )
+    
+    # Update profile status
+    if target_user["role"] == "brand":
+        await db.brands.update_one(
+            {"user_id": user_id},
+            {"$set": {"status": BrandStatus.APPROVED.value, "updated_at": datetime.now(timezone.utc).isoformat()}}
+        )
+    elif target_user["role"] == "influencer":
+        await db.influencers.update_one(
+            {"user_id": user_id},
+            {"$set": {"status": InfluencerStatus.APPROVED.value, "updated_at": datetime.now(timezone.utc).isoformat()}}
+        )
+    
+    await log_audit(user["id"], "approve", "user", user_id)
+    
+    return {"message": "User approved"}
+
+# Admin Dashboard
+@api_router.get("/admin/dashboard")
+async def admin_dashboard(user: dict = Depends(require_role([UserRole.ADMIN]))):
+    total_users = await db.users.count_documents({"deleted_at": None})
+    pending_users = await db.users.count_documents({"status": UserStatus.PENDING.value, "deleted_at": None})
+    total_campaigns = await db.campaigns.count_documents({})
+    total_clicks = await db.amazon_click_logs.count_documents({})
+    pending_purchase_proofs = await db.purchase_proofs.count_documents({"status": PurchaseProofStatus.PENDING.value})
+    
+    return {
+        "total_users": total_users,
+        "pending_users": pending_users,
+        "total_campaigns": total_campaigns,
+        "total_clicks": total_clicks,
+        "pending_purchase_proofs": pending_purchase_proofs
+    }
+
+# Email Settings
+@api_router.get("/admin/email-settings")
+async def get_email_settings(user: dict = Depends(require_role([UserRole.ADMIN]))):
+    settings = await db.email_settings.find_one({"id": "default"}, {"_id": 0})
+    if not settings:
+        settings = {
+            "id": "default",
+            "provider": "smtp",
+            "smtp_host": "",
+            "smtp_port": 587,
+            "smtp_user": "",
+            "smtp_password": "",
+            "from_email": "",
+            "from_name": ""
+        }
+    return settings
+
+@api_router.put("/admin/email-settings")
+async def update_email_settings(
+    settings_data: Dict[str, Any],
+    user: dict = Depends(require_role([UserRole.ADMIN]))
+):
+    settings_data["id"] = "default"
+    settings_data["updated_at"] = datetime.now(timezone.utc).isoformat()
+    
+    await db.email_settings.update_one(
+        {"id": "default"},
+        {"$set": settings_data},
+        upsert=True
+    )
+    
+    await log_audit(user["id"], "update", "email_settings", "default")
+    
+    return {"message": "Email settings updated"}
+
+# Include router
 app.include_router(api_router)
 
 app.add_middleware(
@@ -77,7 +813,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Configure logging
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
