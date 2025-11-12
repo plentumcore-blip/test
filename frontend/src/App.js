@@ -148,6 +148,14 @@ function App() {
 
           {/* Influencer Routes */}
           <Route
+            path="/influencer/profile-setup"
+            element={
+              <ProtectedRoute allowedRoles={['influencer']}>
+                <InfluencerProfileSetup />
+              </ProtectedRoute>
+            }
+          />
+          <Route
             path="/influencer/dashboard"
             element={
               <ProtectedRoute allowedRoles={['influencer']}>
