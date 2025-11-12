@@ -176,6 +176,14 @@ class Campaign(BaseModel):
     post_window_end: datetime
     status: CampaignStatus = CampaignStatus.DRAFT
     asin_allowlist: Optional[List[str]] = None
+    # Landing page fields
+    landing_page_enabled: bool = False
+    landing_page_slug: Optional[str] = None
+    landing_page_hero_image: Optional[str] = None
+    landing_page_content: Optional[str] = None  # HTML/Markdown content
+    landing_page_cta_text: Optional[str] = "Apply Now"
+    landing_page_testimonials: Optional[List[Dict]] = None
+    landing_page_faqs: Optional[List[Dict]] = None
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     
