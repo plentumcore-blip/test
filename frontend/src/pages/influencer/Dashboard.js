@@ -10,12 +10,29 @@ const API_BASE = `${process.env.REACT_APP_BACKEND_URL}/api/v1`;
 export default function InfluencerDashboard() {
   const [assignments, setAssignments] = useState([]);
   const [loading, setLoading] = useState(true);
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchAssignments();
+    checkProfileAndFetch();
   }, []);
+
+  const checkProfileAndFetch = async () => {
+    try {
+      // Check if profile is complete
+      const meRes = await axios.get(`${API_BASE}/auth/me`, { withCredentials: true });
+      if (meRes.data.profile && !meRes.data.profile.profile_completed) {
+        // Redirect to profile setup if not complete
+        navigate('/influencer/profile-setup');
+        return;
+      }
+      
+      await fetchAssignments();
+    } catch (error) {
+      console.error('Error checking profile:', error);
+      setLoading(false);
+    }
+  };
 
   const fetchAssignments = async () => {
     try {
