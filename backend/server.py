@@ -835,6 +835,186 @@ async def update_email_settings(
     
     return {"message": "Email settings updated"}
 
+# Payouts
+@api_router.post("/payouts")
+async def create_payout(
+    payout_data: Dict[str, Any],
+    user: dict = Depends(require_role([UserRole.BRAND, UserRole.ADMIN]))
+):
+    # Get assignment details
+    assignment = await db.assignments.find_one({"id": payout_data["assignment_id"]})
+    if not assignment:
+        raise HTTPException(status_code=404, detail="Assignment not found")
+    
+    # Get campaign to verify brand ownership
+    campaign = await db.campaigns.find_one({"id": assignment["campaign_id"]})
+    if user["role"] == "brand":
+        brand = await db.brands.find_one({"user_id": user["id"]})
+        if campaign["brand_id"] != brand["id"]:
+            raise HTTPException(status_code=403, detail="Not authorized")
+    
+    # Create payout
+    payout = Payout(
+        assignment_id=payout_data["assignment_id"],
+        influencer_id=assignment["influencer_id"],
+        brand_id=campaign["brand_id"],
+        campaign_id=assignment["campaign_id"],
+        amount=payout_data["amount"],
+        currency=payout_data.get("currency", "USD"),
+        payment_method=payout_data.get("payment_method"),
+        payment_details=payout_data.get("payment_details"),
+        notes=payout_data.get("notes")
+    )
+    
+    payout_doc = payout.model_dump()
+    payout_doc['created_at'] = payout_doc['created_at'].isoformat()
+    payout_doc['updated_at'] = payout_doc['updated_at'].isoformat()
+    
+    await db.payouts.insert_one(payout_doc)
+    await log_audit(user["id"], "create", "payout", payout.id, {"amount": payout.amount})
+    
+    return {"id": payout.id, "message": "Payout created"}
+
+@api_router.get("/payouts")
+async def list_payouts(
+    page: int = Query(1, ge=1),
+    page_size: int = Query(20, ge=1, le=100),
+    status: Optional[str] = None,
+    user: dict = Depends(get_current_user)
+):
+    skip = (page - 1) * page_size
+    query = {}
+    
+    if user["role"] == "influencer":
+        influencer = await db.influencers.find_one({"user_id": user["id"]})
+        query["influencer_id"] = influencer["id"]
+    elif user["role"] == "brand":
+        brand = await db.brands.find_one({"user_id": user["id"]})
+        query["brand_id"] = brand["id"]
+    
+    if status:
+        query["status"] = status
+    
+    payouts = await db.payouts.find(query, {"_id": 0}).skip(skip).limit(page_size).to_list(page_size)
+    total = await db.payouts.count_documents(query)
+    
+    # Enrich with assignment and campaign data
+    for payout in payouts:
+        assignment = await db.assignments.find_one({"id": payout["assignment_id"]}, {"_id": 0})
+        campaign = await db.campaigns.find_one({"id": payout["campaign_id"]}, {"_id": 0, "title": 1})
+        payout["assignment"] = assignment
+        payout["campaign"] = campaign
+    
+    return {
+        "data": payouts,
+        "page": page,
+        "page_size": page_size,
+        "total": total
+    }
+
+@api_router.get("/payouts/{payout_id}")
+async def get_payout(payout_id: str, user: dict = Depends(get_current_user)):
+    payout = await db.payouts.find_one({"id": payout_id}, {"_id": 0})
+    if not payout:
+        raise HTTPException(status_code=404, detail="Payout not found")
+    
+    # Check authorization
+    if user["role"] == "influencer":
+        influencer = await db.influencers.find_one({"user_id": user["id"]})
+        if payout["influencer_id"] != influencer["id"]:
+            raise HTTPException(status_code=403, detail="Not authorized")
+    elif user["role"] == "brand":
+        brand = await db.brands.find_one({"user_id": user["id"]})
+        if payout["brand_id"] != brand["id"]:
+            raise HTTPException(status_code=403, detail="Not authorized")
+    
+    return payout
+
+@api_router.put("/payouts/{payout_id}/status")
+async def update_payout_status(
+    payout_id: str,
+    status_data: Dict[str, Any],
+    user: dict = Depends(require_role([UserRole.BRAND, UserRole.ADMIN]))
+):
+    payout = await db.payouts.find_one({"id": payout_id})
+    if not payout:
+        raise HTTPException(status_code=404, detail="Payout not found")
+    
+    update_data = {
+        "status": status_data["status"],
+        "updated_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    if status_data["status"] == PayoutStatus.PAID.value:
+        update_data["paid_at"] = datetime.now(timezone.utc).isoformat()
+        update_data["paid_by"] = user["id"]
+    
+    if "notes" in status_data:
+        update_data["notes"] = status_data["notes"]
+    
+    await db.payouts.update_one(
+        {"id": payout_id},
+        {"$set": update_data}
+    )
+    
+    await log_audit(user["id"], "update_status", "payout", payout_id, {"status": status_data["status"]})
+    
+    return {"message": "Payout status updated"}
+
+# Campaign Landing Pages
+@api_router.put("/campaigns/{campaign_id}/landing-page")
+async def update_campaign_landing_page(
+    campaign_id: str,
+    landing_data: Dict[str, Any],
+    user: dict = Depends(require_role([UserRole.BRAND]))
+):
+    campaign = await db.campaigns.find_one({"id": campaign_id})
+    if not campaign:
+        raise HTTPException(status_code=404, detail="Campaign not found")
+    
+    brand = await db.brands.find_one({"user_id": user["id"]})
+    if campaign["brand_id"] != brand["id"]:
+        raise HTTPException(status_code=403, detail="Not authorized")
+    
+    # Generate slug if not provided
+    if not landing_data.get("landing_page_slug"):
+        import re
+        slug = re.sub(r'[^a-z0-9]+', '-', campaign["title"].lower()).strip('-')
+        landing_data["landing_page_slug"] = f"{slug}-{campaign_id[:8]}"
+    
+    update_data = {
+        "landing_page_enabled": landing_data.get("landing_page_enabled", True),
+        "landing_page_slug": landing_data.get("landing_page_slug"),
+        "landing_page_hero_image": landing_data.get("landing_page_hero_image"),
+        "landing_page_content": landing_data.get("landing_page_content"),
+        "landing_page_cta_text": landing_data.get("landing_page_cta_text", "Apply Now"),
+        "landing_page_testimonials": landing_data.get("landing_page_testimonials", []),
+        "landing_page_faqs": landing_data.get("landing_page_faqs", []),
+        "updated_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    await db.campaigns.update_one(
+        {"id": campaign_id},
+        {"$set": update_data}
+    )
+    
+    await log_audit(user["id"], "update", "campaign_landing_page", campaign_id)
+    
+    return {"message": "Landing page updated", "slug": landing_data.get("landing_page_slug")}
+
+# Public landing page endpoint (no auth required)
+@app.get("/campaigns/{slug}")
+async def get_campaign_landing_page(slug: str):
+    campaign = await db.campaigns.find_one({"landing_page_slug": slug, "landing_page_enabled": True}, {"_id": 0})
+    if not campaign:
+        raise HTTPException(status_code=404, detail="Campaign not found")
+    
+    # Get brand info
+    brand = await db.brands.find_one({"id": campaign["brand_id"]}, {"_id": 0, "company_name": 1, "logo_url": 1})
+    campaign["brand"] = brand
+    
+    return campaign
+
 # Include router
 app.include_router(api_router)
 
