@@ -121,10 +121,26 @@ function App() {
             }
           />
           <Route
+            path="/brand/campaigns/:id/landing-page"
+            element={
+              <ProtectedRoute allowedRoles={['brand']}>
+                <LandingPageBuilder />
+              </ProtectedRoute>
+            }
+          />
+          <Route
             path="/brand/assignments"
             element={
               <ProtectedRoute allowedRoles={['brand']}>
                 <BrandAssignments />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/brand/payouts"
+            element={
+              <ProtectedRoute allowedRoles={['brand']}>
+                <BrandPayouts />
               </ProtectedRoute>
             }
           />
