@@ -76,6 +76,12 @@ export default function InfluencerDashboard() {
             >
               My Assignments
             </button>
+            <button
+              onClick={() => navigate('/influencer/payouts')}
+              className="py-4 px-2 border-b-2 border-transparent text-gray-600 hover:text-[#1F66FF] font-semibold"
+            >
+              Payouts
+            </button>
           </div>
         </div>
       </div>
