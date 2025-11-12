@@ -400,9 +400,139 @@ async def get_me(user: dict = Depends(get_current_user)):
         user_data["profile"] = brand
     elif user["role"] == "influencer":
         influencer = await db.influencers.find_one({"user_id": user["id"]}, {"_id": 0})
+        # Get platforms
+        platforms = await db.influencer_platforms.find({"influencer_id": influencer["id"]}, {"_id": 0}).to_list(10)
+        influencer["platforms"] = platforms
         user_data["profile"] = influencer
     
     return user_data
+
+# Influencer Profile & Platforms
+@api_router.put("/influencer/profile")
+async def update_influencer_profile(
+    profile_data: Dict[str, Any],
+    user: dict = Depends(require_role([UserRole.INFLUENCER]))
+):
+    influencer = await db.influencers.find_one({"user_id": user["id"]})
+    if not influencer:
+        raise HTTPException(status_code=404, detail="Influencer profile not found")
+    
+    update_data = {
+        "name": profile_data.get("name", influencer["name"]),
+        "bio": profile_data.get("bio"),
+        "avatar_url": profile_data.get("avatar_url"),
+        "updated_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    await db.influencers.update_one(
+        {"user_id": user["id"]},
+        {"$set": update_data}
+    )
+    
+    return {"message": "Profile updated"}
+
+@api_router.post("/influencer/platforms")
+async def add_influencer_platform(
+    platform_data: Dict[str, Any],
+    user: dict = Depends(require_role([UserRole.INFLUENCER]))
+):
+    influencer = await db.influencers.find_one({"user_id": user["id"]})
+    if not influencer:
+        raise HTTPException(status_code=404, detail="Influencer profile not found")
+    
+    # Check if platform already exists
+    existing = await db.influencer_platforms.find_one({
+        "influencer_id": influencer["id"],
+        "platform": platform_data["platform"]
+    })
+    if existing:
+        raise HTTPException(status_code=400, detail="Platform already added")
+    
+    platform = InfluencerPlatform(
+        influencer_id=influencer["id"],
+        platform=SocialPlatform(platform_data["platform"]),
+        username=platform_data["username"],
+        profile_url=platform_data["profile_url"],
+        followers_count=platform_data.get("followers_count"),
+        engagement_rate=platform_data.get("engagement_rate")
+    )
+    
+    platform_doc = platform.model_dump()
+    platform_doc['created_at'] = platform_doc['created_at'].isoformat()
+    platform_doc['updated_at'] = platform_doc['updated_at'].isoformat()
+    
+    await db.influencer_platforms.insert_one(platform_doc)
+    
+    # Check if profile is complete (at least one platform)
+    platforms_count = await db.influencer_platforms.count_documents({"influencer_id": influencer["id"]})
+    if platforms_count >= 1:
+        await db.influencers.update_one(
+            {"id": influencer["id"]},
+            {"$set": {"profile_completed": True, "updated_at": datetime.now(timezone.utc).isoformat()}}
+        )
+    
+    await log_audit(user["id"], "add", "influencer_platform", platform.id)
+    
+    return {"id": platform.id, "message": "Platform added"}
+
+@api_router.get("/influencer/platforms")
+async def get_influencer_platforms(user: dict = Depends(require_role([UserRole.INFLUENCER]))):
+    influencer = await db.influencers.find_one({"user_id": user["id"]})
+    if not influencer:
+        raise HTTPException(status_code=404, detail="Influencer profile not found")
+    
+    platforms = await db.influencer_platforms.find({"influencer_id": influencer["id"]}, {"_id": 0}).to_list(10)
+    return {"data": platforms}
+
+@api_router.put("/influencer/platforms/{platform_id}")
+async def update_influencer_platform(
+    platform_id: str,
+    platform_data: Dict[str, Any],
+    user: dict = Depends(require_role([UserRole.INFLUENCER]))
+):
+    platform = await db.influencer_platforms.find_one({"id": platform_id})
+    if not platform:
+        raise HTTPException(status_code=404, detail="Platform not found")
+    
+    influencer = await db.influencers.find_one({"user_id": user["id"]})
+    if platform["influencer_id"] != influencer["id"]:
+        raise HTTPException(status_code=403, detail="Not authorized")
+    
+    update_data = {
+        "username": platform_data.get("username", platform["username"]),
+        "profile_url": platform_data.get("profile_url", platform["profile_url"]),
+        "followers_count": platform_data.get("followers_count", platform.get("followers_count")),
+        "engagement_rate": platform_data.get("engagement_rate", platform.get("engagement_rate")),
+        "updated_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    await db.influencer_platforms.update_one(
+        {"id": platform_id},
+        {"$set": update_data}
+    )
+    
+    await log_audit(user["id"], "update", "influencer_platform", platform_id)
+    
+    return {"message": "Platform updated"}
+
+@api_router.delete("/influencer/platforms/{platform_id}")
+async def delete_influencer_platform(
+    platform_id: str,
+    user: dict = Depends(require_role([UserRole.INFLUENCER]))
+):
+    platform = await db.influencer_platforms.find_one({"id": platform_id})
+    if not platform:
+        raise HTTPException(status_code=404, detail="Platform not found")
+    
+    influencer = await db.influencers.find_one({"user_id": user["id"]})
+    if platform["influencer_id"] != influencer["id"]:
+        raise HTTPException(status_code=403, detail="Not authorized")
+    
+    await db.influencer_platforms.delete_one({"id": platform_id})
+    
+    await log_audit(user["id"], "delete", "influencer_platform", platform_id)
+    
+    return {"message": "Platform deleted"}
 
 # Campaigns
 @api_router.post("/campaigns")
