@@ -231,6 +231,24 @@ class ClickLog(BaseModel):
     user_agent: Optional[str] = None
     clicked_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
+class Payout(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    assignment_id: str
+    influencer_id: str
+    brand_id: str
+    campaign_id: str
+    amount: float
+    currency: str = "USD"
+    status: PayoutStatus = PayoutStatus.PENDING
+    payment_method: Optional[str] = None  # PayPal, Bank Transfer, etc.
+    payment_details: Optional[str] = None  # Email, account number (encrypted)
+    notes: Optional[str] = None
+    paid_at: Optional[datetime] = None
+    paid_by: Optional[str] = None
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
 # Create app
 app = FastAPI()
 api_router = APIRouter(prefix="/api/v1")
