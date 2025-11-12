@@ -160,6 +160,20 @@ class Influencer(BaseModel):
     bio: Optional[str] = None
     avatar_url: Optional[str] = None
     status: InfluencerStatus = InfluencerStatus.PENDING
+    profile_completed: bool = False
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class InfluencerPlatform(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    influencer_id: str
+    platform: SocialPlatform
+    username: str
+    profile_url: str
+    followers_count: Optional[int] = None
+    engagement_rate: Optional[float] = None
+    verified: bool = False
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
