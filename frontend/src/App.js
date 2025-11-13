@@ -90,6 +90,14 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/admin/reports"
+            element={
+              <ProtectedRoute allowedRoles={['admin']}>
+                <AdminReports />
+              </ProtectedRoute>
+            }
+          />
 
           {/* Brand Routes */}
           <Route
