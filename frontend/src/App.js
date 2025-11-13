@@ -146,6 +146,14 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/brand/reports"
+            element={
+              <ProtectedRoute allowedRoles={['brand']}>
+                <BrandReports />
+              </ProtectedRoute>
+            }
+          />
 
           {/* Influencer Routes */}
           <Route
