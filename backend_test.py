@@ -257,7 +257,7 @@ class APITester:
         
         # Test with influencer without payment details
         # Login as different influencer
-        influencer2 = self.login_user("mike.chen@email.com", "password123")
+        influencer2 = self.login_user("testinfluencer@example.com", "password123")
         if influencer2:
             # Login back as brand
             brand = self.login_user("techcorp@email.com", "password123")
