@@ -9,6 +9,7 @@ const AdminSidebar = ({ onLogout }) => {
     { icon: LayoutGrid, label: 'Dashboard', path: '/admin/dashboard' },
     { icon: Users, label: 'Users', path: '/admin/users' },
     { icon: FileCheck, label: 'Verification Queue', path: '/admin/verification' },
+    { icon: BarChart3, label: 'Reports', path: '/admin/reports' },
     { icon: Settings, label: 'Settings', path: '/admin/settings' },
   ];
 
