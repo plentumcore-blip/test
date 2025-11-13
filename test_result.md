@@ -126,6 +126,9 @@ backend:
       - working: true
         agent: "testing"
         comment: "✅ TESTED: Campaign landing page backend flow working perfectly! Successfully tested: brand login, campaign list retrieval, landing page update (slug, content, hero image, testimonials, FAQs), campaign publishing, and backend API access. All data validation passed. Only issue: frontend routing intercepting public /campaigns/{slug} route - backend API works correctly when accessed directly."
+      - working: true
+        agent: "testing"
+        comment: "✅ RE-TESTED: NEW Public API Endpoint /api/v1/public/campaigns/{slug} is working perfectly! Successfully tested complete flow: 1) Login as brand (brand@example.com), 2) Get first campaign from list, 3) Save landing page with slug 'test-landing-page', 4) Publish campaign, 5) Test NEW public API endpoint GET /api/v1/public/campaigns/test-landing-page without authentication. All landing page data returned correctly (content, hero image, testimonials, FAQs, brand info). Access control working - returns 404 for non-published campaigns or when landing_page_enabled=false. 100% success rate (25/25 tests passed)."
 
   - task: "Add PaymentDetails model"
     implemented: true
