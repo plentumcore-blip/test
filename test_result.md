@@ -385,6 +385,23 @@ agent_communication:
       - Campaigns landing page is not working properly
       
       Need to investigate and fix the landing page issue along with testing the new features.
+  - agent: "main"
+    message: |
+      User reported TWO critical issues:
+      1. No way to publish campaigns - campaigns stuck in DRAFT status
+      2. Landing page showing white screen and not displaying data
+      
+      FIXES APPLIED:
+      1. Added "Publish Campaign" button to Campaigns page - only shows for draft campaigns
+      2. Created public CampaignLandingPage component to display landing page data
+      3. Added route /campaigns/:slug to App.js for public landing pages
+      4. Fixed CORS issue by updating to specific origins instead of wildcard
+      
+      The landing page builder was working, but there was no way to VIEW the public landing page.
+      Now users can:
+      - Publish campaigns from draft to published status
+      - View public landing pages at /campaigns/{slug}
+      - See all landing page data (hero image, content, testimonials, FAQs, CTA)
   - agent: "testing"
     message: |
       🎉 FRONTEND TESTING COMPLETED - ALL TESTS PASSED (100% SUCCESS RATE)
