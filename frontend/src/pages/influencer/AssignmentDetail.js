@@ -81,6 +81,33 @@ export default function AssignmentDetail() {
     }
   };
 
+  const handlePostSubmit = async (e) => {
+    e.preventDefault();
+    setSubmittingPost(true);
+
+    try {
+      await axios.post(
+        `${API_BASE}/assignments/${id}/post-submission`,
+        postData,
+        { withCredentials: true }
+      );
+      toast.success('Post submitted for review!');
+      fetchAssignment();
+      setShowPostForm(false);
+      setPostData({
+        post_url: '',
+        platform: '',
+        post_type: '',
+        screenshot_url: '',
+        caption: ''
+      });
+    } catch (error) {
+      toast.error(error.response?.data?.detail || 'Failed to submit post');
+    } finally {
+      setSubmittingPost(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
