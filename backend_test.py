@@ -260,7 +260,7 @@ class APITester:
         influencer2 = self.login_user("testinfluencer@example.com", "password123")
         if influencer2:
             # Login back as brand
-            brand = self.login_user("brand@example.com", "password123")
+            brand = self.login_user("brand@example.com", "Brand@123")
             
             # Try to find an assignment for this influencer
             try:
