@@ -1031,16 +1031,28 @@ async def review_post_submission(
     
     await db.post_submissions.update_one({"id": submission_id}, {"$set": update_data})
     
-    # Update assignment status
-    new_assignment_status = "completed" if status == "approved" else "posting"
-    await db.assignments.update_one(
-        {"id": submission["assignment_id"]},
-        {"$set": {"status": new_assignment_status, "updated_at": datetime.now(timezone.utc).isoformat()}}
-    )
+    # Handle based on whether it's addon post or main post
+    if submission.get("is_addon"):
+        # For addon posts, update addon_post_status
+        addon_status = "approved" if status == "approved" else "rejected"
+        await db.assignments.update_one(
+            {"id": submission["assignment_id"]},
+            {"$set": {
+                "addon_post_status": addon_status,
+                "updated_at": datetime.now(timezone.utc).isoformat()
+            }}
+        )
+    else:
+        # For main posts, update assignment status
+        new_assignment_status = "completed" if status == "approved" else "posting"
+        await db.assignments.update_one(
+            {"id": submission["assignment_id"]},
+            {"$set": {"status": new_assignment_status, "updated_at": datetime.now(timezone.utc).isoformat()}}
+        )
     
-    await log_audit(user["id"], "review", "post_submission", submission_id, {"status": status})
+    await log_audit(user["id"], "review", "post_submission", submission_id, {"status": status, "is_addon": submission.get("is_addon", False)})
     
-    return {"message": f"Post {status}"}
+    return {"message": f"{'Addon post' if submission.get('is_addon') else 'Post'} {status}"}
 
 @api_router.put("/purchase-proofs/{proof_id}/review")
 async def review_purchase_proof(
