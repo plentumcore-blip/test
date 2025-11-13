@@ -116,30 +116,29 @@ export default function AssignmentDetail() {
     }
   };
 
-  const handleAddonSubmit = async (e) => {
+  const handleReviewSubmit = async (e) => {
     e.preventDefault();
-    setSubmittingAddon(true);
+    setSubmittingReview(true);
 
     try {
       await axios.post(
-        `${API_BASE}/assignments/${id}/addon-post`,
-        addonData,
+        `${API_BASE}/assignments/${id}/review`,
+        reviewData,
         { withCredentials: true }
       );
-      toast.success('Addon post submitted! You\'ll earn $5 once approved.');
+      toast.success('Product review submitted! You\'ll earn $5 once approved.');
       fetchAssignment();
-      setShowAddonForm(false);
-      setAddonData({
-        post_url: '',
-        platform: '',
-        post_type: '',
+      setShowReviewForm(false);
+      setReviewData({
+        review_text: '',
+        rating: 5,
         screenshot_url: '',
-        caption: ''
+        platform: 'amazon'
       });
     } catch (error) {
-      toast.error(error.response?.data?.detail || 'Failed to submit addon post');
+      toast.error(error.response?.data?.detail || 'Failed to submit review');
     } finally {
-      setSubmittingAddon(false);
+      setSubmittingReview(false);
     }
   };
 
