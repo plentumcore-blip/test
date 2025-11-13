@@ -17,8 +17,17 @@ export default function AssignmentDetail() {
     asin: '',
     total: ''
   });
+  const [showPostForm, setShowPostForm] = useState(false);
+  const [postData, setPostData] = useState({
+    post_url: '',
+    platform: '',
+    post_type: '',
+    screenshot_url: '',
+    caption: ''
+  });
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+  const [submittingPost, setSubmittingPost] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
