@@ -486,8 +486,8 @@ export default function AssignmentDetail() {
               </div>
             </div>
 
-            {/* Addon Post Section */}
-            {assignment.addon_post_status !== 'approved' && assignment.addon_post_status !== 'review' && (
+            {/* Product Review Section */}
+            {assignment.review_status !== 'approved' && assignment.review_status !== 'review' && (
               <div className="card bg-blue-50 border border-blue-200">
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 bg-[#1F66FF] rounded-full flex items-center justify-center flex-shrink-0">
@@ -496,88 +496,79 @@ export default function AssignmentDetail() {
                   <div className="flex-1">
                     <h3 className="text-2xl font-bold text-[#0B1220] mb-2">Earn Extra $5!</h3>
                     <p className="text-gray-700 mb-4">
-                      Submit an additional post about this product and earn an extra $5 bonus!
+                      Submit a product review and earn an extra $5 bonus!
                     </p>
                     
-                    {showAddonForm ? (
-                      <form onSubmit={handleAddonSubmit} className="space-y-4 bg-white p-6 rounded-xl border border-gray-200">
+                    {showReviewForm ? (
+                      <form onSubmit={handleReviewSubmit} className="space-y-4 bg-white p-6 rounded-xl border border-gray-200">
                         <div>
-                          <label className="block text-sm font-semibold text-[#0B1220] mb-2">Addon Post URL *</label>
-                          <input
-                            type="url"
-                            value={addonData.post_url}
-                            onChange={(e) => setAddonData({ ...addonData, post_url: e.target.value })}
+                          <label className="block text-sm font-semibold text-[#0B1220] mb-2">Your Review *</label>
+                          <textarea
+                            value={reviewData.review_text}
+                            onChange={(e) => setReviewData({ ...reviewData, review_text: e.target.value })}
                             className="input"
-                            placeholder="https://instagram.com/p/..."
+                            rows={6}
+                            placeholder="Share your honest review of the product..."
                             required
                           />
+                          <p className="text-xs text-gray-600 mt-1">Write a detailed review about your experience with the product</p>
                         </div>
 
                         <div>
-                          <label className="block text-sm font-semibold text-[#0B1220] mb-2">Platform *</label>
+                          <label className="block text-sm font-semibold text-[#0B1220] mb-2">Rating *</label>
                           <select
-                            value={addonData.platform}
-                            onChange={(e) => setAddonData({ ...addonData, platform: e.target.value })}
+                            value={reviewData.rating}
+                            onChange={(e) => setReviewData({ ...reviewData, rating: parseInt(e.target.value) })}
                             className="input"
                             required
                           >
-                            <option value="">Select platform</option>
-                            <option value="instagram">Instagram</option>
-                            <option value="tiktok">TikTok</option>
-                            <option value="youtube">YouTube</option>
-                            <option value="twitter">Twitter</option>
+                            <option value="5">⭐⭐⭐⭐⭐ (5 stars)</option>
+                            <option value="4">⭐⭐⭐⭐ (4 stars)</option>
+                            <option value="3">⭐⭐⭐ (3 stars)</option>
+                            <option value="2">⭐⭐ (2 stars)</option>
+                            <option value="1">⭐ (1 star)</option>
                           </select>
                         </div>
 
                         <div>
-                          <label className="block text-sm font-semibold text-[#0B1220] mb-2">Post Type *</label>
-                          <select
-                            value={addonData.post_type}
-                            onChange={(e) => setAddonData({ ...addonData, post_type: e.target.value })}
-                            className="input"
-                            required
-                          >
-                            <option value="">Select type</option>
-                            <option value="post">Post</option>
-                            <option value="story">Story</option>
-                            <option value="reel">Reel</option>
-                            <option value="video">Video</option>
-                          </select>
-                        </div>
-
-                        <div>
-                          <label className="block text-sm font-semibold text-[#0B1220] mb-2">Screenshot URL (Optional)</label>
+                          <label className="block text-sm font-semibold text-[#0B1220] mb-2">Screenshot of Review *</label>
                           <input
                             type="url"
-                            value={addonData.screenshot_url}
-                            onChange={(e) => setAddonData({ ...addonData, screenshot_url: e.target.value })}
+                            value={reviewData.screenshot_url}
+                            onChange={(e) => setReviewData({ ...reviewData, screenshot_url: e.target.value })}
                             className="input"
                             placeholder="https://imgur.com/..."
+                            required
                           />
+                          <p className="text-xs text-gray-600 mt-1">Upload screenshot to imgur.com or similar and paste the link</p>
                         </div>
 
                         <div>
-                          <label className="block text-sm font-semibold text-[#0B1220] mb-2">Caption/Description</label>
-                          <textarea
-                            value={addonData.caption}
-                            onChange={(e) => setAddonData({ ...addonData, caption: e.target.value })}
+                          <label className="block text-sm font-semibold text-[#0B1220] mb-2">Where did you post? (Optional)</label>
+                          <select
+                            value={reviewData.platform}
+                            onChange={(e) => setReviewData({ ...reviewData, platform: e.target.value })}
                             className="input"
-                            rows={4}
-                            placeholder="Share what you posted..."
-                          />
+                          >
+                            <option value="amazon">Amazon</option>
+                            <option value="blog">Personal Blog</option>
+                            <option value="youtube">YouTube</option>
+                            <option value="instagram">Instagram</option>
+                            <option value="other">Other</option>
+                          </select>
                         </div>
 
                         <div className="flex gap-3">
                           <button
                             type="submit"
-                            disabled={submittingAddon}
+                            disabled={submittingReview}
                             className="btn-primary"
                           >
-                            {submittingAddon ? 'Submitting...' : 'Submit Addon Post (+$5)'}
+                            {submittingReview ? 'Submitting...' : 'Submit Review (+$5)'}
                           </button>
                           <button
                             type="button"
-                            onClick={() => setShowAddonForm(false)}
+                            onClick={() => setShowReviewForm(false)}
                             className="btn-secondary"
                           >
                             Cancel
@@ -586,11 +577,11 @@ export default function AssignmentDetail() {
                       </form>
                     ) : (
                       <button
-                        onClick={() => setShowAddonForm(true)}
+                        onClick={() => setShowReviewForm(true)}
                         className="btn-primary flex items-center gap-2"
                       >
                         <Upload className="w-5 h-5" />
-                        Submit Addon Post (+$5)
+                        Submit Product Review (+$5)
                       </button>
                     )}
                   </div>
@@ -598,28 +589,28 @@ export default function AssignmentDetail() {
               </div>
             )}
 
-            {assignment.addon_post_status === 'review' && (
+            {assignment.review_status === 'review' && (
               <div className="card bg-orange-50 border border-orange-200">
                 <div className="flex items-center gap-4">
                   <Clock className="w-12 h-12 text-[#F79009]" />
                   <div>
-                    <h3 className="text-xl font-bold text-[#0B1220] mb-2">Addon Post Under Review</h3>
+                    <h3 className="text-xl font-bold text-[#0B1220] mb-2">Review Under Review</h3>
                     <p className="text-gray-700">
-                      Your addon post is being reviewed. You'll earn an extra $5 once it's approved!
+                      Your product review is being reviewed. You'll earn an extra $5 once it's approved!
                     </p>
                   </div>
                 </div>
               </div>
             )}
 
-            {assignment.addon_post_status === 'approved' && (
+            {assignment.review_status === 'approved' && (
               <div className="card bg-green-50 border border-green-200">
                 <div className="flex items-center gap-4">
                   <CheckCircle className="w-12 h-12 text-[#12B76A]" />
                   <div>
-                    <h3 className="text-xl font-bold text-[#0B1220] mb-2">Addon Post Approved! 💰</h3>
+                    <h3 className="text-xl font-bold text-[#0B1220] mb-2">Review Approved! 💰</h3>
                     <p className="text-gray-700">
-                      Awesome! Your addon post was approved. You've earned an extra $5!
+                      Awesome! Your product review was approved. You've earned an extra $5!
                     </p>
                   </div>
                 </div>
