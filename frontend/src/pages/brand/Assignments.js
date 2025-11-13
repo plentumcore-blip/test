@@ -135,7 +135,8 @@ export default function BrandAssignments() {
       purchase_required: { bg: 'bg-yellow-100', text: 'text-yellow-800', label: 'Purchase Required' },
       purchase_review: { bg: 'bg-blue-100', text: 'text-blue-800', label: 'Purchase Review' },
       purchase_approved: { bg: 'bg-green-100', text: 'text-green-800', label: 'Purchase Approved' },
-      posting: { bg: 'bg-purple-100', text: 'text-purple-800', label: 'Posting' },
+      posting: { bg: 'bg-purple-100', text: 'text-purple-800', label: 'Creating Content' },
+      post_review: { bg: 'bg-blue-100', text: 'text-blue-800', label: 'Post Review' },
       completed: { bg: 'bg-green-100', text: 'text-green-800', label: 'Completed' }
     };
     
