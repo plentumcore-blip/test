@@ -404,41 +404,42 @@ agent_communication:
       - See all landing page data (hero image, content, testimonials, FAQs, CTA)
   - agent: "testing"
     message: |
-      🎉 FRONTEND TESTING COMPLETED - ALL TESTS PASSED (100% SUCCESS RATE)
+      🎉 BACKEND TESTING COMPLETED - CAMPAIGN LANDING PAGE FLOW TESTED (96% SUCCESS RATE)
       
-      ✅ INFLUENCER PAYMENT SETTINGS:
-      - Payment Settings page loads correctly with comprehensive form
-      - All form fields working (required: account holder name, account number, routing number, bank name; optional: SWIFT, IBAN, PayPal email)
-      - Form submission successful with proper success message display
-      - Transaction history section displays correctly with existing payout data
-      - Navigation from sidebar working properly
+      ✅ CAMPAIGN LANDING PAGE BACKEND API:
+      - Login as brand (brand@example.com) working correctly
+      - GET /api/v1/campaigns endpoint returning campaign list successfully
+      - PUT /api/v1/campaigns/{id}/landing-page endpoint working perfectly:
+        * Successfully updates landing_page_enabled: true
+        * Sets landing_page_slug: "test-campaign-slug" 
+        * Sets landing_page_content: "This is test content"
+        * Sets landing_page_hero_image: "https://example.com/image.jpg"
+        * Adds testimonials and FAQs correctly
+      - PUT /api/v1/campaigns/{id}/publish endpoint working correctly
+      - Backend API /campaigns/{slug} endpoint working perfectly when accessed directly (localhost:8001)
       
-      ✅ ADMIN REPORTS:
-      - Reports page loads correctly with all summary cards (Total Brands: 1, Total Influencers: 4, Platform Spending: $75.00, Platform Earnings: $75.00)
-      - Brand Analytics table displays Demo Brand Co with all metrics correctly
-      - Influencer Analytics table shows all influencers with proper status indicators (payment details, profile completion, etc.)
-      - Data loads correctly from backend API
-      - Navigation from sidebar working properly
+      ✅ LANDING PAGE DATA VALIDATION:
+      - All required fields present in response (id, title, landing_page_content, landing_page_hero_image, landing_page_cta_text, landing_page_testimonials, landing_page_faqs, brand)
+      - Content matches exactly: "This is test content" ✓
+      - Hero image matches: "https://example.com/image.jpg" ✓  
+      - Testimonials present and correctly formatted ✓
+      - FAQs present and correctly formatted ✓
+      - Brand info included with company_name ✓
+      - Access control working: only published campaigns with landing_page_enabled=true are accessible ✓
       
-      ✅ CAMPAIGN LANDING PAGE (CRITICAL ISSUE RESOLVED):
-      - Landing Page Builder loads correctly and is fully functional
-      - All form fields working (slug, hero image, content, CTA text)
-      - Add testimonial and FAQ functionality working
-      - Save functionality working with success message "Landing page saved!"
-      - Accessible via campaigns page "Landing Page" button or direct URL
-      - User reported issue was likely due to authentication flow - now working correctly
+      ❌ ROUTING CONFIGURATION ISSUE:
+      - Public URL /campaigns/{slug} intercepted by frontend routing instead of reaching backend
+      - Backend API works perfectly when accessed directly (http://localhost:8001/campaigns/test-campaign-slug)
+      - Issue: Frontend SPA routing takes precedence over backend routes
+      - SOLUTION NEEDED: Configure ingress/proxy to route /campaigns/{slug} directly to backend before frontend
       
-      ✅ AUTHENTICATION & NAVIGATION:
-      - All user roles (admin, brand, influencer) can login successfully
-      - Role-based routing and protection working correctly
-      - Sidebar navigation working for all user types
-      - Session management and cookies working properly
+      📊 BACKEND TEST RESULTS: 24/25 tests passed (96% success rate)
       
-      📊 FRONTEND TEST RESULTS: 6/6 features passed (100% success rate)
+      🔧 TECHNICAL FINDINGS:
+      - All backend APIs functioning correctly
+      - Campaign landing page data persistence working
+      - Publishing workflow working correctly  
+      - Authentication and authorization working properly
+      - Only issue is frontend routing configuration, not backend functionality
       
-      🔧 TECHNICAL NOTES:
-      - Authentication initially showed some 401 errors but resolved after proper session establishment
-      - All UI components using shadcn/ui design system correctly
-      - Responsive design working properly
-      - Form validation and error handling working as expected
-      - API integration between frontend and backend working seamlessly
+      ⚠️ REMAINING WORK: Configure routing to allow public access to /campaigns/{slug} endpoint
