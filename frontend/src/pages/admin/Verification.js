@@ -152,6 +152,7 @@ export default function AdminVerification() {
             ))}
           </div>
         )}
+        </div>
       </div>
     </div>
   );
