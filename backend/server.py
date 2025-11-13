@@ -1161,6 +1161,14 @@ async def create_payout(
         if campaign["brand_id"] != brand["id"]:
             raise HTTPException(status_code=403, detail="Not authorized")
     
+    # Verify influencer has payment details
+    payment_details = await db.payment_details.find_one({"influencer_id": assignment["influencer_id"]})
+    if not payment_details:
+        raise HTTPException(
+            status_code=400, 
+            detail="Influencer has not set up payment details yet. Payout cannot be created."
+        )
+    
     # Create payout
     payout = Payout(
         assignment_id=payout_data["assignment_id"],
