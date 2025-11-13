@@ -878,6 +878,142 @@ async def get_verification_queue(
     return {"data": []}
 
 # Reports & CSV
+@api_router.get("/brand/reports")
+async def get_brand_reports(
+    status: str = Query("all"),
+    user: dict = Depends(require_role([UserRole.BRAND]))
+):
+    brand = await db.brands.find_one({"user_id": user["id"]})
+    if not brand:
+        raise HTTPException(status_code=404, detail="Brand profile not found")
+    
+    # Get all campaigns for this brand
+    campaigns = await db.campaigns.find({"brand_id": brand["id"]}, {"_id": 0}).to_list(1000)
+    campaign_ids = [c["id"] for c in campaigns]
+    
+    # Get assignments for these campaigns
+    query = {"campaign_id": {"$in": campaign_ids}}
+    if status == "completed":
+        query["status"] = AssignmentStatus.COMPLETED.value
+    elif status == "pending":
+        query["status"] = {"$ne": AssignmentStatus.COMPLETED.value}
+    
+    assignments = await db.assignments.find(query, {"_id": 0}).to_list(1000)
+    
+    # Build detailed report
+    report_data = []
+    total_product_cost = 0
+    total_content_fees = 0
+    total_addon_fees = 0
+    
+    for assignment in assignments:
+        # Get purchase proof to get product cost
+        purchase_proof = await db.purchase_proofs.find_one(
+            {"assignment_id": assignment["id"], "status": PurchaseProofStatus.APPROVED.value},
+            {"_id": 0}
+        )
+        
+        # Get influencer name
+        influencer = await db.influencers.find_one({"id": assignment["influencer_id"]}, {"_id": 0})
+        
+        # Get campaign title
+        campaign = await db.campaigns.find_one({"id": assignment["campaign_id"]}, {"_id": 0})
+        
+        # Get payout info
+        payout = await db.payouts.find_one({"assignment_id": assignment["id"]}, {"_id": 0})
+        
+        # Calculate costs
+        product_cost = purchase_proof["total"] if purchase_proof and purchase_proof.get("total") else 0
+        content_fee = 10.00  # Base content fee
+        addon_posts = 0  # Could be tracked via deliverables
+        addon_fee = addon_posts * 5.00
+        
+        total_payable = product_cost + content_fee + addon_fee
+        
+        total_product_cost += product_cost
+        total_content_fees += content_fee
+        total_addon_fees += addon_fee
+        
+        report_data.append({
+            "id": assignment["id"],
+            "campaign_title": campaign["title"] if campaign else "Unknown",
+            "influencer_name": influencer["name"] if influencer else "Unknown",
+            "status": assignment["status"],
+            "payment_status": payout["status"] if payout else "pending",
+            "product_cost": product_cost,
+            "content_fee": content_fee,
+            "addon_posts": addon_posts,
+            "addon_fee": addon_fee,
+            "total_payable": total_payable,
+            "order_date": purchase_proof["order_date"] if purchase_proof else None,
+            "order_id": purchase_proof["order_id"] if purchase_proof else None
+        })
+    
+    return {
+        "summary": {
+            "total_products": len(report_data),
+            "total_product_cost": total_product_cost,
+            "total_content_fees": total_content_fees,
+            "total_addon_fees": total_addon_fees,
+            "total_payable": total_product_cost + total_content_fees + total_addon_fees
+        },
+        "assignments": report_data
+    }
+
+@api_router.get("/brand/reports/export")
+async def export_brand_reports_csv(user: dict = Depends(require_role([UserRole.BRAND]))):
+    brand = await db.brands.find_one({"user_id": user["id"]})
+    if not brand:
+        raise HTTPException(status_code=404, detail="Brand profile not found")
+    
+    # Get report data (reuse logic from above)
+    campaigns = await db.campaigns.find({"brand_id": brand["id"]}, {"_id": 0}).to_list(1000)
+    campaign_ids = [c["id"] for c in campaigns]
+    assignments = await db.assignments.find({"campaign_id": {"$in": campaign_ids}}, {"_id": 0}).to_list(1000)
+    
+    csv_data = []
+    for assignment in assignments:
+        purchase_proof = await db.purchase_proofs.find_one(
+            {"assignment_id": assignment["id"], "status": PurchaseProofStatus.APPROVED.value},
+            {"_id": 0}
+        )
+        influencer = await db.influencers.find_one({"id": assignment["influencer_id"]}, {"_id": 0})
+        campaign = await db.campaigns.find_one({"id": assignment["campaign_id"]}, {"_id": 0})
+        payout = await db.payouts.find_one({"assignment_id": assignment["id"]}, {"_id": 0})
+        
+        product_cost = purchase_proof["total"] if purchase_proof and purchase_proof.get("total") else 0
+        content_fee = 10.00
+        addon_posts = 0
+        addon_fee = addon_posts * 5.00
+        total_payable = product_cost + content_fee + addon_fee
+        
+        csv_data.append({
+            "Campaign": campaign["title"] if campaign else "Unknown",
+            "Influencer": influencer["name"] if influencer else "Unknown",
+            "Order ID": purchase_proof["order_id"] if purchase_proof else "",
+            "Order Date": purchase_proof["order_date"] if purchase_proof else "",
+            "Product Cost": f"${product_cost:.2f}",
+            "Content Fee": "$10.00",
+            "Addon Posts": addon_posts,
+            "Addon Fee": f"${addon_fee:.2f}",
+            "Total Payable": f"${total_payable:.2f}",
+            "Payment Status": payout["status"] if payout else "pending",
+            "Status": assignment["status"]
+        })
+    
+    output = io.StringIO()
+    if csv_data:
+        writer = csv.DictWriter(output, fieldnames=csv_data[0].keys())
+        writer.writeheader()
+        writer.writerows(csv_data)
+    
+    output.seek(0)
+    return StreamingResponse(
+        io.BytesIO(output.getvalue().encode()),
+        media_type="text/csv",
+        headers={"Content-Disposition": f"attachment; filename=campaign-reports-{datetime.now(timezone.utc).strftime('%Y-%m-%d')}.csv"}
+    )
+
 @api_router.get("/reports/clicks")
 async def export_clicks_csv(user: dict = Depends(require_role([UserRole.BRAND, UserRole.ADMIN]))):
     clicks = await db.amazon_click_logs.find({}, {"_id": 0}).to_list(10000)
