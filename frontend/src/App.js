@@ -23,6 +23,8 @@ import BrandReports from './pages/brand/Reports';
 import LandingPageBuilder from './pages/brand/LandingPageBuilder';
 import InfluencerPayouts from './pages/influencer/Payouts';
 import InfluencerProfileSetup from './pages/influencer/ProfileSetup';
+import InfluencerPaymentSettings from './pages/influencer/PaymentSettings';
+import AdminReports from './pages/admin/Reports';
 
 const ProtectedRoute = ({ children, allowedRoles }) => {
   const { user, loading } = useAuth();
