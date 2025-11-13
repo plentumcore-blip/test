@@ -1316,7 +1316,7 @@ async def update_campaign_landing_page(
     
     await log_audit(user["id"], "update", "campaign_landing_page", campaign_id)
     
-    return {"message": "Landing page updated", "slug": landing_data.get("landing_page_slug")}
+    return {"message": "Landing page updated", "slug": update_data["landing_page_slug"]}
 
 # Public landing page endpoint (no auth required)
 @app.get("/campaigns/{slug}")
