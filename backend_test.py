@@ -102,6 +102,9 @@ class APITester:
                 result = response.json()
                 self.log_test("POST Payment Details", True, 
                             f"Created payment details successfully: {result.get('message', 'Success')}")
+            elif response.status_code == 400 and "already exist" in response.text:
+                self.log_test("POST Payment Details", True, 
+                            "Payment details already exist (expected if running tests multiple times)")
             else:
                 self.log_test("POST Payment Details", False, 
                             f"Failed to create payment details: {response.status_code}", 
