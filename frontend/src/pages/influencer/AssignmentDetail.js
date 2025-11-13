@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, ShoppingCart, Upload, ExternalLink, CheckCircle, Clock } from 'lucide-react';
+import { ArrowLeft, ShoppingCart, Upload, ExternalLink, CheckCircle, Clock, DollarSign } from 'lucide-react';
 import { toast } from 'sonner';
 
 const API_BASE = `${process.env.REACT_APP_BACKEND_URL}/api/v1`;
