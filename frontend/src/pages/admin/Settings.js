@@ -59,46 +59,15 @@ export default function AdminSettings() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC]">
-      {/* Header */}
-      <header className="bg-white border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <h1 className="text-3xl font-bold text-[#0B1220]">Platform Settings</h1>
-        </div>
-      </header>
-
-      {/* Navigation */}
-      <div className="bg-white border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="flex gap-6">
-            <button
-              onClick={() => navigate('/admin/dashboard')}
-              className="py-4 px-2 border-b-2 border-transparent text-gray-600 hover:text-[#1F66FF] font-semibold"
-            >
-              Dashboard
-            </button>
-            <button
-              onClick={() => navigate('/admin/users')}
-              className="py-4 px-2 border-b-2 border-transparent text-gray-600 hover:text-[#1F66FF] font-semibold"
-            >
-              Users
-            </button>
-            <button
-              onClick={() => navigate('/admin/verification')}
-              className="py-4 px-2 border-b-2 border-transparent text-gray-600 hover:text-[#1F66FF] font-semibold"
-            >
-              Verification Queue
-            </button>
-            <button
-              className="py-4 px-2 border-b-2 border-[#1F66FF] text-[#1F66FF] font-semibold"
-            >
-              Settings
-            </button>
+    <div className="flex min-h-screen bg-gray-50">
+      <AdminSidebar onLogout={logout} />
+      
+      <div className="flex-1 overflow-auto">
+        <div className="max-w-4xl mx-auto p-8">
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold text-[#0B1220]">Platform Settings</h1>
+            <p className="text-gray-600 mt-2">Configure email and platform settings</p>
           </div>
-        </div>
-      </div>
-
-      <div className="max-w-4xl mx-auto px-6 py-8">
         <div className="card">
           <h2 className="text-2xl font-bold text-[#0B1220] mb-6">Email Configuration</h2>
           
