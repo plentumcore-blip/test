@@ -177,7 +177,7 @@ export default function LandingPageBuilder() {
             />
             {formData.landing_page_slug && (
               <p className="text-sm text-gray-600 mt-2">
-                URL: {process.env.REACT_APP_BACKEND_URL}/campaigns/{formData.landing_page_slug}
+                Public URL: /campaigns/{formData.landing_page_slug}
               </p>
             )}
           </div>
