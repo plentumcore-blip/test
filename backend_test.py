@@ -300,7 +300,7 @@ class APITester:
         print("\n=== Testing Admin Reports Endpoint ===")
         
         # Login as admin
-        admin = self.login_user("admin@affitarget.com", "password123")
+        admin = self.login_user("admin@example.com", "password123")
         if not admin:
             self.log_test("Admin Reports Setup", False, "Could not login as admin")
             return
