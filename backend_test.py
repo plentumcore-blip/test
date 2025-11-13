@@ -256,7 +256,7 @@ class APITester:
             self.log_test("Payout Validation", False, f"Error: {str(e)}")
         
         # Test with influencer without payment details
-        # Login as different influencer
+        # Login as different influencer (this user might not exist, so we'll handle gracefully)
         influencer2 = self.login_user("testinfluencer@example.com", "password123")
         if influencer2:
             # Login back as brand
