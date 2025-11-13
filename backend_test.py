@@ -7,6 +7,7 @@ Tests the newly implemented features for payment details and admin reports.
 import requests
 import json
 import sys
+import uuid
 from datetime import datetime
 from typing import Dict, Any, Optional
 
