@@ -25,6 +25,7 @@ import InfluencerPayouts from './pages/influencer/Payouts';
 import InfluencerProfileSetup from './pages/influencer/ProfileSetup';
 import InfluencerPaymentSettings from './pages/influencer/PaymentSettings';
 import AdminReports from './pages/admin/Reports';
+import CampaignLandingPage from './pages/CampaignLandingPage';
 
 const ProtectedRoute = ({ children, allowedRoles }) => {
   const { user, loading } = useAuth();
