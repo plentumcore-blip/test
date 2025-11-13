@@ -420,6 +420,36 @@ export default function AssignmentDetail() {
           </div>
         )}
 
+        {/* Post Under Review */}
+        {assignment.status === 'post_review' && (
+          <div className="card mb-6 bg-orange-50 border border-orange-200">
+            <div className="flex items-center gap-4">
+              <Clock className="w-12 h-12 text-[#F79009]" />
+              <div>
+                <h3 className="text-2xl font-bold text-[#0B1220] mb-2">Post Under Review</h3>
+                <p className="text-gray-700">
+                  Your post submission is being reviewed by the brand. You'll be notified once it's approved.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Completed */}
+        {assignment.status === 'completed' && (
+          <div className="card mb-6 bg-green-50 border border-green-200">
+            <div className="flex items-center gap-4">
+              <CheckCircle className="w-12 h-12 text-[#12B76A]" />
+              <div>
+                <h3 className="text-2xl font-bold text-[#0B1220] mb-2">Assignment Completed! 🎉</h3>
+                <p className="text-gray-700">
+                  Congratulations! Your assignment has been completed successfully. The payout will be processed soon.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Campaign Details */}
         <div className="card">
           <h3 className="text-2xl font-bold text-[#0B1220] mb-4">Campaign Details</h3>
