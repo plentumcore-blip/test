@@ -409,16 +409,16 @@ class APITester:
             self.log_test("GET Admin Reports", False, f"Error: {str(e)}")
     
     def test_campaign_landing_page_flow(self):
-        """Test campaign landing page end-to-end flow"""
-        print("\n=== Testing Campaign Landing Page Flow ===")
+        """Test campaign landing page end-to-end flow as requested in review"""
+        print("\n=== Testing Campaign Landing Page Flow (Review Request) ===")
         
-        # Step 1: Login as brand
+        # Step 1: Login as brand (brand@example.com / Brand@123)
         brand = self.login_user("brand@example.com", "Brand@123")
         if not brand:
             self.log_test("Landing Page Flow Setup", False, "Could not login as brand")
             return
         
-        # Step 2: Get list of campaigns
+        # Step 2: Get first campaign from the list
         try:
             response = self.session.get(f"{BASE_URL}/campaigns")
             if response.status_code != 200:
@@ -438,31 +438,31 @@ class APITester:
             campaign_id = campaigns[0]['id']
             campaign_title = campaigns[0].get('title', 'Test Campaign')
             
-            self.log_test("Get Campaigns List", True, 
-                        f"Found {len(campaigns)} campaigns, using campaign ID: {campaign_id}")
+            self.log_test("Get First Campaign", True, 
+                        f"Found {len(campaigns)} campaigns, using first campaign ID: {campaign_id}")
             
         except Exception as e:
-            self.log_test("Get Campaigns List", False, f"Error: {str(e)}")
+            self.log_test("Get First Campaign", False, f"Error: {str(e)}")
             return
         
-        # Step 4: Update landing page for that campaign
+        # Step 3: Make sure landing page is saved with slug "test-landing-page"
         landing_page_data = {
             "landing_page_enabled": True,
-            "landing_page_slug": "test-campaign-slug",
-            "landing_page_content": "This is test content",
-            "landing_page_hero_image": "https://example.com/image.jpg",
+            "landing_page_slug": "test-landing-page",
+            "landing_page_content": "This is test content for the landing page",
+            "landing_page_hero_image": "https://example.com/hero-image.jpg",
             "landing_page_cta_text": "Apply Now",
             "landing_page_testimonials": [
                 {
-                    "name": "John Doe",
-                    "content": "Great campaign experience!",
+                    "name": "Sarah Johnson",
+                    "content": "Amazing campaign experience! Highly recommend.",
                     "rating": 5
                 }
             ],
             "landing_page_faqs": [
                 {
-                    "question": "How do I apply?",
-                    "answer": "Click the Apply Now button and fill out the form."
+                    "question": "How do I apply for this campaign?",
+                    "answer": "Click the Apply Now button and complete the application form."
                 }
             ]
         }
@@ -475,147 +475,147 @@ class APITester:
             
             if response.status_code == 200:
                 result = response.json()
-                slug = result.get('slug', 'test-campaign-slug')
-                self.log_test("Update Landing Page", True, 
-                            f"Landing page updated successfully with slug: {slug}")
+                slug = result.get('slug', 'test-landing-page')
+                self.log_test("Save Landing Page with Slug", True, 
+                            f"Landing page saved successfully with slug: {slug}")
             else:
-                self.log_test("Update Landing Page", False, 
-                            f"Failed to update landing page: {response.status_code}", 
+                self.log_test("Save Landing Page with Slug", False, 
+                            f"Failed to save landing page: {response.status_code}", 
                             {"response": response.text})
                 return
                 
         except Exception as e:
-            self.log_test("Update Landing Page", False, f"Error: {str(e)}")
+            self.log_test("Save Landing Page with Slug", False, f"Error: {str(e)}")
             return
         
-        # Step 5: Publish the campaign
+        # Step 4: Publish the campaign if not already published
         try:
-            response = self.session.put(f"{BASE_URL}/campaigns/{campaign_id}/publish")
-            
-            if response.status_code == 200:
-                self.log_test("Publish Campaign", True, "Campaign published successfully")
+            # First check current status
+            campaign_response = self.session.get(f"{BASE_URL}/campaigns/{campaign_id}")
+            if campaign_response.status_code == 200:
+                campaign_data = campaign_response.json()
+                current_status = campaign_data.get('status', 'draft')
+                
+                if current_status != 'published':
+                    # Publish the campaign
+                    response = self.session.put(f"{BASE_URL}/campaigns/{campaign_id}/publish")
+                    
+                    if response.status_code == 200:
+                        self.log_test("Publish Campaign", True, "Campaign published successfully")
+                    else:
+                        self.log_test("Publish Campaign", False, 
+                                    f"Failed to publish campaign: {response.status_code}", 
+                                    {"response": response.text})
+                        return
+                else:
+                    self.log_test("Publish Campaign", True, "Campaign already published")
             else:
                 self.log_test("Publish Campaign", False, 
-                            f"Failed to publish campaign: {response.status_code}", 
-                            {"response": response.text})
+                            f"Failed to get campaign status: {campaign_response.status_code}")
                 return
                 
         except Exception as e:
             self.log_test("Publish Campaign", False, f"Error: {str(e)}")
             return
         
-        # Step 6: Test access to public landing page WITHOUT authentication
-        # First, clear session cookies to simulate unauthenticated access
+        # Step 5: Test the NEW public API endpoint: GET /api/v1/public/campaigns/test-landing-page
+        # This should work without authentication
         public_session = requests.Session()
         public_session.timeout = TIMEOUT
         
-        # The public endpoint is at the app root, not /api/v1
-        public_url = BASE_URL.replace('/api/v1', '') + f"/campaigns/test-campaign-slug"
-        
-        # Test direct backend access first (this should work)
-        backend_url = "http://localhost:8001/campaigns/test-campaign-slug"
+        public_api_url = f"{BASE_URL}/public/campaigns/test-landing-page"
         
         try:
-            # Test direct backend access
-            backend_response = public_session.get(backend_url)
-            
-            if backend_response.status_code == 200:
-                try:
-                    backend_landing_page = backend_response.json()
-                    self.log_test("Backend Landing Page API", True, 
-                                "Backend landing page API working correctly")
-                except json.JSONDecodeError:
-                    self.log_test("Backend Landing Page API", False, 
-                                "Backend API returned invalid JSON")
-                    return
-            else:
-                self.log_test("Backend Landing Page API", False, 
-                            f"Backend API failed: {backend_response.status_code}")
-                return
-        except Exception as e:
-            self.log_test("Backend Landing Page API", False, f"Backend API error: {str(e)}")
-            return
-        
-        # Test public URL (this may fail due to frontend routing)
-        try:
-            response = public_session.get(public_url)
+            response = public_session.get(public_api_url)
             
             if response.status_code == 200:
                 try:
                     landing_page = response.json()
+                    self.log_test("NEW Public API Endpoint", True, 
+                                "✅ NEW public API endpoint /api/v1/public/campaigns/test-landing-page is working!")
+                    
+                    # Step 6: Verify the response includes all landing page data
+                    required_fields = [
+                        'id', 'title', 'landing_page_content', 'landing_page_hero_image',
+                        'landing_page_cta_text', 'landing_page_testimonials', 'landing_page_faqs',
+                        'brand'
+                    ]
+                    
+                    missing_fields = [field for field in required_fields if field not in landing_page]
+                    
+                    if not missing_fields:
+                        # Verify specific content
+                        content_checks = []
+                        
+                        if landing_page.get('landing_page_content') == "This is test content for the landing page":
+                            content_checks.append("✓ Content matches")
+                        else:
+                            content_checks.append(f"✗ Content mismatch: got '{landing_page.get('landing_page_content')}'")
+                        
+                        if landing_page.get('landing_page_hero_image') == "https://example.com/hero-image.jpg":
+                            content_checks.append("✓ Hero image matches")
+                        else:
+                            content_checks.append(f"✗ Hero image mismatch: got '{landing_page.get('landing_page_hero_image')}'")
+                        
+                        if landing_page.get('landing_page_testimonials') and len(landing_page['landing_page_testimonials']) > 0:
+                            content_checks.append("✓ Testimonials present")
+                        else:
+                            content_checks.append("✗ Testimonials missing")
+                        
+                        if landing_page.get('landing_page_faqs') and len(landing_page['landing_page_faqs']) > 0:
+                            content_checks.append("✓ FAQs present")
+                        else:
+                            content_checks.append("✗ FAQs missing")
+                        
+                        if landing_page.get('brand') and 'company_name' in landing_page['brand']:
+                            content_checks.append("✓ Brand info present")
+                        else:
+                            content_checks.append("✗ Brand info missing")
+                        
+                        self.log_test("Verify Landing Page Data", True, 
+                                    f"Landing page contains all required data. Checks: {', '.join(content_checks)}")
+                        
+                        # Test access control - should only work for published campaigns with landing_page_enabled=true
+                        if landing_page.get('status') == 'published' and landing_page.get('landing_page_enabled'):
+                            self.log_test("Landing Page Access Control", True, 
+                                        "✅ Access control working - only published campaigns with landing_page_enabled=true are accessible")
+                        else:
+                            self.log_test("Landing Page Access Control", False, 
+                                        f"❌ Access control issue - status: {landing_page.get('status')}, landing_page_enabled: {landing_page.get('landing_page_enabled')}")
+                        
+                    else:
+                        self.log_test("Verify Landing Page Data", False, 
+                                    f"❌ Landing page missing required fields: {missing_fields}")
+                        
                 except json.JSONDecodeError:
-                    # This is expected - frontend is intercepting the route
-                    self.log_test("Public Landing Page Access", False, 
-                                f"Frontend routing intercepting /campaigns/{{slug}} route. Backend API works correctly but needs routing configuration.")
-                    
-                    # Use the backend response for validation instead
-                    landing_page = backend_landing_page
-                
-                # Step 7: Verify the response includes all the landing page data
-                required_fields = [
-                    'id', 'title', 'landing_page_content', 'landing_page_hero_image',
-                    'landing_page_cta_text', 'landing_page_testimonials', 'landing_page_faqs',
-                    'brand'
-                ]
-                
-                missing_fields = [field for field in required_fields if field not in landing_page]
-                
-                if not missing_fields:
-                    # Verify specific content
-                    content_checks = []
-                    
-                    if landing_page.get('landing_page_content') == "This is test content":
-                        content_checks.append("✓ Content matches")
-                    else:
-                        content_checks.append("✗ Content mismatch")
-                    
-                    if landing_page.get('landing_page_hero_image') == "https://example.com/image.jpg":
-                        content_checks.append("✓ Hero image matches")
-                    else:
-                        content_checks.append("✗ Hero image mismatch")
-                    
-                    if landing_page.get('landing_page_testimonials') and len(landing_page['landing_page_testimonials']) > 0:
-                        content_checks.append("✓ Testimonials present")
-                    else:
-                        content_checks.append("✗ Testimonials missing")
-                    
-                    if landing_page.get('landing_page_faqs') and len(landing_page['landing_page_faqs']) > 0:
-                        content_checks.append("✓ FAQs present")
-                    else:
-                        content_checks.append("✗ FAQs missing")
-                    
-                    if landing_page.get('brand') and 'company_name' in landing_page['brand']:
-                        content_checks.append("✓ Brand info present")
-                    else:
-                        content_checks.append("✗ Brand info missing")
-                    
-                    self.log_test("Public Landing Page Access", True, 
-                                f"Landing page accessible and contains all required data. Checks: {', '.join(content_checks)}")
-                    
-                    # Test access control by checking the backend logic
-                    # The backend should only return published campaigns with landing_page_enabled=true
-                    # Let's verify this by checking the campaign status in the response
-                    if backend_landing_page.get('status') == 'published' and backend_landing_page.get('landing_page_enabled'):
-                        self.log_test("Landing Page Access Control", True, 
-                                    "Landing page access control working - only published campaigns with landing_page_enabled=true are accessible")
-                    else:
-                        self.log_test("Landing Page Access Control", False, 
-                                    f"Access control issue - campaign status: {backend_landing_page.get('status')}, landing_page_enabled: {backend_landing_page.get('landing_page_enabled')}")
-                    
-                else:
-                    self.log_test("Public Landing Page Access", False, 
-                                f"Landing page missing required fields: {missing_fields}")
+                    self.log_test("NEW Public API Endpoint", False, 
+                                "❌ Public API returned invalid JSON")
                     
             elif response.status_code == 404:
-                self.log_test("Public Landing Page Access", False, 
-                            "Landing page not found - check if slug is correct or campaign is published")
+                self.log_test("NEW Public API Endpoint", False, 
+                            "❌ Landing page not found (404) - check if campaign is published and landing_page_enabled is true")
             else:
-                self.log_test("Public Landing Page Access", False, 
-                            f"Failed to access public landing page: {response.status_code}", 
-                            {"response": response.text, "url": public_url})
+                self.log_test("NEW Public API Endpoint", False, 
+                            f"❌ Public API endpoint failed: {response.status_code}", 
+                            {"response": response.text, "url": public_api_url})
                 
         except Exception as e:
-            self.log_test("Public Landing Page Access", False, f"Error: {str(e)}")
+            self.log_test("NEW Public API Endpoint", False, f"❌ Error accessing public API: {str(e)}")
+        
+        # Step 7: Test that endpoint returns 404 for non-published campaigns or landing_page_enabled=false
+        try:
+            # Test with a non-existent slug
+            fake_response = public_session.get(f"{BASE_URL}/public/campaigns/non-existent-slug")
+            
+            if fake_response.status_code == 404:
+                self.log_test("404 for Non-existent Campaign", True, 
+                            "✅ Correctly returns 404 for non-existent campaign slug")
+            else:
+                self.log_test("404 for Non-existent Campaign", False, 
+                            f"❌ Should return 404 for non-existent slug, got: {fake_response.status_code}")
+                
+        except Exception as e:
+            self.log_test("404 for Non-existent Campaign", False, f"Error: {str(e)}")
     
     def run_all_tests(self):
         """Run all tests"""
