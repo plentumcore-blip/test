@@ -101,3 +101,204 @@
 #====================================================================================================
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
+
+user_problem_statement: |
+  Implement influencer payment details and admin reports:
+  1. Influencers must add bank details (account holder name, account number, routing number, bank name, SWIFT/IBAN)
+  2. Add a separate "Payment Settings" page in influencer dashboard with transaction history/ledger
+  3. Payment details are mandatory before payouts can be processed
+  4. Admin dashboard should have a detailed reports page showing:
+     - Brand analytics (campaigns, spending, influencer count, performance)
+     - Influencer analytics (earnings, assignments, applications, payment status)
+
+backend:
+  - task: "Add PaymentDetails model"
+    implemented: true
+    working: "NA"
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Added PaymentDetails model with fields for account holder name, account number, routing number, bank name, SWIFT code, IBAN, and PayPal email"
+
+  - task: "Add Transaction model"
+    implemented: true
+    working: "NA"
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Added Transaction model for tracking influencer payment history and ledger"
+
+  - task: "Create POST/PUT /api/v1/influencer/payment-details endpoint"
+    implemented: true
+    working: "NA"
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Created endpoints for influencers to add and update their payment details. POST creates new, PUT updates existing or creates if not exists"
+
+  - task: "Create GET /api/v1/influencer/payment-details endpoint"
+    implemented: true
+    working: "NA"
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Created endpoint to fetch influencer payment details. Returns has_payment_details flag and data"
+
+  - task: "Create GET /api/v1/influencer/transactions endpoint"
+    implemented: true
+    working: "NA"
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Created endpoint to fetch influencer transaction history. Transforms payout data into transaction format with pagination"
+
+  - task: "Add payment details validation to payout creation"
+    implemented: true
+    working: "NA"
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Updated POST /api/v1/payouts endpoint to check if influencer has payment details before creating payout. Returns 400 error if missing"
+
+  - task: "Create GET /api/v1/admin/reports endpoint"
+    implemented: true
+    working: "NA"
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Created comprehensive admin reports endpoint that returns brand analytics (campaigns, spending, influencers, applications) and influencer analytics (earnings, assignments, payment details status, platforms)"
+
+frontend:
+  - task: "Add Payment Settings link to InfluencerSidebar"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/components/InfluencerSidebar.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Added CreditCard icon and Payment Settings menu item to influencer sidebar navigation"
+
+  - task: "Create Payment Settings page for influencers"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/pages/influencer/PaymentSettings.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Created comprehensive payment settings page with form for bank details (all required fields including SWIFT/IBAN) and transaction history/ledger table"
+
+  - task: "Add Reports link to AdminSidebar"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/components/AdminSidebar.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Added BarChart3 icon and Reports menu item to admin sidebar navigation"
+
+  - task: "Create Admin Reports page"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/pages/admin/Reports.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Created detailed admin reports page with summary cards and two comprehensive tables for brand and influencer analytics"
+
+  - task: "Add routes to App.js"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/App.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Added routes for /influencer/payment-settings and /admin/reports pages with proper role-based protection"
+
+metadata:
+  created_by: "main_agent"
+  version: "1.0"
+  test_sequence: 0
+  run_ui: false
+
+test_plan:
+  current_focus:
+    - "Payment details endpoints"
+    - "Transaction history endpoint"
+    - "Admin reports endpoint"
+    - "Payment settings UI"
+    - "Admin reports UI"
+    - "Payout validation with payment details"
+  stuck_tasks: []
+  test_all: true
+  test_priority: "high_first"
+
+agent_communication:
+  - agent: "main"
+    message: |
+      Implementation completed for influencer payment settings and admin reports features:
+      
+      BACKEND:
+      - Added PaymentDetails and Transaction models
+      - Created payment details CRUD endpoints (POST, PUT, GET)
+      - Created transaction history endpoint with pagination
+      - Updated payout creation to validate payment details exist
+      - Created comprehensive admin reports endpoint with brand and influencer analytics
+      
+      FRONTEND:
+      - Created Payment Settings page with form and transaction history
+      - Updated InfluencerSidebar with Payment Settings link
+      - Created Admin Reports page with summary cards and detailed tables
+      - Updated AdminSidebar with Reports link
+      - Added routes to App.js
+      
+      All services have been restarted and are running.
+      
+      Ready for comprehensive testing of:
+      1. Payment details creation/update flow
+      2. Transaction history display
+      3. Payout validation when payment details are missing
+      4. Admin reports data accuracy
+      5. UI/UX of both new pages
