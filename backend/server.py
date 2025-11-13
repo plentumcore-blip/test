@@ -984,15 +984,62 @@ async def get_assignment_post_submission(assignment_id: str, user: dict = Depend
         raise HTTPException(status_code=404, detail="No post submission found for this assignment")
     return post
 
-@api_router.get("/assignments/{assignment_id}/addon-post")
-async def get_assignment_addon_post(assignment_id: str, user: dict = Depends(get_current_user)):
-    addon_post = await db.post_submissions.find_one({
-        "assignment_id": assignment_id,
-        "is_addon": True
+@api_router.get("/assignments/{assignment_id}/review")
+async def get_assignment_product_review(assignment_id: str, user: dict = Depends(get_current_user)):
+    review = await db.product_reviews.find_one({
+        "assignment_id": assignment_id
     }, {"_id": 0})
-    if not addon_post:
-        raise HTTPException(status_code=404, detail="No addon post found for this assignment")
-    return addon_post
+    if not review:
+        raise HTTPException(status_code=404, detail="No product review found for this assignment")
+    return review
+
+@api_router.put("/product-reviews/{review_id}/review")
+async def review_product_review(
+    review_id: str,
+    review_data: Dict[str, Any],
+    user: dict = Depends(require_role([UserRole.BRAND, UserRole.ADMIN]))
+):
+    review = await db.product_reviews.find_one({"id": review_id})
+    if not review:
+        raise HTTPException(status_code=404, detail="Product review not found")
+    
+    # Get assignment and campaign
+    assignment = await db.assignments.find_one({"id": review["assignment_id"]})
+    campaign = await db.campaigns.find_one({"id": review["campaign_id"]})
+    
+    # For brands, verify they own the campaign
+    if user["role"] == "brand":
+        brand = await db.brands.find_one({"user_id": user["id"]})
+        if campaign["brand_id"] != brand["id"]:
+            raise HTTPException(status_code=403, detail="Not your campaign")
+    
+    status = review_data.get("status")
+    if status not in ["approved", "rejected"]:
+        raise HTTPException(status_code=400, detail="Status must be 'approved' or 'rejected'")
+    
+    update_data = {
+        "status": status,
+        "review_notes": review_data.get("notes"),
+        "reviewed_by": user["id"],
+        "reviewed_at": datetime.now(timezone.utc).isoformat(),
+        "updated_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    await db.product_reviews.update_one({"id": review_id}, {"$set": update_data})
+    
+    # Update assignment review_status
+    review_status = "approved" if status == "approved" else "rejected"
+    await db.assignments.update_one(
+        {"id": review["assignment_id"]},
+        {"$set": {
+            "review_status": review_status,
+            "updated_at": datetime.now(timezone.utc).isoformat()
+        }}
+    )
+    
+    await log_audit(user["id"], "review", "product_review", review_id, {"status": status})
+    
+    return {"message": f"Product review {status}"}
 
 @api_router.put("/post-submissions/{submission_id}/review")
 async def review_post_submission(
