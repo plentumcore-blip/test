@@ -218,6 +218,18 @@ backend:
         comment: "✅ TESTED: Admin reports endpoint working perfectly. Returns comprehensive data with all required sections: brands array with metrics (total_campaigns, total_spent, pending_payouts, completed_payouts, unique_influencers, total_applications, completed_assignments), influencers array with metrics (total_earnings, pending_earnings, paid_earnings, total_assignments, completed_assignments, total_applications, platforms, has_payment_details), and summary object (total_brands, total_influencers, total_platform_spending, total_platform_earnings). All data accurate and properly calculated."
 
 frontend:
+  - task: "Campaign landing page functionality"
+    implemented: true
+    working: false
+    file: "/app/frontend/src/pages/brand/LandingPageBuilder.js"
+    stuck_count: 1
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: false
+        agent: "user"
+        comment: "User reported that campaigns landing page is not working properly. Need to investigate and fix the issue."
+
   - task: "Add Payment Settings link to InfluencerSidebar"
     implemented: true
     working: "NA"
