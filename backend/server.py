@@ -1321,9 +1321,13 @@ async def update_campaign_landing_page(
 # Public landing page endpoint (no auth required)
 @app.get("/campaigns/{slug}")
 async def get_campaign_landing_page(slug: str):
-    campaign = await db.campaigns.find_one({"landing_page_slug": slug, "landing_page_enabled": True}, {"_id": 0})
+    campaign = await db.campaigns.find_one({
+        "landing_page_slug": slug, 
+        "landing_page_enabled": True,
+        "status": {"$in": ["published", "live"]}
+    }, {"_id": 0})
     if not campaign:
-        raise HTTPException(status_code=404, detail="Campaign not found")
+        raise HTTPException(status_code=404, detail="Campaign not found or not published")
     
     # Get brand info
     brand = await db.brands.find_one({"id": campaign["brand_id"]}, {"_id": 0, "company_name": 1, "logo_url": 1})
