@@ -25,9 +25,18 @@ export default function AssignmentDetail() {
     screenshot_url: '',
     caption: ''
   });
+  const [showAddonForm, setShowAddonForm] = useState(false);
+  const [addonData, setAddonData] = useState({
+    post_url: '',
+    platform: '',
+    post_type: '',
+    screenshot_url: '',
+    caption: ''
+  });
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [submittingPost, setSubmittingPost] = useState(false);
+  const [submittingAddon, setSubmittingAddon] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
