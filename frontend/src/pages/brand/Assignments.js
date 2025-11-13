@@ -29,11 +29,12 @@ export default function BrandAssignments() {
         withCredentials: true
       });
       
-      // Fetch purchase proofs and post submissions for each assignment
+      // Fetch purchase proofs, post submissions, and addon posts for each assignment
       const assignmentsWithData = await Promise.all(
         (response.data.data || []).map(async (assignment) => {
           let purchaseProof = null;
           let postSubmission = null;
+          let addonPost = null;
           
           // Fetch purchase proof if exists
           try {
@@ -57,7 +58,18 @@ export default function BrandAssignments() {
             // No post yet
           }
           
-          return { ...assignment, purchaseProof, postSubmission };
+          // Fetch addon post if exists
+          try {
+            const addonResponse = await axios.get(
+              `${API_BASE}/assignments/${assignment.id}/addon-post`,
+              { withCredentials: true }
+            );
+            addonPost = addonResponse.data;
+          } catch (error) {
+            // No addon post yet
+          }
+          
+          return { ...assignment, purchaseProof, postSubmission, addonPost };
         })
       );
       
