@@ -263,6 +263,34 @@ class Payout(BaseModel):
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
+class PaymentDetails(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    influencer_id: str
+    account_holder_name: str
+    account_number: str
+    routing_number: str
+    bank_name: str
+    swift_code: Optional[str] = None
+    iban: Optional[str] = None
+    paypal_email: Optional[str] = None
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class Transaction(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    influencer_id: str
+    payout_id: str
+    amount: float
+    currency: str = "USD"
+    type: str  # "payout", "bonus", "adjustment"
+    description: str
+    status: str  # "completed", "pending", "failed"
+    transaction_date: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+
 # Create app
 app = FastAPI()
 api_router = APIRouter(prefix="/api/v1")
