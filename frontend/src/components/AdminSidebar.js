@@ -1,5 +1,5 @@
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Home, ShoppingBag, Users, FileCheck, Settings, LogOut, DollarSign, LayoutGrid } from 'lucide-react';
+import { Home, ShoppingBag, Users, FileCheck, Settings, LogOut, DollarSign, LayoutGrid, BarChart3 } from 'lucide-react';
 
 const AdminSidebar = ({ onLogout }) => {
   const navigate = useNavigate();
