@@ -109,8 +109,8 @@ export default function BrandAssignments() {
     }
   };
 
-  const handleReviewPost = (assignment) => {
-    setSelectedPost(assignment.postSubmission);
+  const handleReviewPost = (assignment, isAddon = false) => {
+    setSelectedPost(isAddon ? assignment.addonPost : assignment.postSubmission);
     setReviewNotes('');
     setShowPostModal(true);
   };
