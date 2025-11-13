@@ -25,18 +25,17 @@ export default function AssignmentDetail() {
     screenshot_url: '',
     caption: ''
   });
-  const [showAddonForm, setShowAddonForm] = useState(false);
-  const [addonData, setAddonData] = useState({
-    post_url: '',
-    platform: '',
-    post_type: '',
+  const [showReviewForm, setShowReviewForm] = useState(false);
+  const [reviewData, setReviewData] = useState({
+    review_text: '',
+    rating: 5,
     screenshot_url: '',
-    caption: ''
+    platform: 'amazon'
   });
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [submittingPost, setSubmittingPost] = useState(false);
-  const [submittingAddon, setSubmittingAddon] = useState(false);
+  const [submittingReview, setSubmittingReview] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
