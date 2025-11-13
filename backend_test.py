@@ -602,7 +602,7 @@ class APITester:
     
     def run_all_tests(self):
         """Run all tests"""
-        print("🚀 Starting Backend API Tests for Payment Settings and Admin Reports")
+        print("🚀 Starting Backend API Tests for Payment Settings, Admin Reports, and Campaign Landing Pages")
         print(f"Testing against: {BASE_URL}")
         print("=" * 80)
         
@@ -611,6 +611,7 @@ class APITester:
             self.test_transaction_history()
             self.test_payout_validation()
             self.test_admin_reports()
+            self.test_campaign_landing_page_flow()
             
         except Exception as e:
             print(f"❌ Critical error during testing: {str(e)}")
