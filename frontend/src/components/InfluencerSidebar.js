@@ -10,6 +10,7 @@ const InfluencerSidebar = ({ onLogout }) => {
     { icon: Search, label: 'Browse Campaigns', path: '/influencer/campaigns' },
     { icon: FileCheck, label: 'My Assignments', path: '/influencer/assignments' },
     { icon: DollarSign, label: 'Payouts', path: '/influencer/payouts' },
+    { icon: CreditCard, label: 'Payment Settings', path: '/influencer/payment-settings' },
   ];
 
   return (
