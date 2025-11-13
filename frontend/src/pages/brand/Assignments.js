@@ -549,6 +549,90 @@ export default function BrandAssignments() {
           </div>
         </div>
       )}
+
+      {/* Review Product Review Modal */}
+      {showReviewModal && selectedReview && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto">
+            <div className="p-6 border-b border-gray-200">
+              <h2 className="text-2xl font-bold text-[#0B1220]">Review Product Review (+$5)</h2>
+            </div>
+            
+            <div className="p-6 space-y-4">
+              <div>
+                <label className="text-sm font-medium text-gray-700 mb-2 block">Rating</label>
+                <div className="text-2xl">
+                  {'⭐'.repeat(selectedReview.rating)}
+                  <span className="text-gray-500 text-base ml-2">({selectedReview.rating}/5)</span>
+                </div>
+              </div>
+
+              <div>
+                <label className="text-sm font-medium text-gray-700 mb-2 block">Platform</label>
+                <p className="text-gray-900 capitalize">{selectedReview.platform}</p>
+              </div>
+
+              <div>
+                <label className="text-sm font-medium text-gray-700 mb-2 block">Review Text</label>
+                <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                  <p className="text-gray-900 whitespace-pre-wrap">{selectedReview.review_text}</p>
+                </div>
+              </div>
+
+              <div>
+                <label className="text-sm font-medium text-gray-700 mb-2 block">Screenshot of Review</label>
+                <a
+                  href={selectedReview.screenshot_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 text-[#1F66FF]"
+                >
+                  <ExternalLink className="w-4 h-4" />
+                  View Screenshot
+                </a>
+              </div>
+
+              {/* Review Notes */}
+              <div>
+                <label className="text-sm font-medium text-gray-700 mb-2 block">Review Notes (Optional)</label>
+                <textarea
+                  value={reviewNotes}
+                  onChange={(e) => setReviewNotes(e.target.value)}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1F66FF]"
+                  rows={4}
+                  placeholder="Add notes about this review..."
+                />
+              </div>
+            </div>
+
+            <div className="p-6 border-t border-gray-200 flex gap-3">
+              <button
+                onClick={() => {
+                  setShowReviewModal(false);
+                  setSelectedReview(null);
+                }}
+                className="flex-1 px-4 py-3 border border-gray-300 rounded-xl text-gray-700 hover:bg-gray-50 transition-colors font-semibold"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => submitProductReviewReview('rejected')}
+                className="flex-1 px-4 py-3 bg-red-50 text-red-600 rounded-xl hover:bg-red-100 transition-colors font-semibold flex items-center justify-center gap-2"
+              >
+                <XCircle className="w-5 h-5" />
+                Reject
+              </button>
+              <button
+                onClick={() => submitProductReviewReview('approved')}
+                className="flex-1 px-4 py-3 bg-green-600 text-white rounded-xl hover:bg-green-700 transition-colors font-semibold flex items-center justify-center gap-2"
+              >
+                <CheckCircle className="w-5 h-5" />
+                Approve (+$5)
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
