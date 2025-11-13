@@ -1470,6 +1470,82 @@ async def get_transactions(
         "total": total
     }
 
+# Admin User Management endpoints
+@api_router.get("/admin/users")
+async def get_all_users(user: dict = Depends(require_role([UserRole.ADMIN]))):
+    users = await db.users.find({"deleted_at": None}, {"_id": 0, "password_hash": 0}).to_list(None)
+    return {"data": users}
+
+@api_router.put("/admin/users/{user_id}")
+async def update_user(
+    user_id: str,
+    user_data: Dict[str, Any],
+    user: dict = Depends(require_role([UserRole.ADMIN]))
+):
+    # Don't allow updating own account
+    if user_id == user["id"]:
+        raise HTTPException(status_code=400, detail="Cannot edit your own account")
+    
+    update_data = {}
+    if "email" in user_data:
+        # Check if email is already taken
+        existing = await db.users.find_one({"email": user_data["email"], "id": {"$ne": user_id}})
+        if existing:
+            raise HTTPException(status_code=400, detail="Email already in use")
+        update_data["email"] = user_data["email"]
+    
+    if "role" in user_data:
+        update_data["role"] = user_data["role"]
+    
+    update_data["updated_at"] = datetime.now(timezone.utc).isoformat()
+    
+    await db.users.update_one({"id": user_id}, {"$set": update_data})
+    await log_audit(user["id"], "update", "user", user_id, update_data)
+    
+    return {"message": "User updated successfully"}
+
+@api_router.put("/admin/users/{user_id}/status")
+async def update_user_status(
+    user_id: str,
+    status_data: Dict[str, Any],
+    user: dict = Depends(require_role([UserRole.ADMIN]))
+):
+    # Don't allow updating own status
+    if user_id == user["id"]:
+        raise HTTPException(status_code=400, detail="Cannot change your own status")
+    
+    new_status = status_data.get("status")
+    if new_status not in ["active", "pending", "suspended", "deleted"]:
+        raise HTTPException(status_code=400, detail="Invalid status")
+    
+    update_data = {
+        "status": new_status,
+        "updated_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    await db.users.update_one({"id": user_id}, {"$set": update_data})
+    await log_audit(user["id"], "update_status", "user", user_id, {"status": new_status})
+    
+    return {"message": f"User status updated to {new_status}"}
+
+@api_router.delete("/admin/users/{user_id}")
+async def delete_user(user_id: str, user: dict = Depends(require_role([UserRole.ADMIN]))):
+    # Don't allow deleting own account
+    if user_id == user["id"]:
+        raise HTTPException(status_code=400, detail="Cannot delete your own account")
+    
+    # Soft delete by setting deleted_at
+    update_data = {
+        "deleted_at": datetime.now(timezone.utc).isoformat(),
+        "status": "deleted",
+        "updated_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    await db.users.update_one({"id": user_id}, {"$set": update_data})
+    await log_audit(user["id"], "delete", "user", user_id)
+    
+    return {"message": "User deleted successfully"}
+
 # Admin Reports endpoint
 @api_router.get("/admin/reports")
 async def get_admin_reports(user: dict = Depends(require_role([UserRole.ADMIN]))):
