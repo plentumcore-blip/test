@@ -979,10 +979,23 @@ async def submit_addon_post(
 
 @api_router.get("/assignments/{assignment_id}/post-submission")
 async def get_assignment_post_submission(assignment_id: str, user: dict = Depends(get_current_user)):
-    post = await db.post_submissions.find_one({"assignment_id": assignment_id}, {"_id": 0})
+    post = await db.post_submissions.find_one({
+        "assignment_id": assignment_id,
+        "is_addon": False
+    }, {"_id": 0})
     if not post:
         raise HTTPException(status_code=404, detail="No post submission found for this assignment")
     return post
+
+@api_router.get("/assignments/{assignment_id}/addon-post")
+async def get_assignment_addon_post(assignment_id: str, user: dict = Depends(get_current_user)):
+    addon_post = await db.post_submissions.find_one({
+        "assignment_id": assignment_id,
+        "is_addon": True
+    }, {"_id": 0})
+    if not addon_post:
+        raise HTTPException(status_code=404, detail="No addon post found for this assignment")
+    return addon_post
 
 @api_router.put("/post-submissions/{submission_id}/review")
 async def review_post_submission(
