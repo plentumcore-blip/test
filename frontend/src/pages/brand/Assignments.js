@@ -139,6 +139,34 @@ export default function BrandAssignments() {
     }
   };
 
+  const handleReviewProductReview = (assignment) => {
+    setSelectedReview(assignment.productReview);
+    setReviewNotes('');
+    setShowReviewModal(true);
+  };
+
+  const submitProductReviewReview = async (status) => {
+    if (!selectedReview) return;
+
+    try {
+      await axios.put(
+        `${API_BASE}/product-reviews/${selectedReview.id}/review`,
+        {
+          status,
+          notes: reviewNotes
+        },
+        { withCredentials: true }
+      );
+      
+      toast.success(`Product review ${status === 'approved' ? 'approved' : 'rejected'}`);
+      setShowReviewModal(false);
+      setSelectedReview(null);
+      fetchAssignments();
+    } catch (error) {
+      toast.error('Failed to review product review');
+    }
+  };
+
   const handleLogout = async () => {
     await logout();
     navigate('/login');
