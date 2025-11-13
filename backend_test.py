@@ -512,6 +512,8 @@ class APITester:
         # The public endpoint is at the app root, not /api/v1
         public_url = BASE_URL.replace('/api/v1', '') + f"/campaigns/test-campaign-slug"
         
+        self.log_test("Landing Page URL Debug", True, f"Testing public URL: {public_url}")
+        
         try:
             response = public_session.get(public_url)
             
