@@ -210,7 +210,7 @@ class APITester:
         print("\n=== Testing Payout Validation with Payment Details ===")
         
         # Login as brand
-        brand = self.login_user("techcorp@email.com", "password123")
+        brand = self.login_user("brand@example.com", "password123")
         if not brand:
             self.log_test("Payout Validation Setup", False, "Could not login as brand")
             return
