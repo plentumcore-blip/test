@@ -3,6 +3,8 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Save } from 'lucide-react';
 import { toast } from 'sonner';
+import AdminSidebar from '../../components/AdminSidebar';
+import { useAuth } from '../../contexts/AuthContext';
 
 const API_BASE = `${process.env.REACT_APP_BACKEND_URL}/api/v1`;
 
@@ -19,6 +21,7 @@ export default function AdminSettings() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const navigate = useNavigate();
+  const { logout } = useAuth();
 
   useEffect(() => {
     fetchSettings();
