@@ -113,3 +113,8 @@ code {
         border-bottom-color: inherit;
     }
 }
+
+/* Hide Emergent badge on all pages */
+#emergent-badge {
+    display: none !important;
+}
