@@ -1,5 +1,5 @@
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Home, ShoppingBag, FileCheck, LogOut, DollarSign, LayoutGrid, Search } from 'lucide-react';
+import { Home, ShoppingBag, FileCheck, LogOut, DollarSign, LayoutGrid, Search, CreditCard } from 'lucide-react';
 
 const InfluencerSidebar = ({ onLogout }) => {
   const navigate = useNavigate();
