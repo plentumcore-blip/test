@@ -516,7 +516,12 @@ class APITester:
             response = public_session.get(public_url)
             
             if response.status_code == 200:
-                landing_page = response.json()
+                try:
+                    landing_page = response.json()
+                except json.JSONDecodeError:
+                    self.log_test("Public Landing Page Access", False, 
+                                f"Invalid JSON response from landing page. Response text: {response.text[:200]}...")
+                    return
                 
                 # Step 7: Verify the response includes all the landing page data
                 required_fields = [
