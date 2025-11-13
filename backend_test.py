@@ -61,7 +61,7 @@ class APITester:
         print("\n=== Testing Payment Details Endpoints ===")
         
         # Login as influencer
-        influencer = self.login_user("creator@example.com", "password123")
+        influencer = self.login_user("creator@example.com", "Creator@123")
         if not influencer:
             self.log_test("Payment Details Setup", False, "Could not login as influencer")
             return
