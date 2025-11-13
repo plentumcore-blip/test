@@ -1,0 +1,78 @@
+<analysis>
+The trajectory details the iterative development of a full-stack influencer marketing platform, AffiTarget, from scratch. The initial AI engineer began by clarifying the tech stack with the user, opting for the platform's default FastAPI, React, and MongoDB, despite the initial request specifying Node.js and MySQL.
+
+The development proceeded in distinct phases. First, the core application structure was built, including backend server logic, API endpoints, and Pydantic models in . Simultaneously, the React frontend was scaffolded with pages for different user roles (Admin, Brand, Influencer), contexts, and basic styling. Initial data was populated using a  script.
+
+Subsequent user requests drove feature additions. Manual payouts and custom campaign landing pages were implemented by extending the backend models and API, and creating new frontend components and pages. Next, an influencer profile setup flow was added, allowing influencers to submit their social media profiles (TikTok, Instagram) after registration.
+
+A major UI/UX overhaul was then requested, leading to the replacement of the top-level navigation with a professional, role-specific sidebar layout. This involved creating new  components and refactoring all dashboard pages to use a consistent two-column layout.
+
+Finally, the user requested fixes for the brand dashboard's UI consistency and the implementation of a detailed reporting page for brands to track sales and creator payments. The AI created the reports page and backend endpoint but encountered and fixed a syntax error in the process. The most recent task was to ensure the end-to-end influencer payout logic is correct.
+</analysis>
+
+<product_requirements>
+The goal is to build AffiTarget, a full-stack web application for managing Amazon-only influencer marketing campaigns. The platform connects Brands with Influencers.
+
+**Core User Roles & Functionality:**
+1.  **Admin:** Manages the platform, approves/rejects Brand and Influencer profiles, and oversees verification queues.
+2.  **Brand:** Creates and manages campaigns, each with a mandatory Amazon Attribution URL. They can review applications, manage assignments, and review influencer post submissions. They have access to a dashboard and detailed reports on product sales and creator payouts.
+3.  **Influencer:** Creates a profile, submits social media accounts (TikTok, Instagram) for verification, and browses/applies for campaigns. For an accepted assignment, they must use a special link to purchase the product on Amazon, submit proof of purchase, and after approval, submit proof of their promotional post.
+
+**Key Workflows:**
+*   **Campaign Lifecycle:** A Brand creates a campaign, which Influencers can apply to.
+*   **Assignment & Purchase:** Accepted Influencers receive an assignment. They must first prove they've purchased the product.
+*   **Content Submission:** Once purchase proof is approved, the Influencer can submit their content (post URL, screenshots, etc.).
+*   **Payouts:** A system for manual payouts exists for Brands to compensate Influencers. The payout logic is defined as .
+*   **Reporting:** Brands have a dedicated reports page to track sales, total costs, and individual payout calculations per influencer.
+
+The application features a professional design with a sidebar for navigation within each user's dashboard.
+</product_requirements>
+
+<key_technical_concepts>
+- **Full-Stack Framework:** FastAPI (Python) for the backend, React (JavaScript) for the frontend.
+- **Database:** MongoDB for data storage, with data models managed via Pydantic in the backend.
+- **API Architecture:** RESTful API with routes prefixed by .
+- **Frontend State Management:** React Context API ().
+- **UI/UX:** Component-based design using pre-built Shadcn UI components and custom components. A role-based sidebar navigation system is implemented for all dashboards.
+- **Authentication:** A token-based authentication system is in place, with distinct roles (Admin, Brand, Influencer).
+</key_technical_concepts>
+
+<code_architecture>
+The application follows a standard monorepo structure with separate  and  directories.
+
+
+
+**Key Files:**
+
+-   ****
+    -   **Importance:** This is the core of the backend. It defines the FastAPI application, all API endpoints, Pydantic models for data validation and serialization, database connection logic, and business logic for all features including authentication, campaigns, user roles, payouts, and reporting.
+    -   **Changes:** Initially created to set up the basic server. It has been extensively modified to add Pydantic models for all entities (, , , , etc.), and API endpoints for CRUD operations, user registration/login, fetching reports (), managing social platforms (), and handling payouts.
+
+-   ****
+    -   **Importance:** The main entry point for the React application. It sets up the router () to handle all page navigation and wraps the application in the  to manage authentication state globally.
+    -   **Changes:** Updated multiple times to add new routes for pages like , , , and the campaign . Logic was also added to handle redirects for new influencers to the profile setup page.
+
+-   ** (various dashboards)**
+    -   **Importance:** These directories contain the UI components for each user role. Examples include , , and .
+    -   **Changes:** Initially created with basic content. All dashboard-related pages were significantly refactored to incorporate a new sidebar layout. This involved changing the root element to a two-column flex container and wrapping the main content area.
+
+-   ****
+    -   **Importance:** These three files (, , ) were created during the major UI overhaul. They provide consistent, role-specific navigation for each dashboard, improving UX.
+    -   **Changes:** Created from scratch to house the navigation links for each user role. The  was later updated to include a link to the new Reports page.
+
+-   ****
+    -   **Importance:** A critical page for the Brand user, fulfilling the requirement for detailed financial reporting. It fetches and displays data on products sold, influencer costs, and total payout amounts.
+    -   **Changes:** Created to display report data from the new  endpoint. It had an initial implementation with a syntax error (incorrectly escaped quotes in template literals), which was fixed by re-creating the file with the correct code.
+</code_architecture>
+
+<pending_tasks>
+- There are no outstanding explicit feature requests from the user. The primary pending action is to validate the most recently implemented logic.
+</pending_tasks>
+
+<current_work>
+The last request from the user was to ensure the end-to-end payout logic is correct and fully functional for influencers. The AI engineer's last action was to update the  page to provide a more detailed breakdown of the payout calculation. The work was paused just before restarting the frontend service to test this entire flow. The goal is to verify that the UI correctly reflects the payout logic (product cost + 0 for content +  for addon post) and that the data flows correctly from the backend to the influencer's dashboard.
+</current_work>
+
+<optional_next_step>
+I will restart the frontend service and then thoroughly test the influencer payout page and the associated end-to-end logic to confirm it is working as expected.
+</optional_next_step>
