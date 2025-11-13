@@ -19,6 +19,7 @@ import AdminUsers from './pages/admin/Users';
 import AdminVerification from './pages/admin/Verification';
 import AdminSettings from './pages/admin/Settings';
 import BrandPayouts from './pages/brand/Payouts';
+import BrandReports from './pages/brand/Reports';
 import LandingPageBuilder from './pages/brand/LandingPageBuilder';
 import InfluencerPayouts from './pages/influencer/Payouts';
 import InfluencerProfileSetup from './pages/influencer/ProfileSetup';
