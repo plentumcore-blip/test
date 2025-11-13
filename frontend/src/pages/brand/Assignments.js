@@ -58,18 +58,18 @@ export default function BrandAssignments() {
             // No post yet
           }
           
-          // Fetch addon post if exists
+          // Fetch product review if exists
           try {
-            const addonResponse = await axios.get(
-              `${API_BASE}/assignments/${assignment.id}/addon-post`,
+            const reviewResponse = await axios.get(
+              `${API_BASE}/assignments/${assignment.id}/review`,
               { withCredentials: true }
             );
-            addonPost = addonResponse.data;
+            addonPost = reviewResponse.data;
           } catch (error) {
-            // No addon post yet
+            // No review yet
           }
           
-          return { ...assignment, purchaseProof, postSubmission, addonPost };
+          return { ...assignment, purchaseProof, postSubmission, productReview: addonPost };
         })
       );
       
