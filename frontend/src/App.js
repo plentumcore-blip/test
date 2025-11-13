@@ -57,6 +57,7 @@ function App() {
           <Route path="/" element={<Landing />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/campaigns/:slug" element={<CampaignLandingPage />} />
 
           {/* Admin Routes */}
           <Route
