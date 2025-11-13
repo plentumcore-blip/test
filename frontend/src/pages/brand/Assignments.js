@@ -284,39 +284,34 @@ export default function BrandAssignments() {
                         ✓ Assignment completed successfully
                       </p>
                       
-                      {/* Addon Post Review Section */}
-                      {assignment.addonPost && assignment.addon_post_status === 'review' && (
+                      {/* Product Review Section */}
+                      {assignment.productReview && assignment.review_status === 'review' && (
                         <div className="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
                           <div className="flex items-center justify-between">
                             <div>
-                              <h4 className="font-semibold text-gray-900 mb-2">💰 Addon Post Submitted (+$5)</h4>
+                              <h4 className="font-semibold text-gray-900 mb-2">⭐ Product Review Submitted (+$5)</h4>
                               <p className="text-sm text-gray-600">
-                                Platform: {assignment.addonPost.platform} • Type: {assignment.addonPost.post_type}
+                                Rating: {'⭐'.repeat(assignment.productReview.rating)} • Platform: {assignment.productReview.platform}
                               </p>
-                              <a
-                                href={assignment.addonPost.post_url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-sm text-[#1F66FF] hover:underline flex items-center gap-1 mt-1"
-                              >
-                                View Addon Post <ExternalLink className="w-3 h-3" />
-                              </a>
+                              <p className="text-sm text-gray-700 mt-1 line-clamp-2">
+                                "{assignment.productReview.review_text.substring(0, 100)}..."
+                              </p>
                             </div>
                             <button
-                              onClick={() => handleReviewPost(assignment, true)}
+                              onClick={() => handleReviewProductReview(assignment)}
                               className="flex items-center gap-2 px-4 py-2 bg-[#1F66FF] text-white rounded-xl hover:bg-blue-700 transition-colors"
                             >
                               <Eye className="w-4 h-4" />
-                              Review Addon
+                              Review
                             </button>
                           </div>
                         </div>
                       )}
                       
-                      {assignment.addon_post_status === 'approved' && (
+                      {assignment.review_status === 'approved' && (
                         <div className="mt-4 p-4 bg-green-50 rounded-lg border border-green-200">
                           <p className="text-sm text-green-700 font-semibold">
-                            ✓ Addon post approved (+$5 bonus added to payout)
+                            ✓ Product review approved (+$5 bonus added to payout)
                           </p>
                         </div>
                       )}
