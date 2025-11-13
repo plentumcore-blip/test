@@ -1,5 +1,5 @@
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Home, ShoppingBag, Users, FileCheck, LogOut, DollarSign, LayoutGrid } from 'lucide-react';
+import { Home, ShoppingBag, Users, FileCheck, LogOut, DollarSign, LayoutGrid, BarChart3 } from 'lucide-react';
 
 const BrandSidebar = ({ onLogout }) => {
   const navigate = useNavigate();
@@ -10,6 +10,7 @@ const BrandSidebar = ({ onLogout }) => {
     { icon: ShoppingBag, label: 'Campaigns', path: '/brand/campaigns' },
     { icon: FileCheck, label: 'Assignments', path: '/brand/assignments' },
     { icon: DollarSign, label: 'Payouts', path: '/brand/payouts' },
+    { icon: BarChart3, label: 'Reports', path: '/brand/reports' },
   ];
 
   return (
