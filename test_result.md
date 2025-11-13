@@ -351,3 +351,9 @@ agent_communication:
       📊 TEST RESULTS: 17/17 tests passed (100% success rate)
       
       ⚠️ REMAINING WORK: Frontend UI testing only (backend is fully functional)
+  - agent: "user"
+    message: |
+      User requested automated frontend testing and reported an issue:
+      - Campaigns landing page is not working properly
+      
+      Need to investigate and fix the landing page issue along with testing the new features.
