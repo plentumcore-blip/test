@@ -117,6 +117,33 @@ export default function AssignmentDetail() {
     }
   };
 
+  const handleAddonSubmit = async (e) => {
+    e.preventDefault();
+    setSubmittingAddon(true);
+
+    try {
+      await axios.post(
+        `${API_BASE}/assignments/${id}/addon-post`,
+        addonData,
+        { withCredentials: true }
+      );
+      toast.success('Addon post submitted! You\'ll earn $5 once approved.');
+      fetchAssignment();
+      setShowAddonForm(false);
+      setAddonData({
+        post_url: '',
+        platform: '',
+        post_type: '',
+        screenshot_url: '',
+        caption: ''
+      });
+    } catch (error) {
+      toast.error(error.response?.data?.detail || 'Failed to submit addon post');
+    } finally {
+      setSubmittingAddon(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
