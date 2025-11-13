@@ -1,10 +1,21 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ShoppingBag, ExternalLink } from 'lucide-react';
 import axios from 'axios';
 import { toast } from 'sonner';
 
 const API_BASE = process.env.REACT_APP_BACKEND_URL || import.meta.env.VITE_REACT_APP_BACKEND_URL;
+
+const Section = ({ id, children, className = '' }) => (
+  <section id={id} className={`mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 ${className}`}>{children}</section>
+);
+
+const Pill = ({ children }) => (
+  <span className="inline-flex items-center rounded-full bg-[#E8F1FF] text-[#0E2C7E] px-3 py-1 text-xs font-medium">{children}</span>
+);
+
+const Card = ({ children, className = '' }) => (
+  <div className={`rounded-2xl bg-white shadow-sm ring-1 ring-[#E8F1FF] ${className}`}>{children}</div>
+);
 
 export default function CampaignLandingPage() {
   const { slug } = useParams();
@@ -30,21 +41,21 @@ export default function CampaignLandingPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-lg text-gray-600">Loading campaign...</div>
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <div className="text-lg text-[#0B1220]">Loading campaign...</div>
       </div>
     );
   }
 
   if (!campaign) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center bg-white">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">Campaign Not Found</h1>
-          <p className="text-gray-600 mb-6">This campaign may not exist or is not yet published.</p>
+          <h1 className="text-2xl font-bold text-[#0E2C7E] mb-4">Campaign Not Found</h1>
+          <p className="text-[#0B1220]/80 mb-6">This campaign may not exist or is not yet published.</p>
           <button
             onClick={() => navigate('/')}
-            className="px-6 py-3 bg-[#1F66FF] text-white rounded-xl hover:bg-blue-700 transition-colors"
+            className="px-6 py-3 bg-[#1F66FF] text-white rounded-xl hover:bg-[#0E2C7E] transition-colors"
           >
             Go to Home
           </button>
@@ -53,133 +64,246 @@ export default function CampaignLandingPage() {
     );
   }
 
+  const brandName = campaign.brand?.company_name || 'AffiTarget';
+
   return (
-    <div className="min-h-screen bg-white">
-      {/* Header */}
-      <header className="border-b border-gray-200">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <ShoppingBag className="w-8 h-8 text-[#1F66FF]" />
-            <span className="text-2xl font-bold text-[#0B1220]">AffiTarget</span>
+    <div className="min-h-screen bg-white text-[#0B1220]">
+      {/* Nav */}
+      <nav className="sticky top-0 z-40 backdrop-blur bg-white/75 border-b border-[#E8F1FF]">
+        <Section className="flex h-16 items-center justify-between gap-6">
+          <div className="flex items-center gap-3">
+            <div className="h-9 w-9 rounded-xl bg-[#1F66FF] grid place-items-center text-white font-bold">
+              {brandName.charAt(0)}
+            </div>
+            <div className="font-semibold">{brandName} · Campaign</div>
+          </div>
+          <div className="hidden md:flex items-center gap-6 text-sm">
+            <a href="#overview" className="hover:text-[#1F66FF]">Overview</a>
+            <a href="#perks" className="hover:text-[#1F66FF]">Perks</a>
+            <a href="#deliverables" className="hover:text-[#1F66FF]">Deliverables</a>
+            <a href="#timeline" className="hover:text-[#1F66FF]">Timeline</a>
+            <a href="#faqs" className="hover:text-[#1F66FF]">FAQs</a>
           </div>
           <button
-            onClick={() => navigate('/login')}
-            className="text-[#1F66FF] hover:text-blue-700 font-semibold"
+            onClick={() => navigate('/register')}
+            className="inline-flex items-center rounded-xl bg-[#1F66FF] px-4 py-2 text-white font-medium shadow-sm hover:bg-[#0E2C7E]"
           >
-            Sign In
+            Apply Now
           </button>
-        </div>
-      </header>
+        </Section>
+      </nav>
 
-      {/* Hero Section */}
-      {campaign.landing_page_hero_image && (
-        <div className="relative h-96 overflow-hidden">
-          <img
-            src={campaign.landing_page_hero_image}
-            alt={campaign.title}
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end">
-            <div className="max-w-6xl mx-auto px-6 py-12 w-full">
-              <h1 className="text-5xl font-bold text-white mb-4">{campaign.title}</h1>
-              {campaign.brand && (
-                <p className="text-xl text-white/90">by {campaign.brand.company_name}</p>
-              )}
+      {/* Hero */}
+      <div className="relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-[#E8F1FF] to-transparent" />
+        <Section id="overview" className="relative grid gap-10 lg:grid-cols-2 items-center py-16">
+          <div className="space-y-6">
+            <Pill>Amazon Attribution Creator Campaign</Pill>
+            <h1 className="text-3xl sm:text-4xl font-bold leading-tight text-[#0E2C7E]">
+              {campaign.title}
+            </h1>
+            <p className="text-base sm:text-lg text-[#0B1220]/80">
+              {campaign.description}
+            </p>
+            <ul className="space-y-3 text-sm">
+              <li className="flex gap-2">
+                <span className="mt-1 h-2 w-2 rounded-full bg-[#1F66FF]" />
+                Purchase via our Amazon link (tracked redirect).
+              </li>
+              <li className="flex gap-2">
+                <span className="mt-1 h-2 w-2 rounded-full bg-[#1F66FF]" />
+                Submit order screenshots to unlock posting.
+              </li>
+              <li className="flex gap-2">
+                <span className="mt-1 h-2 w-2 rounded-full bg-[#1F66FF]" />
+                Manual reviews, no bots. Clear deadlines & reminders.
+              </li>
+            </ul>
+            <div className="flex flex-wrap gap-3 pt-2">
+              <button
+                onClick={() => navigate('/register')}
+                className="inline-flex items-center rounded-xl bg-[#1F66FF] px-5 py-3 text-white font-semibold shadow-sm hover:bg-[#0E2C7E]"
+              >
+                Apply Now
+              </button>
+              <a
+                href="#timeline"
+                className="inline-flex items-center rounded-xl bg-white px-5 py-3 font-semibold ring-1 ring-[#E8F1FF] hover:ring-[#1F66FF]"
+              >
+                See Timeline
+              </a>
             </div>
-          </div>
-        </div>
-      )}
-
-      {/* Main Content */}
-      <div className="max-w-4xl mx-auto px-6 py-12">
-        {!campaign.landing_page_hero_image && (
-          <div className="mb-8">
-            <h1 className="text-5xl font-bold text-[#0B1220] mb-4">{campaign.title}</h1>
-            {campaign.brand && (
-              <p className="text-xl text-gray-600">by {campaign.brand.company_name}</p>
+            {campaign.amazon_attribution_url && (
+              <p className="text-xs text-[#0B1220]/60">
+                Amazon link: <span className="underline decoration-dotted">{campaign.amazon_attribution_url}</span>
+              </p>
             )}
           </div>
-        )}
+          {campaign.landing_page_hero_image && (
+            <Card className="overflow-hidden">
+              <img src={campaign.landing_page_hero_image} alt="Campaign hero" className="h-full w-full object-cover" />
+            </Card>
+          )}
+        </Section>
+      </div>
 
-        {/* Campaign Description */}
-        <div className="mb-12">
-          <h2 className="text-3xl font-bold text-[#0B1220] mb-6">About This Campaign</h2>
-          <p className="text-lg text-gray-700 leading-relaxed">{campaign.description}</p>
+      {/* Perks */}
+      <Section id="perks" className="py-12">
+        <h2 className="text-2xl font-bold text-[#0E2C7E] mb-6">Why join?</h2>
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <Card className="p-6">
+            <h3 className="font-semibold">Fast approvals</h3>
+            <p className="mt-2 text-sm text-[#0B1220]/80">
+              Manual queue with 24–48h turnaround on purchase & posts.
+            </p>
+          </Card>
+          <Card className="p-6">
+            <h3 className="font-semibold">Clear rules</h3>
+            <p className="mt-2 text-sm text-[#0B1220]/80">
+              Simple deliverables with examples, tags, and caption guidance.
+            </p>
+          </Card>
+          <Card className="p-6">
+            <h3 className="font-semibold">Earn rewards</h3>
+            <p className="mt-2 text-sm text-[#0B1220]/80">
+              Get paid for your content and product reviews with transparent payouts.
+            </p>
+          </Card>
         </div>
+      </Section>
 
-        {/* Custom Content */}
-        {campaign.landing_page_content && (
-          <div className="mb-12">
+      {/* Custom Content */}
+      {campaign.landing_page_content && (
+        <Section id="deliverables" className="py-12">
+          <h2 className="text-2xl font-bold text-[#0E2C7E] mb-6">Details</h2>
+          <Card className="p-6">
             <div 
-              className="prose prose-lg max-w-none"
+              className="prose prose-sm max-w-none text-[#0B1220]/80"
               dangerouslySetInnerHTML={{ __html: campaign.landing_page_content }}
             />
-          </div>
-        )}
+          </Card>
+        </Section>
+      )}
 
-        {/* Testimonials */}
-        {campaign.landing_page_testimonials && campaign.landing_page_testimonials.length > 0 && (
-          <div className="mb-12">
-            <h2 className="text-3xl font-bold text-[#0B1220] mb-8 text-center">What Influencers Say</h2>
-            <div className="grid md:grid-cols-2 gap-6">
-              {campaign.landing_page_testimonials.map((testimonial, index) => (
-                <div key={index} className="bg-gray-50 rounded-2xl p-6 border border-gray-200">
-                  <p className="text-gray-700 mb-4 italic">"{testimonial.content}"</p>
-                  <div className="flex items-center gap-3">
-                    {testimonial.avatar && (
-                      <img
-                        src={testimonial.avatar}
-                        alt={testimonial.name}
-                        className="w-12 h-12 rounded-full object-cover"
-                      />
-                    )}
-                    <div>
-                      <p className="font-semibold text-[#0B1220]">{testimonial.name}</p>
-                      <p className="text-sm text-gray-600">{testimonial.role}</p>
-                    </div>
+      {/* How it works */}
+      <Section className="py-12">
+        <h2 className="text-2xl font-bold text-[#0E2C7E] mb-6">How it works</h2>
+        <div className="grid gap-6 md:grid-cols-4">
+          {[
+            { step: 1, title: 'Apply', text: 'Answer a few questions and submit your profile.' },
+            { step: 2, title: 'Buy via link', text: 'Use your unique redirect to purchase on Amazon.' },
+            { step: 3, title: 'Upload proof', text: 'Order ID + screenshots → approval unlocks posting.' },
+            { step: 4, title: 'Post & submit', text: 'Share content, add links/hashtags, upload metrics.' },
+          ].map((s) => (
+            <Card key={s.step} className="p-6">
+              <div className="flex items-center gap-3">
+                <div className="h-9 w-9 rounded-xl bg-[#1F66FF] text-white grid place-items-center font-bold">
+                  {s.step}
+                </div>
+                <h3 className="font-semibold">{s.title}</h3>
+              </div>
+              <p className="mt-3 text-sm text-[#0B1220]/80">{s.text}</p>
+            </Card>
+          ))}
+        </div>
+      </Section>
+
+      {/* Timeline */}
+      <Section id="timeline" className="py-12">
+        <h2 className="text-2xl font-bold text-[#0E2C7E] mb-6">Timeline</h2>
+        <div className="grid gap-6 md:grid-cols-2">
+          <Card className="p-6">
+            <h3 className="font-semibold">Purchase window</h3>
+            <p className="mt-2 text-sm">
+              {new Date(campaign.purchase_window_start).toLocaleDateString()} – {new Date(campaign.purchase_window_end).toLocaleDateString()}
+            </p>
+            <p className="mt-1 text-xs text-[#0B1220]/70">
+              Purchase must be inside this window.
+            </p>
+          </Card>
+          <Card className="p-6">
+            <h3 className="font-semibold">Posting window</h3>
+            <p className="mt-2 text-sm">
+              {new Date(campaign.post_window_start).toLocaleDateString()} – {new Date(campaign.post_window_end).toLocaleDateString()}
+            </p>
+            <p className="mt-1 text-xs text-[#0B1220]/70">
+              Submit post URL + caption + screenshots + visible metrics.
+            </p>
+          </Card>
+        </div>
+      </Section>
+
+      {/* Testimonials */}
+      {campaign.landing_page_testimonials && campaign.landing_page_testimonials.length > 0 && (
+        <Section className="py-12">
+          <h2 className="text-2xl font-bold text-[#0E2C7E] mb-6">What Creators Say</h2>
+          <div className="grid gap-6 md:grid-cols-2">
+            {campaign.landing_page_testimonials.map((testimonial, index) => (
+              <Card key={index} className="p-6">
+                <p className="text-sm text-[#0B1220]/80 italic mb-4">"{testimonial.content}"</p>
+                <div className="flex items-center gap-3">
+                  {testimonial.avatar && (
+                    <img
+                      src={testimonial.avatar}
+                      alt={testimonial.name}
+                      className="w-10 h-10 rounded-full object-cover"
+                    />
+                  )}
+                  <div>
+                    <p className="font-semibold text-sm">{testimonial.name}</p>
+                    <p className="text-xs text-[#0B1220]/70">{testimonial.role}</p>
                   </div>
                 </div>
-              ))}
-            </div>
+              </Card>
+            ))}
           </div>
-        )}
+        </Section>
+      )}
 
-        {/* FAQs */}
-        {campaign.landing_page_faqs && campaign.landing_page_faqs.length > 0 && (
-          <div className="mb-12">
-            <h2 className="text-3xl font-bold text-[#0B1220] mb-8 text-center">Frequently Asked Questions</h2>
-            <div className="space-y-4">
-              {campaign.landing_page_faqs.map((faq, index) => (
-                <div key={index} className="bg-white border border-gray-200 rounded-2xl p-6">
-                  <h3 className="text-lg font-semibold text-[#0B1220] mb-2">{faq.question}</h3>
-                  <p className="text-gray-700">{faq.answer}</p>
-                </div>
-              ))}
-            </div>
+      {/* FAQs */}
+      {campaign.landing_page_faqs && campaign.landing_page_faqs.length > 0 && (
+        <Section id="faqs" className="py-12">
+          <h2 className="text-2xl font-bold text-[#0E2C7E] mb-6">FAQs</h2>
+          <div className="space-y-3">
+            {campaign.landing_page_faqs.map((faq, index) => (
+              <Card key={index} className="p-4">
+                <details>
+                  <summary className="cursor-pointer font-medium">{faq.question}</summary>
+                  <div className="mt-2 text-sm text-[#0B1220]/80">{faq.answer}</div>
+                </details>
+              </Card>
+            ))}
           </div>
-        )}
+        </Section>
+      )}
 
-        {/* CTA Section */}
-        <div className="bg-[#1F66FF] rounded-3xl p-12 text-center text-white">
-          <h2 className="text-4xl font-bold mb-4">Ready to Join?</h2>
-          <p className="text-xl mb-8 opacity-90">Apply now and start your influencer journey with {campaign.brand?.company_name || 'us'}</p>
+      {/* Sticky Apply bar */}
+      <div className="sticky bottom-0 z-30 border-t border-[#E8F1FF] bg-white/95 backdrop-blur">
+        <Section className="flex flex-wrap items-center justify-between gap-4 py-3">
+          <div className="text-sm">
+            <span className="font-semibold text-[#0E2C7E]">Ready to join?</span> Posting window: {new Date(campaign.post_window_start).toLocaleDateString()} – {new Date(campaign.post_window_end).toLocaleDateString()}
+          </div>
           <button
-            onClick={() => {
-              navigate('/register');
-            }}
-            className="px-8 py-4 bg-white text-[#1F66FF] rounded-xl font-semibold text-lg hover:bg-gray-100 transition-colors inline-flex items-center gap-2"
+            onClick={() => navigate('/register')}
+            className="inline-flex items-center rounded-xl bg-[#1F66FF] px-5 py-2.5 text-white font-semibold shadow-sm hover:bg-[#0E2C7E]"
           >
             {campaign.landing_page_cta_text || 'Apply Now'}
-            <ExternalLink className="w-5 h-5" />
           </button>
-        </div>
+        </Section>
       </div>
 
       {/* Footer */}
-      <footer className="border-t border-gray-200 py-8 mt-12">
-        <div className="max-w-6xl mx-auto px-6 text-center text-gray-600">
-          <p>&copy; 2025 AffiTarget. All rights reserved.</p>
-        </div>
+      <footer className="mt-12 border-t border-[#E8F1FF]">
+        <Section className="py-8 text-xs text-[#0B1220]/70">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+            <div>© {new Date().getFullYear()} {brandName}. All rights reserved.</div>
+            <div className="flex gap-4">
+              <a href="#" className="hover:text-[#1F66FF]">Terms</a>
+              <a href="#" className="hover:text-[#1F66FF]">Privacy</a>
+              <a href="#" className="hover:text-[#1F66FF]">Contact</a>
+            </div>
+          </div>
+        </Section>
       </footer>
     </div>
   );
