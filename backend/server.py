@@ -917,10 +917,10 @@ async def submit_post(
     
     return {"id": post_submission["id"], "message": "Post submitted for review"}
 
-@api_router.post("/assignments/{assignment_id}/addon-post")
-async def submit_addon_post(
+@api_router.post("/assignments/{assignment_id}/review")
+async def submit_product_review(
     assignment_id: str,
-    post_data: Dict[str, Any],
+    review_data: Dict[str, Any],
     user: dict = Depends(require_role([UserRole.INFLUENCER]))
 ):
     # Get influencer and assignment
@@ -938,44 +938,41 @@ async def submit_addon_post(
     if assignment["status"] != "completed":
         raise HTTPException(status_code=400, detail="Main post must be approved first")
     
-    # Check if addon post already exists
-    existing_addon = await db.post_submissions.find_one({
-        "assignment_id": assignment_id,
-        "is_addon": True
+    # Check if review already exists
+    existing_review = await db.product_reviews.find_one({
+        "assignment_id": assignment_id
     })
-    if existing_addon:
-        raise HTTPException(status_code=400, detail="Addon post already submitted")
+    if existing_review:
+        raise HTTPException(status_code=400, detail="Product review already submitted")
     
-    addon_post = {
+    product_review = {
         "id": str(uuid.uuid4()),
         "assignment_id": assignment_id,
         "influencer_id": influencer["id"],
         "campaign_id": assignment["campaign_id"],
-        "post_url": post_data["post_url"],
-        "platform": post_data["platform"],
-        "post_type": post_data["post_type"],
-        "screenshot_url": post_data.get("screenshot_url"),
-        "caption": post_data.get("caption"),
+        "review_text": review_data["review_text"],
+        "rating": review_data.get("rating", 5),
+        "screenshot_url": review_data["screenshot_url"],
+        "platform": review_data.get("platform", "other"),
         "status": "pending",
-        "is_addon": True,
         "created_at": datetime.now(timezone.utc).isoformat(),
         "updated_at": datetime.now(timezone.utc).isoformat()
     }
     
-    await db.post_submissions.insert_one(addon_post)
+    await db.product_reviews.insert_one(product_review)
     
-    # Update assignment to indicate addon post is under review
+    # Update assignment to indicate review is under review
     await db.assignments.update_one(
         {"id": assignment_id},
         {"$set": {
-            "addon_post_status": "review",
+            "review_status": "review",
             "updated_at": datetime.now(timezone.utc).isoformat()
         }}
     )
     
-    await log_audit(user["id"], "create", "addon_post_submission", addon_post["id"])
+    await log_audit(user["id"], "create", "product_review", product_review["id"])
     
-    return {"id": addon_post["id"], "message": "Addon post submitted for review"}
+    return {"id": product_review["id"], "message": "Product review submitted for review"}
 
 @api_router.get("/assignments/{assignment_id}/post-submission")
 async def get_assignment_post_submission(assignment_id: str, user: dict = Depends(get_current_user)):
