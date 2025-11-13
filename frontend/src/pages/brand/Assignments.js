@@ -13,6 +13,8 @@ export default function BrandAssignments() {
   const [loading, setLoading] = useState(true);
   const [selectedProof, setSelectedProof] = useState(null);
   const [showProofModal, setShowProofModal] = useState(false);
+  const [selectedPost, setSelectedPost] = useState(null);
+  const [showPostModal, setShowPostModal] = useState(false);
   const [reviewNotes, setReviewNotes] = useState('');
   const { logout } = useAuth();
   const navigate = useNavigate();
