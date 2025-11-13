@@ -214,6 +214,14 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/influencer/payment-settings"
+            element={
+              <ProtectedRoute allowedRoles={['influencer']}>
+                <InfluencerPaymentSettings />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
         <Toaster position="top-right" richColors />
       </BrowserRouter>
