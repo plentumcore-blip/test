@@ -1323,6 +1323,250 @@ async def get_campaign_landing_page(slug: str):
     
     return campaign
 
+# Payment Details endpoints
+@api_router.post("/influencer/payment-details")
+async def create_payment_details(
+    payment_data: Dict[str, Any],
+    user: dict = Depends(require_role([UserRole.INFLUENCER]))
+):
+    influencer = await db.influencers.find_one({"user_id": user["id"]})
+    if not influencer:
+        raise HTTPException(status_code=404, detail="Influencer profile not found")
+    
+    # Check if payment details already exist
+    existing = await db.payment_details.find_one({"influencer_id": influencer["id"]})
+    if existing:
+        raise HTTPException(status_code=400, detail="Payment details already exist. Use PUT to update.")
+    
+    payment_details = PaymentDetails(
+        influencer_id=influencer["id"],
+        account_holder_name=payment_data["account_holder_name"],
+        account_number=payment_data["account_number"],
+        routing_number=payment_data["routing_number"],
+        bank_name=payment_data["bank_name"],
+        swift_code=payment_data.get("swift_code"),
+        iban=payment_data.get("iban"),
+        paypal_email=payment_data.get("paypal_email")
+    )
+    
+    payment_doc = payment_details.model_dump()
+    payment_doc['created_at'] = payment_doc['created_at'].isoformat()
+    payment_doc['updated_at'] = payment_doc['updated_at'].isoformat()
+    
+    await db.payment_details.insert_one(payment_doc)
+    await log_audit(user["id"], "create", "payment_details", payment_details.id)
+    
+    return {"id": payment_details.id, "message": "Payment details created successfully"}
+
+@api_router.put("/influencer/payment-details")
+async def update_payment_details(
+    payment_data: Dict[str, Any],
+    user: dict = Depends(require_role([UserRole.INFLUENCER]))
+):
+    influencer = await db.influencers.find_one({"user_id": user["id"]})
+    if not influencer:
+        raise HTTPException(status_code=404, detail="Influencer profile not found")
+    
+    existing = await db.payment_details.find_one({"influencer_id": influencer["id"]})
+    
+    update_data = {
+        "account_holder_name": payment_data["account_holder_name"],
+        "account_number": payment_data["account_number"],
+        "routing_number": payment_data["routing_number"],
+        "bank_name": payment_data["bank_name"],
+        "swift_code": payment_data.get("swift_code"),
+        "iban": payment_data.get("iban"),
+        "paypal_email": payment_data.get("paypal_email"),
+        "updated_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    if existing:
+        # Update existing
+        await db.payment_details.update_one(
+            {"influencer_id": influencer["id"]},
+            {"$set": update_data}
+        )
+        await log_audit(user["id"], "update", "payment_details", existing["id"])
+        return {"message": "Payment details updated successfully"}
+    else:
+        # Create new if doesn't exist
+        payment_details = PaymentDetails(
+            influencer_id=influencer["id"],
+            **{k: v for k, v in update_data.items() if k != "updated_at"}
+        )
+        payment_doc = payment_details.model_dump()
+        payment_doc['created_at'] = payment_doc['created_at'].isoformat()
+        payment_doc['updated_at'] = update_data['updated_at']
+        
+        await db.payment_details.insert_one(payment_doc)
+        await log_audit(user["id"], "create", "payment_details", payment_details.id)
+        return {"message": "Payment details created successfully"}
+
+@api_router.get("/influencer/payment-details")
+async def get_payment_details(user: dict = Depends(require_role([UserRole.INFLUENCER]))):
+    influencer = await db.influencers.find_one({"user_id": user["id"]})
+    if not influencer:
+        raise HTTPException(status_code=404, detail="Influencer profile not found")
+    
+    payment_details = await db.payment_details.find_one({"influencer_id": influencer["id"]}, {"_id": 0})
+    
+    if not payment_details:
+        return {"has_payment_details": False, "data": None}
+    
+    return {"has_payment_details": True, "data": payment_details}
+
+@api_router.get("/influencer/transactions")
+async def get_transactions(
+    page: int = Query(1, ge=1),
+    page_size: int = Query(20, ge=1, le=100),
+    user: dict = Depends(require_role([UserRole.INFLUENCER]))
+):
+    influencer = await db.influencers.find_one({"user_id": user["id"]})
+    if not influencer:
+        raise HTTPException(status_code=404, detail="Influencer profile not found")
+    
+    skip = (page - 1) * page_size
+    
+    # Get all payouts for this influencer as transactions
+    payouts = await db.payouts.find(
+        {"influencer_id": influencer["id"]},
+        {"_id": 0}
+    ).sort("created_at", -1).skip(skip).limit(page_size).to_list(page_size)
+    
+    total = await db.payouts.count_documents({"influencer_id": influencer["id"]})
+    
+    # Transform payouts into transaction format
+    transactions = []
+    for payout in payouts:
+        campaign = await db.campaigns.find_one({"id": payout["campaign_id"]}, {"_id": 0, "title": 1})
+        transactions.append({
+            "id": payout["id"],
+            "amount": payout["amount"],
+            "currency": payout["currency"],
+            "type": "payout",
+            "description": f"Payout for campaign: {campaign['title'] if campaign else 'Unknown'}",
+            "status": payout["status"],
+            "transaction_date": payout.get("paid_at", payout["created_at"]),
+            "created_at": payout["created_at"],
+            "campaign_title": campaign["title"] if campaign else "Unknown"
+        })
+    
+    return {
+        "data": transactions,
+        "page": page,
+        "page_size": page_size,
+        "total": total
+    }
+
+# Admin Reports endpoint
+@api_router.get("/admin/reports")
+async def get_admin_reports(user: dict = Depends(require_role([UserRole.ADMIN]))):
+    # Get all brands with their metrics
+    brands = await db.brands.find({}, {"_id": 0}).to_list(None)
+    
+    brand_reports = []
+    for brand in brands:
+        # Get brand user info
+        brand_user = await db.users.find_one({"id": brand["user_id"]}, {"_id": 0, "email": 1})
+        
+        # Count campaigns
+        total_campaigns = await db.campaigns.count_documents({"brand_id": brand["id"]})
+        
+        # Get all payouts for this brand
+        payouts = await db.payouts.find({"brand_id": brand["id"]}).to_list(None)
+        total_spent = sum(p["amount"] for p in payouts)
+        pending_payouts = sum(p["amount"] for p in payouts if p["status"] == "pending")
+        completed_payouts = sum(p["amount"] for p in payouts if p["status"] == "paid")
+        
+        # Count unique influencers working with this brand
+        assignments = await db.assignments.find({"campaign_id": {"$in": [c["id"] for c in await db.campaigns.find({"brand_id": brand["id"]}, {"_id": 0, "id": 1}).to_list(None)]}}).to_list(None)
+        unique_influencers = len(set(a["influencer_id"] for a in assignments))
+        
+        # Count applications
+        campaigns_ids = [c["id"] for c in await db.campaigns.find({"brand_id": brand["id"]}, {"_id": 0, "id": 1}).to_list(None)]
+        total_applications = await db.applications.count_documents({"campaign_id": {"$in": campaigns_ids}})
+        
+        # Count completed assignments
+        completed_assignments = await db.assignments.count_documents({
+            "campaign_id": {"$in": campaigns_ids},
+            "status": "completed"
+        })
+        
+        brand_reports.append({
+            "brand_id": brand["id"],
+            "company_name": brand["company_name"],
+            "email": brand_user["email"] if brand_user else "N/A",
+            "status": brand["status"],
+            "total_campaigns": total_campaigns,
+            "total_spent": total_spent,
+            "pending_payouts": pending_payouts,
+            "completed_payouts": completed_payouts,
+            "unique_influencers": unique_influencers,
+            "total_applications": total_applications,
+            "completed_assignments": completed_assignments,
+            "created_at": brand["created_at"]
+        })
+    
+    # Get all influencers with their earnings
+    influencers = await db.influencers.find({}, {"_id": 0}).to_list(None)
+    
+    influencer_reports = []
+    for influencer in influencers:
+        # Get influencer user info
+        influencer_user = await db.users.find_one({"id": influencer["user_id"]}, {"_id": 0, "email": 1})
+        
+        # Get payment details status
+        payment_details = await db.payment_details.find_one({"influencer_id": influencer["id"]})
+        has_payment_details = payment_details is not None
+        
+        # Get all payouts
+        payouts = await db.payouts.find({"influencer_id": influencer["id"]}).to_list(None)
+        total_earnings = sum(p["amount"] for p in payouts)
+        pending_earnings = sum(p["amount"] for p in payouts if p["status"] == "pending")
+        paid_earnings = sum(p["amount"] for p in payouts if p["status"] == "paid")
+        
+        # Count assignments
+        total_assignments = await db.assignments.count_documents({"influencer_id": influencer["id"]})
+        completed_assignments = await db.assignments.count_documents({
+            "influencer_id": influencer["id"],
+            "status": "completed"
+        })
+        
+        # Count applications
+        total_applications = await db.applications.count_documents({"influencer_id": influencer["id"]})
+        
+        # Get platforms
+        platforms = await db.influencer_platforms.find({"influencer_id": influencer["id"]}, {"_id": 0, "platform": 1, "followers_count": 1}).to_list(None)
+        
+        influencer_reports.append({
+            "influencer_id": influencer["id"],
+            "name": influencer["name"],
+            "email": influencer_user["email"] if influencer_user else "N/A",
+            "status": influencer["status"],
+            "profile_completed": influencer.get("profile_completed", False),
+            "has_payment_details": has_payment_details,
+            "total_earnings": total_earnings,
+            "pending_earnings": pending_earnings,
+            "paid_earnings": paid_earnings,
+            "total_assignments": total_assignments,
+            "completed_assignments": completed_assignments,
+            "total_applications": total_applications,
+            "platforms": platforms,
+            "created_at": influencer["created_at"]
+        })
+    
+    return {
+        "brands": brand_reports,
+        "influencers": influencer_reports,
+        "summary": {
+            "total_brands": len(brand_reports),
+            "total_influencers": len(influencer_reports),
+            "total_platform_spending": sum(b["total_spent"] for b in brand_reports),
+            "total_platform_earnings": sum(i["total_earnings"] for i in influencer_reports)
+        }
+    }
+
+
 # Include router
 app.include_router(api_router)
 
