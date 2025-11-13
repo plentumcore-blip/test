@@ -862,6 +862,112 @@ async def get_purchase_proof(proof_id: str, user: dict = Depends(get_current_use
     
     return proof
 
+# Post Submissions
+@api_router.post("/assignments/{assignment_id}/post-submission")
+async def submit_post(
+    assignment_id: str,
+    post_data: Dict[str, Any],
+    user: dict = Depends(require_role([UserRole.INFLUENCER]))
+):
+    # Get influencer and assignment
+    influencer = await db.influencers.find_one({"user_id": user["id"]})
+    if not influencer:
+        raise HTTPException(status_code=404, detail="Influencer profile not found")
+    
+    assignment = await db.assignments.find_one({"id": assignment_id})
+    if not assignment:
+        raise HTTPException(status_code=404, detail="Assignment not found")
+    
+    if assignment["influencer_id"] != influencer["id"]:
+        raise HTTPException(status_code=403, detail="Not your assignment")
+    
+    if assignment["status"] not in ["purchase_approved", "posting"]:
+        raise HTTPException(status_code=400, detail="Purchase must be approved first")
+    
+    # Check if post already exists
+    existing = await db.post_submissions.find_one({"assignment_id": assignment_id})
+    if existing:
+        raise HTTPException(status_code=400, detail="Post already submitted")
+    
+    post_submission = {
+        "id": str(uuid.uuid4()),
+        "assignment_id": assignment_id,
+        "influencer_id": influencer["id"],
+        "campaign_id": assignment["campaign_id"],
+        "post_url": post_data["post_url"],
+        "platform": post_data["platform"],
+        "post_type": post_data["post_type"],
+        "screenshot_url": post_data.get("screenshot_url"),
+        "caption": post_data.get("caption"),
+        "status": "pending",
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "updated_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    await db.post_submissions.insert_one(post_submission)
+    
+    # Update assignment status
+    await db.assignments.update_one(
+        {"id": assignment_id},
+        {"$set": {"status": "post_review", "updated_at": datetime.now(timezone.utc).isoformat()}}
+    )
+    
+    await log_audit(user["id"], "create", "post_submission", post_submission["id"])
+    
+    return {"id": post_submission["id"], "message": "Post submitted for review"}
+
+@api_router.get("/assignments/{assignment_id}/post-submission")
+async def get_assignment_post_submission(assignment_id: str, user: dict = Depends(get_current_user)):
+    post = await db.post_submissions.find_one({"assignment_id": assignment_id}, {"_id": 0})
+    if not post:
+        raise HTTPException(status_code=404, detail="No post submission found for this assignment")
+    return post
+
+@api_router.put("/post-submissions/{submission_id}/review")
+async def review_post_submission(
+    submission_id: str,
+    review_data: Dict[str, Any],
+    user: dict = Depends(require_role([UserRole.BRAND, UserRole.ADMIN]))
+):
+    submission = await db.post_submissions.find_one({"id": submission_id})
+    if not submission:
+        raise HTTPException(status_code=404, detail="Post submission not found")
+    
+    # Get assignment and campaign
+    assignment = await db.assignments.find_one({"id": submission["assignment_id"]})
+    campaign = await db.campaigns.find_one({"id": submission["campaign_id"]})
+    
+    # For brands, verify they own the campaign
+    if user["role"] == "brand":
+        brand = await db.brands.find_one({"user_id": user["id"]})
+        if campaign["brand_id"] != brand["id"]:
+            raise HTTPException(status_code=403, detail="Not your campaign")
+    
+    status = review_data.get("status")
+    if status not in ["approved", "rejected"]:
+        raise HTTPException(status_code=400, detail="Status must be 'approved' or 'rejected'")
+    
+    update_data = {
+        "status": status,
+        "review_notes": review_data.get("notes"),
+        "reviewed_by": user["id"],
+        "reviewed_at": datetime.now(timezone.utc).isoformat(),
+        "updated_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    await db.post_submissions.update_one({"id": submission_id}, {"$set": update_data})
+    
+    # Update assignment status
+    new_assignment_status = "completed" if status == "approved" else "posting"
+    await db.assignments.update_one(
+        {"id": submission["assignment_id"]},
+        {"$set": {"status": new_assignment_status, "updated_at": datetime.now(timezone.utc).isoformat()}}
+    )
+    
+    await log_audit(user["id"], "review", "post_submission", submission_id, {"status": status})
+    
+    return {"message": f"Post {status}"}
+
 @api_router.put("/purchase-proofs/{proof_id}/review")
 async def review_purchase_proof(
     proof_id: str,
