@@ -435,18 +435,160 @@ export default function AssignmentDetail() {
           </div>
         )}
 
-        {/* Completed */}
+        {/* Completed - Addon Post Option */}
         {assignment.status === 'completed' && (
-          <div className="card mb-6 bg-green-50 border border-green-200">
-            <div className="flex items-center gap-4">
-              <CheckCircle className="w-12 h-12 text-[#12B76A]" />
-              <div>
-                <h3 className="text-2xl font-bold text-[#0B1220] mb-2">Assignment Completed! 🎉</h3>
-                <p className="text-gray-700">
-                  Congratulations! Your assignment has been completed successfully. The payout will be processed soon.
-                </p>
+          <div className="space-y-4 mb-6">
+            <div className="card bg-green-50 border border-green-200">
+              <div className="flex items-center gap-4">
+                <CheckCircle className="w-12 h-12 text-[#12B76A]" />
+                <div>
+                  <h3 className="text-2xl font-bold text-[#0B1220] mb-2">Assignment Completed! 🎉</h3>
+                  <p className="text-gray-700">
+                    Congratulations! Your assignment has been completed successfully. The payout will be processed soon.
+                  </p>
+                </div>
               </div>
             </div>
+
+            {/* Addon Post Section */}
+            {assignment.addon_post_status !== 'approved' && assignment.addon_post_status !== 'review' && (
+              <div className="card bg-blue-50 border border-blue-200">
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 bg-[#1F66FF] rounded-full flex items-center justify-center flex-shrink-0">
+                    <DollarSign className="w-6 h-6 text-white" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-2xl font-bold text-[#0B1220] mb-2">Earn Extra $5!</h3>
+                    <p className="text-gray-700 mb-4">
+                      Submit an additional post about this product and earn an extra $5 bonus!
+                    </p>
+                    
+                    {showAddonForm ? (
+                      <form onSubmit={handleAddonSubmit} className="space-y-4 bg-white p-6 rounded-xl border border-gray-200">
+                        <div>
+                          <label className="block text-sm font-semibold text-[#0B1220] mb-2">Addon Post URL *</label>
+                          <input
+                            type="url"
+                            value={addonData.post_url}
+                            onChange={(e) => setAddonData({ ...addonData, post_url: e.target.value })}
+                            className="input"
+                            placeholder="https://instagram.com/p/..."
+                            required
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-sm font-semibold text-[#0B1220] mb-2">Platform *</label>
+                          <select
+                            value={addonData.platform}
+                            onChange={(e) => setAddonData({ ...addonData, platform: e.target.value })}
+                            className="input"
+                            required
+                          >
+                            <option value="">Select platform</option>
+                            <option value="instagram">Instagram</option>
+                            <option value="tiktok">TikTok</option>
+                            <option value="youtube">YouTube</option>
+                            <option value="twitter">Twitter</option>
+                          </select>
+                        </div>
+
+                        <div>
+                          <label className="block text-sm font-semibold text-[#0B1220] mb-2">Post Type *</label>
+                          <select
+                            value={addonData.post_type}
+                            onChange={(e) => setAddonData({ ...addonData, post_type: e.target.value })}
+                            className="input"
+                            required
+                          >
+                            <option value="">Select type</option>
+                            <option value="post">Post</option>
+                            <option value="story">Story</option>
+                            <option value="reel">Reel</option>
+                            <option value="video">Video</option>
+                          </select>
+                        </div>
+
+                        <div>
+                          <label className="block text-sm font-semibold text-[#0B1220] mb-2">Screenshot URL (Optional)</label>
+                          <input
+                            type="url"
+                            value={addonData.screenshot_url}
+                            onChange={(e) => setAddonData({ ...addonData, screenshot_url: e.target.value })}
+                            className="input"
+                            placeholder="https://imgur.com/..."
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-sm font-semibold text-[#0B1220] mb-2">Caption/Description</label>
+                          <textarea
+                            value={addonData.caption}
+                            onChange={(e) => setAddonData({ ...addonData, caption: e.target.value })}
+                            className="input"
+                            rows={4}
+                            placeholder="Share what you posted..."
+                          />
+                        </div>
+
+                        <div className="flex gap-3">
+                          <button
+                            type="submit"
+                            disabled={submittingAddon}
+                            className="btn-primary"
+                          >
+                            {submittingAddon ? 'Submitting...' : 'Submit Addon Post (+$5)'}
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setShowAddonForm(false)}
+                            className="btn-secondary"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </form>
+                    ) : (
+                      <button
+                        onClick={() => setShowAddonForm(true)}
+                        className="btn-primary flex items-center gap-2"
+                      >
+                        <Upload className="w-5 h-5" />
+                        Submit Addon Post (+$5)
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {assignment.addon_post_status === 'review' && (
+              <div className="card bg-orange-50 border border-orange-200">
+                <div className="flex items-center gap-4">
+                  <Clock className="w-12 h-12 text-[#F79009]" />
+                  <div>
+                    <h3 className="text-xl font-bold text-[#0B1220] mb-2">Addon Post Under Review</h3>
+                    <p className="text-gray-700">
+                      Your addon post is being reviewed. You'll earn an extra $5 once it's approved!
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {assignment.addon_post_status === 'approved' && (
+              <div className="card bg-green-50 border border-green-200">
+                <div className="flex items-center gap-4">
+                  <CheckCircle className="w-12 h-12 text-[#12B76A]" />
+                  <div>
+                    <h3 className="text-xl font-bold text-[#0B1220] mb-2">Addon Post Approved! 💰</h3>
+                    <p className="text-gray-700">
+                      Awesome! Your addon post was approved. You've earned an extra $5!
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         )}
 
