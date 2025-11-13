@@ -105,7 +105,7 @@ export default function LandingPageBuilder() {
   };
 
   const previewURL = formData.landing_page_slug 
-    ? `${process.env.REACT_APP_BACKEND_URL}/campaigns/${formData.landing_page_slug}`
+    ? `/campaigns/${formData.landing_page_slug}`
     : null;
 
   if (loading) {
