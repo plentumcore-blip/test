@@ -839,6 +839,14 @@ async def submit_purchase_proof(
     
     return {"id": purchase_proof.id, "message": "Purchase proof submitted"}
 
+
+@api_router.get("/assignments/{assignment_id}/purchase-proof")
+async def get_assignment_purchase_proof(assignment_id: str, user: dict = Depends(get_current_user)):
+    proof = await db.purchase_proofs.find_one({"assignment_id": assignment_id}, {"_id": 0})
+    if not proof:
+        raise HTTPException(status_code=404, detail="No purchase proof found for this assignment")
+    return proof
+
 @api_router.get("/purchase-proofs/{proof_id}")
 async def get_purchase_proof(proof_id: str, user: dict = Depends(get_current_user)):
     proof = await db.purchase_proofs.find_one({"id": proof_id}, {"_id": 0})
