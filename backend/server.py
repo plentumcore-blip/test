@@ -1318,8 +1318,8 @@ async def update_campaign_landing_page(
     
     return {"message": "Landing page updated", "slug": update_data["landing_page_slug"]}
 
-# Public landing page endpoint (no auth required)
-@app.get("/campaigns/{slug}")
+# Public landing page endpoint (no auth required) - at /api route to avoid frontend routing conflict
+@api_router.get("/public/campaigns/{slug}")
 async def get_campaign_landing_page(slug: str):
     campaign = await db.campaigns.find_one({
         "landing_page_slug": slug, 
