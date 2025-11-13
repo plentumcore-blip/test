@@ -27,22 +27,39 @@ export default function BrandAssignments() {
         withCredentials: true
       });
       
-      // Fetch purchase proofs for each assignment
-      const assignmentsWithProofs = await Promise.all(
+      // Fetch purchase proofs and post submissions for each assignment
+      const assignmentsWithData = await Promise.all(
         (response.data.data || []).map(async (assignment) => {
+          let purchaseProof = null;
+          let postSubmission = null;
+          
+          // Fetch purchase proof if exists
           try {
             const proofResponse = await axios.get(
               `${API_BASE}/assignments/${assignment.id}/purchase-proof`,
               { withCredentials: true }
             );
-            return { ...assignment, purchaseProof: proofResponse.data };
+            purchaseProof = proofResponse.data;
           } catch (error) {
-            return { ...assignment, purchaseProof: null };
+            // No proof yet
           }
+          
+          // Fetch post submission if exists
+          try {
+            const postResponse = await axios.get(
+              `${API_BASE}/assignments/${assignment.id}/post-submission`,
+              { withCredentials: true }
+            );
+            postSubmission = postResponse.data;
+          } catch (error) {
+            // No post yet
+          }
+          
+          return { ...assignment, purchaseProof, postSubmission };
         })
       );
       
-      setAssignments(assignmentsWithProofs);
+      setAssignments(assignmentsWithData);
     } catch (error) {
       toast.error('Failed to load assignments');
     } finally {
