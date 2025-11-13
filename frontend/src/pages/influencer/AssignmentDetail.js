@@ -270,19 +270,115 @@ export default function AssignmentDetail() {
           </div>
         )}
 
-        {/* Purchase Approved */}
-        {assignment.status === 'purchase_approved' && (
-          <div className="card mb-6 bg-green-50 border border-green-200" data-testid="approved-status">
-            <div className="flex items-center gap-4">
-              <CheckCircle className="w-12 h-12 text-[#12B76A]" />
-              <div>
-                <h3 className="text-2xl font-bold text-[#0B1220] mb-2">Purchase Approved!</h3>
+        {/* Purchase Approved - Post Submission */}
+        {(assignment.status === 'purchase_approved' || assignment.status === 'posting') && (
+          <div className="card mb-6 bg-green-50 border border-green-200">
+            <div className="flex items-start gap-4">
+              <div className="w-12 h-12 bg-[#12B76A] rounded-full flex items-center justify-center flex-shrink-0">
+                <span className="text-white font-bold text-lg">3</span>
+              </div>
+              <div className="flex-1">
+                <h3 className="text-2xl font-bold text-[#0B1220] mb-2">Create & Submit Your Post</h3>
                 <p className="text-gray-700 mb-4">
-                  Your purchase has been verified. You can now create and submit your post.
+                  Your purchase has been verified! Create your promotional post and submit the details below.
                 </p>
-                <button className="btn-primary">
-                  Submit Post (Coming Soon)
-                </button>
+                
+                {showPostForm ? (
+                  <form onSubmit={handlePostSubmit} className="space-y-4 bg-white p-6 rounded-xl border border-gray-200">
+                    <div>
+                      <label className="block text-sm font-semibold text-[#0B1220] mb-2">Post URL *</label>
+                      <input
+                        type="url"
+                        value={postData.post_url}
+                        onChange={(e) => setPostData({ ...postData, post_url: e.target.value })}
+                        className="input"
+                        placeholder="https://instagram.com/p/..."
+                        required
+                      />
+                      <p className="text-xs text-gray-600 mt-1">Link to your published post</p>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-semibold text-[#0B1220] mb-2">Platform *</label>
+                      <select
+                        value={postData.platform}
+                        onChange={(e) => setPostData({ ...postData, platform: e.target.value })}
+                        className="input"
+                        required
+                      >
+                        <option value="">Select platform</option>
+                        <option value="instagram">Instagram</option>
+                        <option value="tiktok">TikTok</option>
+                        <option value="youtube">YouTube</option>
+                        <option value="twitter">Twitter</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-semibold text-[#0B1220] mb-2">Post Type *</label>
+                      <select
+                        value={postData.post_type}
+                        onChange={(e) => setPostData({ ...postData, post_type: e.target.value })}
+                        className="input"
+                        required
+                      >
+                        <option value="">Select type</option>
+                        <option value="post">Post</option>
+                        <option value="story">Story</option>
+                        <option value="reel">Reel</option>
+                        <option value="video">Video</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-semibold text-[#0B1220] mb-2">Screenshot URL (Optional)</label>
+                      <input
+                        type="url"
+                        value={postData.screenshot_url}
+                        onChange={(e) => setPostData({ ...postData, screenshot_url: e.target.value })}
+                        className="input"
+                        placeholder="https://imgur.com/..."
+                      />
+                      <p className="text-xs text-gray-600 mt-1">Screenshot of your post (upload to imgur or similar)</p>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-semibold text-[#0B1220] mb-2">Caption/Description</label>
+                      <textarea
+                        value={postData.caption}
+                        onChange={(e) => setPostData({ ...postData, caption: e.target.value })}
+                        className="input"
+                        rows={4}
+                        placeholder="Share what you posted..."
+                      />
+                    </div>
+
+                    <div className="flex gap-3">
+                      <button
+                        type="submit"
+                        disabled={submittingPost}
+                        className="btn-primary"
+                      >
+                        {submittingPost ? 'Submitting...' : 'Submit Post for Review'}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setShowPostForm(false)}
+                        className="btn-secondary"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </form>
+                ) : (
+                  <button
+                    onClick={() => setShowPostForm(true)}
+                    className="btn-primary flex items-center gap-2"
+                  >
+                    <Upload className="w-5 h-5" />
+                    Submit Post Details
+                  </button>
+                )}
               </div>
             </div>
           </div>
