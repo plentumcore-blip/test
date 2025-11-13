@@ -97,6 +97,34 @@ export default function BrandAssignments() {
     }
   };
 
+  const handleReviewPost = (assignment) => {
+    setSelectedPost(assignment.postSubmission);
+    setReviewNotes('');
+    setShowPostModal(true);
+  };
+
+  const submitPostReview = async (status) => {
+    if (!selectedPost) return;
+
+    try {
+      await axios.put(
+        `${API_BASE}/post-submissions/${selectedPost.id}/review`,
+        {
+          status,
+          notes: reviewNotes
+        },
+        { withCredentials: true }
+      );
+      
+      toast.success(`Post ${status === 'approved' ? 'approved' : 'rejected'}`);
+      setShowPostModal(false);
+      setSelectedPost(null);
+      fetchAssignments();
+    } catch (error) {
+      toast.error('Failed to review post');
+    }
+  };
+
   const handleLogout = async () => {
     await logout();
     navigate('/login');
