@@ -104,6 +104,27 @@ export default function BrandCampaigns() {
                       </div>
                     </div>
                     <div className="flex flex-col gap-2">
+                      {campaign.status === 'draft' && (
+                        <button
+                          data-testid={`publish-campaign-btn-${campaign.id}`}
+                          onClick={async () => {
+                            try {
+                              await axios.put(
+                                `${API_BASE}/campaigns/${campaign.id}/publish`,
+                                {},
+                                { withCredentials: true }
+                              );
+                              toast.success('Campaign published successfully!');
+                              fetchCampaigns(); // Refresh list
+                            } catch (error) {
+                              toast.error('Failed to publish campaign');
+                            }
+                          }}
+                          className="btn-primary text-sm"
+                        >
+                          Publish Campaign
+                        </button>
+                      )}
                       <button
                         data-testid={`view-applications-btn-${campaign.id}`}
                         onClick={() => navigate(`/brand/campaigns/${campaign.id}/applications`)}
