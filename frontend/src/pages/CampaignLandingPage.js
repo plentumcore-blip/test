@@ -18,7 +18,7 @@ export default function CampaignLandingPage() {
 
   const fetchCampaign = async () => {
     try {
-      const response = await axios.get(`${API_BASE}/campaigns/${slug}`);
+      const response = await axios.get(`${API_BASE}/api/v1/public/campaigns/${slug}`);
       setCampaign(response.data);
     } catch (error) {
       console.error('Failed to load campaign:', error);
