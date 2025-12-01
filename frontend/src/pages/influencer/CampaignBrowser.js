@@ -95,7 +95,9 @@ export default function CampaignBrowser() {
                 <div className="mb-4">
                   <div className="flex items-center justify-between mb-3">
                     <h3 className="text-2xl font-bold text-[#0B1220]">{campaign.title}</h3>
-                    <span className="badge badge-success">Live</span>
+                    <span className="badge badge-success">
+                      {campaign.status === 'live' ? 'Live' : 'Active'}
+                    </span>
                   </div>
                   <p className="text-gray-600">{campaign.description}</p>
                 </div>
