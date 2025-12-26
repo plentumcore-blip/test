@@ -1897,6 +1897,9 @@ async def get_admin_reports(user: dict = Depends(require_role([UserRole.ADMIN]))
 # Include router
 app.include_router(api_router)
 
+# Serve uploaded files
+app.mount("/uploads", StaticFiles(directory="/app/backend/uploads"), name="uploads")
+
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
