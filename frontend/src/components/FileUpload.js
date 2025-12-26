@@ -17,6 +17,7 @@ const FileUpload = ({
   const [error, setError] = useState('');
   const [uploadedUrl, setUploadedUrl] = useState(currentUrl);
   const fileInputRef = useRef(null);
+  const inputId = useRef(`file-upload-${Math.random().toString(36).substr(2, 9)}`).current;
 
   const validateFile = (file) => {
     // Check file size
