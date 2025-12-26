@@ -303,6 +303,28 @@ def hash_password(password: str) -> str:
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     return pwd_context.verify(plain_password, hashed_password)
 
+def validate_password_strength(password: str) -> tuple[bool, str]:
+    """
+    Validate password meets security requirements
+    Returns (is_valid, error_message)
+    """
+    if len(password) < 8:
+        return False, "Password must be at least 8 characters long"
+    
+    if not any(c.isupper() for c in password):
+        return False, "Password must contain at least one uppercase letter"
+    
+    if not any(c.islower() for c in password):
+        return False, "Password must contain at least one lowercase letter"
+    
+    if not any(c.isdigit() for c in password):
+        return False, "Password must contain at least one number"
+    
+    if not any(c in '!@#$%^&*(),.?":{}|<>' for c in password):
+        return False, "Password must contain at least one special character"
+    
+    return True, ""
+
 def create_access_token(data: dict):
     to_encode = data.copy()
     expire = datetime.now(timezone.utc) + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
