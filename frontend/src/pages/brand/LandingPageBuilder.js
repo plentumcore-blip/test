@@ -245,7 +245,7 @@ export default function LandingPageBuilder() {
                     <Trash2 className="w-4 h-4" />
                   </button>
                 </div>
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-2 gap-3 mb-3">
                   <input
                     type="text"
                     placeholder="Name"
@@ -261,6 +261,13 @@ export default function LandingPageBuilder() {
                     className="input"
                   />
                 </div>
+                <FileUpload
+                  label="Avatar Image"
+                  accept="image/*"
+                  maxSize={2}
+                  onUploadComplete={(url) => updateTestimonial(index, 'avatar', url)}
+                  currentUrl={testimonial.avatar}
+                />
                 <textarea
                   placeholder="Testimonial content"
                   value={testimonial.content}
