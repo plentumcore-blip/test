@@ -1893,6 +1893,42 @@ async def get_admin_reports(user: dict = Depends(require_role([UserRole.ADMIN]))
         }
     }
 
+# File Upload Endpoint
+@api_router.post("/upload")
+async def upload_file(
+    file: UploadFile = File(...),
+    user: dict = Depends(get_current_user)
+):
+    """Upload a file and return the URL to access it"""
+    if not file.filename:
+        raise HTTPException(status_code=400, detail="No file provided")
+    
+    # Generate unique filename
+    file_extension = Path(file.filename).suffix
+    unique_filename = f"{str(uuid.uuid4())}{file_extension}"
+    file_path = Path("/app/backend/uploads") / unique_filename
+    
+    # Save file
+    try:
+        async with aiofiles.open(file_path, 'wb') as f:
+            content = await file.read()
+            await f.write(content)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to save file: {str(e)}")
+    
+    # Return file URL
+    base_url = os.environ.get('REACT_APP_BACKEND_URL', 'http://localhost:8001')
+    file_url = f"{base_url}/uploads/{unique_filename}"
+    
+    await log_audit(user["id"], "upload", "file", unique_filename, {"original_name": file.filename})
+    
+    return {
+        "filename": unique_filename,
+        "original_filename": file.filename,
+        "url": file_url,
+        "message": "File uploaded successfully"
+    }
+
 
 # Include router
 app.include_router(api_router)
