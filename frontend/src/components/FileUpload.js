@@ -124,11 +124,12 @@ const FileUpload = ({
           />
           <label
             htmlFor={inputId}
+            onClick={triggerFileInput}
             className={`
               flex flex-col items-center justify-center w-full h-32 
               border-2 border-dashed rounded-xl cursor-pointer
               transition-colors
-              ${uploading ? 'border-blue-300 bg-blue-50' : 'border-gray-300 hover:border-blue-500 hover:bg-gray-50'}
+              ${uploading ? 'border-blue-300 bg-blue-50 cursor-not-allowed' : 'border-gray-300 hover:border-blue-500 hover:bg-gray-50'}
               ${error ? 'border-red-300 bg-red-50' : ''}
             `}
           >
