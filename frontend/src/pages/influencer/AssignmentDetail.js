@@ -414,15 +414,14 @@ export default function AssignmentDetail() {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-semibold text-[#0B1220] mb-2">Screenshot URL (Optional)</label>
-                      <input
-                        type="url"
-                        value={postData.screenshot_url}
-                        onChange={(e) => setPostData({ ...postData, screenshot_url: e.target.value })}
-                        className="input"
-                        placeholder="https://imgur.com/..."
+                      <FileUpload
+                        label="Screenshot"
+                        accept="image/*"
+                        maxSize={5}
+                        onUploadComplete={(url) => setPostData({ ...postData, screenshot_url: url })}
+                        currentUrl={postData.screenshot_url}
                       />
-                      <p className="text-xs text-gray-600 mt-1">Screenshot of your post (upload to imgur or similar)</p>
+                      <p className="text-xs text-gray-600 mt-1">Upload screenshot of your post</p>
                     </div>
 
                     <div>
