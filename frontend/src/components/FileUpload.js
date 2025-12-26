@@ -116,10 +116,10 @@ const FileUpload = ({
             onChange={handleFileSelect}
             disabled={uploading}
             className="hidden"
-            id={`file-upload-${Math.random()}`}
+            id={inputId}
           />
           <label
-            htmlFor={fileInputRef.current?.id}
+            htmlFor={inputId}
             className={`
               flex flex-col items-center justify-center w-full h-32 
               border-2 border-dashed rounded-xl cursor-pointer
