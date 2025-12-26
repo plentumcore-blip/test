@@ -377,6 +377,11 @@ async def register(user_data: UserRegister, response: Response):
     if existing:
         raise HTTPException(status_code=400, detail="Email already registered")
     
+    # Validate password strength
+    is_valid, error_message = validate_password_strength(user_data.password)
+    if not is_valid:
+        raise HTTPException(status_code=400, detail=error_message)
+    
     # Create user
     user = User(
         email=user_data.email,
