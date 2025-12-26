@@ -185,15 +185,14 @@ export default function LandingPageBuilder() {
 
           {/* Hero Image */}
           <div>
-            <label className="block text-sm font-semibold text-[#0B1220] mb-2">Hero Image URL</label>
-            <input
-              data-testid="hero-image-input"
-              type="url"
-              value={formData.landing_page_hero_image}
-              onChange={(e) => setFormData({ ...formData, landing_page_hero_image: e.target.value })}
-              className="input"
-              placeholder="https://example.com/image.jpg"
+            <FileUpload
+              label="Hero Image"
+              accept="image/*"
+              maxSize={10}
+              onUploadComplete={(url) => setFormData({ ...formData, landing_page_hero_image: url })}
+              currentUrl={formData.landing_page_hero_image}
             />
+            <p className="text-xs text-gray-600 mt-1">Upload hero image for your campaign landing page (max 10MB)</p>
           </div>
 
           {/* Content */}
