@@ -49,14 +49,19 @@ const FileUpload = ({
 
   const handleFileSelect = async (event) => {
     const file = event.target.files?.[0];
-    if (!file) return;
+    if (!file) {
+      console.log('No file selected');
+      return;
+    }
 
+    console.log('File selected:', file.name, file.size, file.type);
     setError('');
     
     // Validate file
     const validationError = validateFile(file);
     if (validationError) {
       setError(validationError);
+      console.error('Validation error:', validationError);
       return;
     }
 
@@ -68,6 +73,8 @@ const FileUpload = ({
       const formData = new FormData();
       formData.append('file', file);
 
+      console.log('Starting upload to:', `${API_BASE}/api/v1/upload`);
+
       const response = await axios.post(`${API_BASE}/api/v1/upload`, formData, {
         withCredentials: true,
         headers: {
@@ -76,15 +83,18 @@ const FileUpload = ({
         onUploadProgress: (progressEvent) => {
           const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
           setProgress(percentCompleted);
+          console.log('Upload progress:', percentCompleted + '%');
         },
       });
 
+      console.log('Upload successful:', response.data);
       const fileUrl = response.data.url;
       setUploadedUrl(fileUrl);
       onUploadComplete(fileUrl);
       setProgress(100);
     } catch (err) {
       console.error('Upload failed:', err);
+      console.error('Error response:', err.response?.data);
       setError(err.response?.data?.detail || 'Failed to upload file');
     } finally {
       setUploading(false);
