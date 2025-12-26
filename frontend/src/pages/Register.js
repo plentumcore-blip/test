@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { toast } from 'sonner';
-import { ShoppingBag, Mail, Lock, User } from 'lucide-react';
+import { ShoppingBag, Mail, User } from 'lucide-react';
+import PasswordInput from '../components/PasswordInput';
 
 export default function Register() {
   const [email, setEmail] = useState('');
@@ -13,16 +14,28 @@ export default function Register() {
   const { register } = useAuth();
   const navigate = useNavigate();
 
+  // Password validation
+  const validatePassword = (pwd) => {
+    const minLength = pwd.length >= 8;
+    const hasUppercase = /[A-Z]/.test(pwd);
+    const hasLowercase = /[a-z]/.test(pwd);
+    const hasNumber = /[0-9]/.test(pwd);
+    const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(pwd);
+    
+    return minLength && hasUppercase && hasLowercase && hasNumber && hasSpecial;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (password !== confirmPassword) {
-      toast.error('Passwords do not match');
+    // Validate password strength
+    if (!validatePassword(password)) {
+      toast.error('Please meet all password requirements');
       return;
     }
 
-    if (password.length < 6) {
-      toast.error('Password must be at least 6 characters');
+    if (password !== confirmPassword) {
+      toast.error('Passwords do not match');
       return;
     }
 
