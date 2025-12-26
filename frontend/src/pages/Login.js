@@ -49,13 +49,13 @@ export default function Login() {
               <div>
                 <label className="block text-sm font-semibold text-[#0B1220] mb-2">Email</label>
                 <div className="relative">
-                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
                   <input
                     data-testid="login-email-input"
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="input pl-12"
+                    className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#1F66FF] focus:border-transparent"
                     placeholder="you@example.com"
                     required
                   />
@@ -65,13 +65,13 @@ export default function Login() {
               <div>
                 <label className="block text-sm font-semibold text-[#0B1220] mb-2">Password</label>
                 <div className="relative">
-                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
                   <input
                     data-testid="login-password-input"
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="input pl-12"
+                    className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#1F66FF] focus:border-transparent"
                     placeholder="••••••••"
                     required
                   />
