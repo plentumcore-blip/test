@@ -16,7 +16,8 @@ export default function AssignmentDetail() {
     order_id: '',
     order_date: '',
     asin: '',
-    total: ''
+    total: '',
+    screenshot_url: ''
   });
   const [showPostForm, setShowPostForm] = useState(false);
   const [postData, setPostData] = useState({
