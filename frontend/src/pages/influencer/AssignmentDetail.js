@@ -301,6 +301,17 @@ export default function AssignmentDetail() {
                         </div>
                       </div>
 
+                      <div>
+                        <FileUpload
+                          label="Screenshot URL"
+                          accept="image/*"
+                          maxSize={5}
+                          onUploadComplete={(url) => setPurchaseData({ ...purchaseData, screenshot_url: url })}
+                          currentUrl={purchaseData.screenshot_url}
+                        />
+                        <p className="text-xs text-gray-600 mt-1">Upload screenshot of your Amazon order confirmation</p>
+                      </div>
+
                       <div className="flex gap-3">
                         <button
                           data-testid="submit-purchase-btn"
