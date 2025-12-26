@@ -541,16 +541,15 @@ export default function AssignmentDetail() {
                         </div>
 
                         <div>
-                          <label className="block text-sm font-semibold text-[#0B1220] mb-2">Screenshot of Review *</label>
-                          <input
-                            type="url"
-                            value={reviewData.screenshot_url}
-                            onChange={(e) => setReviewData({ ...reviewData, screenshot_url: e.target.value })}
-                            className="input"
-                            placeholder="https://imgur.com/..."
-                            required
+                          <FileUpload
+                            label="Screenshot of Review"
+                            accept="image/*"
+                            maxSize={5}
+                            required={true}
+                            onUploadComplete={(url) => setReviewData({ ...reviewData, screenshot_url: url })}
+                            currentUrl={reviewData.screenshot_url}
                           />
-                          <p className="text-xs text-gray-600 mt-1">Upload screenshot to imgur.com or similar and paste the link</p>
+                          <p className="text-xs text-gray-600 mt-1">Upload screenshot showing your posted review</p>
                         </div>
 
                         <div>
