@@ -434,6 +434,10 @@ class TestPublicLandingPage:
         assert "landing_page_testimonials" in data, "Missing landing_page_testimonials"
         assert "landing_page_faqs" in data, "Missing landing_page_faqs"
         
+        # Verify Why Join and How It Works fields
+        assert "landing_page_why_join" in data, "Missing landing_page_why_join"
+        assert "landing_page_how_it_works" in data, "Missing landing_page_how_it_works"
+        
         # Verify brand info
         assert "brand" in data, "Missing brand info"
         assert "company_name" in data["brand"], "Missing brand company_name"
@@ -442,6 +446,8 @@ class TestPublicLandingPage:
         print(f"  - Campaign: {data['title']}")
         print(f"  - Brand: {data['brand']['company_name']}")
         print(f"  - CTA: {data['landing_page_cta_text']}")
+        print(f"  - Why Join count: {len(data.get('landing_page_why_join', []))}")
+        print(f"  - How It Works count: {len(data.get('landing_page_how_it_works', []))}")
     
     def test_02_public_landing_page_returns_html_content(self):
         """Test public landing page returns HTML content correctly"""
