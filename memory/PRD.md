@@ -63,6 +63,18 @@ AffiTarget is a full-stack influencer marketing platform connecting brands with 
 
 ## What's Been Implemented
 
+### January 16, 2026 - Email Notifications System
+- ✅ Created comprehensive email service (`/app/backend/email_service.py`) with 16 email templates
+- ✅ Integrated email notifications into all key flows:
+  - **Registration**: Welcome emails to new influencers/brands + Admin notifications
+  - **Applications**: Brand notified on new application, influencer notified on approve/reject
+  - **Purchase Proofs**: Brand notified on submission, influencer notified on approve/reject
+  - **Content Posts**: Brand notified on submission, influencer notified on approve/reject
+  - **Product Reviews**: Brand notified on submission, influencer notified on approve/reject
+- ✅ SMTP configuration via admin settings (supports MailSlurp, SendGrid, or any SMTP)
+- ✅ Asynchronous email sending using `asyncio.create_task()` for non-blocking operations
+- ✅ Beautiful HTML email templates with branding
+
 ### January 16, 2026 - Marketing Landing Page & Campaign Landing Page Editor
 - ✅ Created new marketing landing page (`MarketingLandingPage.js`)
 - ✅ Backend-manageable video section and stats
