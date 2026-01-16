@@ -1223,12 +1223,39 @@ async def review_purchase_proof(
         }}
     )
     
+    # Get assignment, influencer, and campaign for email
+    assignment = await db.assignments.find_one({"id": proof["assignment_id"]})
+    influencer = await db.influencers.find_one({"id": assignment["influencer_id"]}) if assignment else None
+    influencer_user = await db.users.find_one({"id": influencer["user_id"]}) if influencer else None
+    campaign = await db.campaigns.find_one({"id": assignment["campaign_id"]}) if assignment else None
+    
     # Update assignment if approved
     if review_data["status"] == PurchaseProofStatus.APPROVED.value:
         await db.assignments.update_one(
             {"id": proof["assignment_id"]},
             {"$set": {"status": AssignmentStatus.PURCHASE_APPROVED.value, "updated_at": datetime.now(timezone.utc).isoformat()}}
         )
+        
+        # Send approval email to influencer
+        if influencer_user and campaign:
+            asyncio.create_task(email_service.send_purchase_proof_approved(
+                influencer_user["email"],
+                influencer.get("name", influencer_user["email"].split('@')[0]),
+                campaign["title"],
+                assignment["id"],
+                APP_URL
+            ))
+    elif review_data["status"] == PurchaseProofStatus.REJECTED.value:
+        # Send rejection email to influencer
+        if influencer_user and campaign:
+            asyncio.create_task(email_service.send_purchase_proof_rejected(
+                influencer_user["email"],
+                influencer.get("name", influencer_user["email"].split('@')[0]),
+                campaign["title"],
+                assignment["id"],
+                review_data.get("notes", ""),
+                APP_URL
+            ))
     
     await log_audit(user["id"], "review", "purchase_proof", proof_id, {"status": review_data["status"]})
     
