@@ -147,28 +147,23 @@ export default function CampaignLandingPage() {
         </Section>
       </div>
 
-      {/* Perks */}
+      {/* Perks / Why Join */}
       <Section id="perks" className="py-12">
         <h2 className="text-2xl font-bold text-[#0E2C7E] mb-6">Why join?</h2>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          <Card className="p-6">
-            <h3 className="font-semibold">Fast approvals</h3>
-            <p className="mt-2 text-sm text-[#0B1220]/80">
-              Manual queue with 24–48h turnaround on purchase & posts.
-            </p>
-          </Card>
-          <Card className="p-6">
-            <h3 className="font-semibold">Clear rules</h3>
-            <p className="mt-2 text-sm text-[#0B1220]/80">
-              Simple deliverables with examples, tags, and caption guidance.
-            </p>
-          </Card>
-          <Card className="p-6">
-            <h3 className="font-semibold">Earn rewards</h3>
-            <p className="mt-2 text-sm text-[#0B1220]/80">
-              Get paid for your content and product reviews with transparent payouts.
-            </p>
-          </Card>
+          {(campaign.landing_page_why_join && campaign.landing_page_why_join.length > 0 
+            ? campaign.landing_page_why_join 
+            : [
+                { title: 'Fast approvals', description: 'Manual queue with 24–48h turnaround on purchase & posts.' },
+                { title: 'Clear rules', description: 'Simple deliverables with examples, tags, and caption guidance.' },
+                { title: 'Earn rewards', description: 'Get paid for your content and product reviews with transparent payouts.' }
+              ]
+          ).map((perk, index) => (
+            <Card key={index} className="p-6">
+              <h3 className="font-semibold">{perk.title}</h3>
+              <p className="mt-2 text-sm text-[#0B1220]/80">{perk.description}</p>
+            </Card>
+          ))}
         </div>
       </Section>
 
