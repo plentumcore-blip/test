@@ -1,5 +1,5 @@
 """
-Email Service for AffiTarget
+Email Service for Influiv
 Sends notifications via SMTP configured in admin settings
 """
 
@@ -16,16 +16,16 @@ logger = logging.getLogger(__name__)
 EMAIL_TEMPLATES = {
     # ============ INFLUENCER EMAILS ============
     "influencer_welcome": {
-        "subject": "Welcome to AffiTarget! 🎉",
+        "subject": "Welcome to Influiv! 🎉",
         "html": """
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
             <div style="background: linear-gradient(135deg, #1F66FF 0%, #0E2C7E 100%); padding: 40px 20px; text-align: center;">
-                <h1 style="color: white; margin: 0;">Welcome to AffiTarget!</h1>
+                <h1 style="color: white; margin: 0;">Welcome to Influiv!</h1>
             </div>
             <div style="padding: 30px 20px; background: #f9fafb;">
                 <p style="font-size: 16px; color: #333;">Hi <strong>{name}</strong>,</p>
                 <p style="font-size: 16px; color: #333;">
-                    Thanks for joining AffiTarget! You're now part of our community of influencers 
+                    Thanks for joining Influiv! You're now part of our community of influencers 
                     who earn money by creating authentic content for top brands.
                 </p>
                 <div style="background: white; border-radius: 12px; padding: 20px; margin: 20px 0;">
@@ -42,7 +42,7 @@ EMAIL_TEMPLATES = {
                 </a>
             </div>
             <div style="padding: 20px; text-align: center; color: #888; font-size: 12px;">
-                © 2025 AffiTarget. All rights reserved.
+                © 2025 Influiv. All rights reserved.
             </div>
         </div>
         """
@@ -74,7 +74,7 @@ EMAIL_TEMPLATES = {
                 </a>
             </div>
             <div style="padding: 20px; text-align: center; color: #888; font-size: 12px;">
-                © 2025 AffiTarget. All rights reserved.
+                © 2025 Influiv. All rights reserved.
             </div>
         </div>
         """
@@ -104,7 +104,7 @@ EMAIL_TEMPLATES = {
                 </a>
             </div>
             <div style="padding: 20px; text-align: center; color: #888; font-size: 12px;">
-                © 2025 AffiTarget. All rights reserved.
+                © 2025 Influiv. All rights reserved.
             </div>
         </div>
         """
@@ -134,7 +134,7 @@ EMAIL_TEMPLATES = {
                 </a>
             </div>
             <div style="padding: 20px; text-align: center; color: #888; font-size: 12px;">
-                © 2025 AffiTarget. All rights reserved.
+                © 2025 Influiv. All rights reserved.
             </div>
         </div>
         """
@@ -162,7 +162,7 @@ EMAIL_TEMPLATES = {
                 </a>
             </div>
             <div style="padding: 20px; text-align: center; color: #888; font-size: 12px;">
-                © 2025 AffiTarget. All rights reserved.
+                © 2025 Influiv. All rights reserved.
             </div>
         </div>
         """
@@ -192,7 +192,7 @@ EMAIL_TEMPLATES = {
                 </a>
             </div>
             <div style="padding: 20px; text-align: center; color: #888; font-size: 12px;">
-                © 2025 AffiTarget. All rights reserved.
+                © 2025 Influiv. All rights reserved.
             </div>
         </div>
         """
@@ -220,7 +220,7 @@ EMAIL_TEMPLATES = {
                 </a>
             </div>
             <div style="padding: 20px; text-align: center; color: #888; font-size: 12px;">
-                © 2025 AffiTarget. All rights reserved.
+                © 2025 Influiv. All rights reserved.
             </div>
         </div>
         """
@@ -248,7 +248,7 @@ EMAIL_TEMPLATES = {
                 </a>
             </div>
             <div style="padding: 20px; text-align: center; color: #888; font-size: 12px;">
-                © 2025 AffiTarget. All rights reserved.
+                © 2025 Influiv. All rights reserved.
             </div>
         </div>
         """
@@ -276,7 +276,7 @@ EMAIL_TEMPLATES = {
                 </a>
             </div>
             <div style="padding: 20px; text-align: center; color: #888; font-size: 12px;">
-                © 2025 AffiTarget. All rights reserved.
+                © 2025 Influiv. All rights reserved.
             </div>
         </div>
         """
@@ -308,7 +308,7 @@ EMAIL_TEMPLATES = {
                 </a>
             </div>
             <div style="padding: 20px; text-align: center; color: #888; font-size: 12px;">
-                © 2025 AffiTarget. All rights reserved.
+                © 2025 Influiv. All rights reserved.
             </div>
         </div>
         """
@@ -316,16 +316,16 @@ EMAIL_TEMPLATES = {
     
     # ============ BRAND EMAILS ============
     "brand_welcome": {
-        "subject": "Welcome to AffiTarget! 🚀",
+        "subject": "Welcome to Influiv! 🚀",
         "html": """
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
             <div style="background: linear-gradient(135deg, #1F66FF 0%, #0E2C7E 100%); padding: 40px 20px; text-align: center;">
-                <h1 style="color: white; margin: 0;">Welcome to AffiTarget!</h1>
+                <h1 style="color: white; margin: 0;">Welcome to Influiv!</h1>
             </div>
             <div style="padding: 30px 20px; background: #f9fafb;">
                 <p style="font-size: 16px; color: #333;">Hi <strong>{name}</strong>,</p>
                 <p style="font-size: 16px; color: #333;">
-                    Welcome to AffiTarget! You're now ready to connect with thousands of 
+                    Welcome to Influiv! You're now ready to connect with thousands of 
                     authentic influencers and scale your brand with UGC.
                 </p>
                 <div style="background: white; border-radius: 12px; padding: 20px; margin: 20px 0;">
@@ -342,7 +342,7 @@ EMAIL_TEMPLATES = {
                 </a>
             </div>
             <div style="padding: 20px; text-align: center; color: #888; font-size: 12px;">
-                © 2025 AffiTarget. All rights reserved.
+                © 2025 Influiv. All rights reserved.
             </div>
         </div>
         """
@@ -370,7 +370,7 @@ EMAIL_TEMPLATES = {
                 </a>
             </div>
             <div style="padding: 20px; text-align: center; color: #888; font-size: 12px;">
-                © 2025 AffiTarget. All rights reserved.
+                © 2025 Influiv. All rights reserved.
             </div>
         </div>
         """
@@ -397,7 +397,7 @@ EMAIL_TEMPLATES = {
                 </a>
             </div>
             <div style="padding: 20px; text-align: center; color: #888; font-size: 12px;">
-                © 2025 AffiTarget. All rights reserved.
+                © 2025 Influiv. All rights reserved.
             </div>
         </div>
         """
@@ -423,7 +423,7 @@ EMAIL_TEMPLATES = {
                 </a>
             </div>
             <div style="padding: 20px; text-align: center; color: #888; font-size: 12px;">
-                © 2025 AffiTarget. All rights reserved.
+                © 2025 Influiv. All rights reserved.
             </div>
         </div>
         """
@@ -450,7 +450,7 @@ EMAIL_TEMPLATES = {
                 </a>
             </div>
             <div style="padding: 20px; text-align: center; color: #888; font-size: 12px;">
-                © 2025 AffiTarget. All rights reserved.
+                © 2025 Influiv. All rights reserved.
             </div>
         </div>
         """
@@ -465,7 +465,7 @@ EMAIL_TEMPLATES = {
                 <h1 style="color: white; margin: 0;">New User Registered</h1>
             </div>
             <div style="padding: 30px 20px; background: #f9fafb;">
-                <p style="font-size: 16px; color: #333;">A new user has registered on AffiTarget.</p>
+                <p style="font-size: 16px; color: #333;">A new user has registered on Influiv.</p>
                 <div style="background: white; border-radius: 12px; padding: 20px; margin: 20px 0;">
                     <p style="color: #555;"><strong>Name:</strong> {name}</p>
                     <p style="color: #555;"><strong>Email:</strong> {email}</p>
@@ -477,7 +477,7 @@ EMAIL_TEMPLATES = {
                 </a>
             </div>
             <div style="padding: 20px; text-align: center; color: #888; font-size: 12px;">
-                © 2025 AffiTarget. All rights reserved.
+                © 2025 Influiv. All rights reserved.
             </div>
         </div>
         """
@@ -485,7 +485,7 @@ EMAIL_TEMPLATES = {
     
     # ============ PASSWORD RESET EMAILS ============
     "password_reset": {
-        "subject": "🔐 Reset Your AffiTarget Password",
+        "subject": "🔐 Reset Your Influiv Password",
         "html": """
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
             <div style="background: linear-gradient(135deg, #1F66FF 0%, #0E2C7E 100%); padding: 40px 20px; text-align: center;">
@@ -494,7 +494,7 @@ EMAIL_TEMPLATES = {
             <div style="padding: 30px 20px; background: #f9fafb;">
                 <p style="font-size: 16px; color: #333;">Hi <strong>{name}</strong>,</p>
                 <p style="font-size: 16px; color: #333;">
-                    We received a request to reset your password for your AffiTarget account. 
+                    We received a request to reset your password for your Influiv account. 
                     Click the button below to create a new password.
                 </p>
                 <div style="text-align: center; margin: 30px 0;">
@@ -515,7 +515,7 @@ EMAIL_TEMPLATES = {
                 </p>
             </div>
             <div style="padding: 20px; text-align: center; color: #888; font-size: 12px;">
-                © 2025 AffiTarget. All rights reserved.
+                © 2025 Influiv. All rights reserved.
             </div>
         </div>
         """
@@ -547,7 +547,7 @@ EMAIL_TEMPLATES = {
                 </div>
             </div>
             <div style="padding: 20px; text-align: center; color: #888; font-size: 12px;">
-                © 2025 AffiTarget. All rights reserved.
+                © 2025 Influiv. All rights reserved.
             </div>
         </div>
         """
@@ -598,7 +598,7 @@ class EmailService:
             # Create message
             msg = MIMEMultipart("alternative")
             msg["Subject"] = subject
-            msg["From"] = f"{settings.get('from_name', 'AffiTarget')} <{settings.get('from_email', settings['smtp_user'])}>"
+            msg["From"] = f"{settings.get('from_name', 'Influiv')} <{settings.get('from_email', settings['smtp_user'])}>"
             msg["To"] = to_email
             
             # Attach HTML content

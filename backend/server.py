@@ -34,7 +34,7 @@ from email_service import EmailService
 email_service = EmailService(db)
 
 # Get app URL for email links
-APP_URL = os.environ.get('APP_URL', 'https://affitarget-2.preview.emergentagent.com')
+APP_URL = os.environ.get('APP_URL', 'https://influiv-2.preview.emergentagent.com')
 
 # Security
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -1967,7 +1967,7 @@ async def get_landing_content():
                 {"label": "Average ROI", "value": "5.2x"}
             ],
             "videoUrl": "",
-            "videoTitle": "How Affitarget Works"
+            "videoTitle": "How Influiv Works"
         }
     return content
 
@@ -1987,7 +1987,7 @@ async def update_landing_content(
             {"label": "Average ROI", "value": "5.2x"}
         ]),
         "videoUrl": content_data.get("videoUrl", ""),
-        "videoTitle": content_data.get("videoTitle", "How Affitarget Works"),
+        "videoTitle": content_data.get("videoTitle", "How Influiv Works"),
         "updated_at": datetime.now(timezone.utc).isoformat()
     }
     
@@ -2014,7 +2014,7 @@ async def get_admin_landing_content(user: dict = Depends(require_role([UserRole.
                 {"label": "Average ROI", "value": "5.2x"}
             ],
             "videoUrl": "",
-            "videoTitle": "How Affitarget Works"
+            "videoTitle": "How Influiv Works"
         }
     return content
 

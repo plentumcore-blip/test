@@ -20,7 +20,7 @@ const AdminSidebar = ({ onLogout }) => {
       <div className="p-6 border-b border-gray-200">
         <div className="flex items-center gap-2">
           <ShoppingBag className="w-8 h-8 text-[#1F66FF]" />
-          <span className="text-2xl font-bold text-[#0B1220]">AffiTarget</span>
+          <span className="text-2xl font-bold text-[#0B1220]">Influiv</span>
         </div>
         <p className="text-sm text-gray-600 mt-1">Admin Panel</p>
       </div>

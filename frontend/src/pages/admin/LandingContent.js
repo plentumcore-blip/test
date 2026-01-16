@@ -16,7 +16,7 @@ export default function AdminLandingContent() {
       { label: "Average ROI", value: "5.2x" }
     ],
     videoUrl: "",
-    videoTitle: "How Affitarget Works"
+    videoTitle: "How Influiv Works"
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -136,7 +136,7 @@ export default function AdminLandingContent() {
                       value={content.videoTitle}
                       onChange={(e) => setContent({ ...content, videoTitle: e.target.value })}
                       className="input"
-                      placeholder="How Affitarget Works"
+                      placeholder="How Influiv Works"
                     />
                   </div>
 

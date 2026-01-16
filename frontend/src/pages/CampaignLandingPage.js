@@ -64,7 +64,7 @@ export default function CampaignLandingPage() {
     );
   }
 
-  const brandName = campaign.brand?.company_name || 'AffiTarget';
+  const brandName = campaign.brand?.company_name || 'Influiv';
 
   return (
     <div className="min-h-screen bg-white text-[#0B1220]">

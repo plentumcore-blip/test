@@ -10,7 +10,7 @@ import uuid
 
 # MongoDB connection
 mongo_url = os.environ.get('MONGO_URL', 'mongodb://localhost:27017')
-db_name = os.environ.get('DB_NAME', 'affitarget_db')
+db_name = os.environ.get('DB_NAME', 'influiv_db')
 client = AsyncIOMotorClient(mongo_url)
 db = client[db_name]
 

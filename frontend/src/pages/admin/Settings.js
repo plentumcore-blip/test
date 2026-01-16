@@ -131,7 +131,7 @@ export default function AdminSettings() {
                   value={settings.from_email}
                   onChange={(e) => setSettings({ ...settings, from_email: e.target.value })}
                   className="input"
-                  placeholder="noreply@affitarget.com"
+                  placeholder="noreply@influiv.com"
                 />
               </div>
 
@@ -143,7 +143,7 @@ export default function AdminSettings() {
                   value={settings.from_name}
                   onChange={(e) => setSettings({ ...settings, from_name: e.target.value })}
                   className="input"
-                  placeholder="AffiTarget"
+                  placeholder="Influiv"
                 />
               </div>
 

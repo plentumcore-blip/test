@@ -22,7 +22,7 @@ export default function Landing() {
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <ShoppingBag className="w-8 h-8 text-[#1F66FF]" />
-            <span className="text-2xl font-bold text-[#0B1220]">AffiTarget</span>
+            <span className="text-2xl font-bold text-[#0B1220]">Influiv</span>
           </div>
           <div className="flex items-center gap-4">
             <button
@@ -76,7 +76,7 @@ export default function Landing() {
       {/* Features */}
       <section className="py-20 px-6">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-4xl font-bold text-center mb-16 text-[#0B1220]">Why AffiTarget?</h2>
+          <h2 className="text-4xl font-bold text-center mb-16 text-[#0B1220]">Why Influiv?</h2>
           <div className="grid md:grid-cols-3 gap-8">
             <div className="card text-center hover:scale-105 transition-transform">
               <div className="w-16 h-16 bg-[#E8F1FF] rounded-full flex items-center justify-center mx-auto mb-4">
@@ -131,7 +131,7 @@ export default function Landing() {
       {/* Footer */}
       <footer className="py-10 px-6 border-t border-gray-200">
         <div className="max-w-7xl mx-auto text-center text-gray-600">
-          <p>&copy; 2025 AffiTarget. Amazon influencer campaigns made simple.</p>
+          <p>&copy; 2025 Influiv. Amazon influencer campaigns made simple.</p>
         </div>
       </footer>
     </div>

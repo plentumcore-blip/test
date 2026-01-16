@@ -39,7 +39,7 @@ export default function Login() {
           <div className="text-center mb-8">
             <div className="flex items-center justify-center gap-2 mb-4">
               <ShoppingBag className="w-10 h-10 text-[#1F66FF]" />
-              <span className="text-3xl font-bold text-[#0B1220]">AffiTarget</span>
+              <span className="text-3xl font-bold text-[#0B1220]">Influiv</span>
             </div>
             <h1 className="text-4xl font-bold text-[#0B1220] mb-2">Welcome Back</h1>
             <p className="text-gray-600">Sign in to manage your campaigns</p>

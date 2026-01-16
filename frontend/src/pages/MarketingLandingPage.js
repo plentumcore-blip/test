@@ -37,7 +37,7 @@ const MarketingLandingPage = () => {
       { label: "Average ROI", value: "5.2x" }
     ],
     videoUrl: "",
-    videoTitle: "How Affitarget Works"
+    videoTitle: "How Influiv Works"
   });
 
   // Redirect authenticated users to their dashboard
@@ -79,7 +79,7 @@ const MarketingLandingPage = () => {
     },
     {
       question: "What rights do I have to the content?",
-      answer: "Affitarget grants you full perpetual usage rights for all content generated through our platform. You can repurpose videos and images for website assets, email marketing, and paid ad creatives without additional licensing fees."
+      answer: "Influiv grants you full perpetual usage rights for all content generated through our platform. You can repurpose videos and images for website assets, email marketing, and paid ad creatives without additional licensing fees."
     },
     {
       question: "Is this compliant with marketplace terms?",
@@ -135,7 +135,7 @@ const MarketingLandingPage = () => {
               <div className="w-9 h-9 bg-slate-900 rounded-lg flex items-center justify-center shadow-md">
                 <span className="text-white font-bold text-xl">A</span>
               </div>
-              <span className="text-2xl font-bold text-slate-900 tracking-tight">Affitarget</span>
+              <span className="text-2xl font-bold text-slate-900 tracking-tight">Influiv</span>
             </div>
 
             {/* Desktop Nav */}
@@ -438,7 +438,7 @@ const MarketingLandingPage = () => {
               <div className="text-indigo-600 font-bold tracking-wide uppercase mb-3">Asset Ownership</div>
               <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6">Build a content engine. Own the assets.</h2>
               <p className="text-lg text-slate-600 mb-8 leading-relaxed">
-                User-Generated Content performs 35% better than studio creative in paid ads. With Affitarget, you automatically secure full licensing rights to every video and image created during your campaigns.
+                User-Generated Content performs 35% better than studio creative in paid ads. With Influiv, you automatically secure full licensing rights to every video and image created during your campaigns.
               </p>
               <ul className="space-y-4">
                 <li className="flex items-center gap-3 text-slate-700 font-medium">
@@ -473,7 +473,7 @@ const MarketingLandingPage = () => {
                     <div className="w-6 h-6 rounded-full bg-indigo-500"></div>
                     <span className="text-xs font-bold text-white">@creator_{item}</span>
                   </div>
-                  <p className="text-xs text-slate-300 line-clamp-2">Loving this new product from Affitarget! #ad #ugc</p>
+                  <p className="text-xs text-slate-300 line-clamp-2">Loving this new product from Influiv! #ad #ugc</p>
                 </div>
                 <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white/20 backdrop-blur-sm p-4 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
                   <PlayCircle size={32} fill="white" className="text-transparent" />
@@ -488,14 +488,14 @@ const MarketingLandingPage = () => {
       <section id="results" className="py-24 bg-slate-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 mb-4">Why Top Brands Choose Affitarget</h2>
+            <h2 className="text-3xl font-bold text-slate-900 mb-4">Why Top Brands Choose Influiv</h2>
             <p className="text-lg text-slate-600">Eliminate the uncertainty of manual influencer marketing.</p>
           </div>
 
           <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-100">
             <div className="grid grid-cols-3 bg-slate-50 p-6 border-b border-slate-100 text-sm font-bold text-slate-500 uppercase tracking-wider">
               <div className="col-span-1">Feature</div>
-              <div className="col-span-1 text-center text-indigo-600">Affitarget</div>
+              <div className="col-span-1 text-center text-indigo-600">Influiv</div>
               <div className="col-span-1 text-center">Agencies / Manual</div>
             </div>
 
@@ -586,7 +586,7 @@ const MarketingLandingPage = () => {
                 <div className="w-8 h-8 bg-slate-900 rounded-lg flex items-center justify-center">
                   <span className="text-white font-bold text-sm">A</span>
                 </div>
-                <span className="text-xl font-bold text-slate-900">Affitarget</span>
+                <span className="text-xl font-bold text-slate-900">Influiv</span>
               </div>
               <p className="text-slate-500 leading-relaxed mb-6 max-w-sm">
                 The premier marketplace for authentic product seeding and user-generated content. Connecting modern brands with vetted creators.
@@ -623,7 +623,7 @@ const MarketingLandingPage = () => {
             </div>
           </div>
           <div className="border-t border-slate-100 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-sm text-slate-400">© 2025 Affitarget Inc. All rights reserved.</p>
+            <p className="text-sm text-slate-400">© 2025 Influiv Inc. All rights reserved.</p>
             <div className="flex gap-6 text-sm text-slate-400">
               <a href="#" className="hover:text-slate-900">Privacy</a>
               <a href="#" className="hover:text-slate-900">Terms</a>

@@ -63,7 +63,7 @@ export default function Register() {
           <div className="text-center mb-8">
             <div className="flex items-center justify-center gap-2 mb-4">
               <ShoppingBag className="w-10 h-10 text-[#1F66FF]" />
-              <span className="text-3xl font-bold text-[#0B1220]">AffiTarget</span>
+              <span className="text-3xl font-bold text-[#0B1220]">Influiv</span>
             </div>
             <h1 className="text-4xl font-bold text-[#0B1220] mb-2">Get Started</h1>
             <p className="text-gray-600">Create your account to launch campaigns</p>
@@ -167,7 +167,7 @@ export default function Register() {
       {/* Right side illustration */}
       <div className="hidden lg:flex flex-1 items-center justify-center" style={{ background: 'linear-gradient(135deg, #1F66FF 0%, #0E2C7E 100%)' }}>
         <div className="text-center text-white p-12">
-          <h2 className="text-5xl font-bold mb-6">Join AffiTarget</h2>
+          <h2 className="text-5xl font-bold mb-6">Join Influiv</h2>
           <p className="text-2xl text-white/90 mb-8">
             {role === 'brand'
               ? 'Launch authentic Amazon campaigns with verified influencers'
