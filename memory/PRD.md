@@ -63,6 +63,20 @@ AffiTarget is a full-stack influencer marketing platform connecting brands with 
 
 ## What's Been Implemented
 
+### January 16, 2026 - Forgot Password Feature
+- ✅ Added "Forgot password?" link to login page
+- ✅ Created `/forgot-password` page with email input form
+- ✅ Created `/reset-password` page with password requirements validation
+- ✅ Backend endpoints:
+  - `POST /api/v1/auth/forgot-password` - sends reset email, returns generic message (prevents email enumeration)
+  - `GET /api/v1/auth/verify-reset-token` - validates reset token
+  - `POST /api/v1/auth/reset-password` - resets password with valid token
+- ✅ Password reset email template with reset link
+- ✅ Password reset success confirmation email
+- ✅ Reset tokens expire after 1 hour
+- ✅ Password validation: 8+ chars, uppercase, lowercase, number, special char
+- ✅ Real-time password validation UI with checkmarks
+
 ### January 16, 2026 - Edit Campaign Dates Feature
 - ✅ Added `PUT /api/v1/campaigns/{id}/dates` endpoint for brands to update campaign dates
 - ✅ "Edit Dates" button visible for published/live campaigns on brand campaigns page
