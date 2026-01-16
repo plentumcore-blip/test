@@ -19,6 +19,7 @@ import csv
 from enum import Enum
 import re
 import aiofiles
+import asyncio
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -27,6 +28,13 @@ load_dotenv(ROOT_DIR / '.env')
 mongo_url = os.environ['MONGO_URL']
 client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ['DB_NAME']]
+
+# Import email service
+from email_service import EmailService
+email_service = EmailService(db)
+
+# Get app URL for email links
+APP_URL = os.environ.get('APP_URL', 'https://affitarget-2.preview.emergentagent.com')
 
 # Security
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
