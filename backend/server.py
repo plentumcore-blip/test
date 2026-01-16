@@ -1601,6 +1601,72 @@ async def get_campaign_landing_page(slug: str):
     
     return campaign
 
+# Marketing Landing Page Content (public endpoint - no auth required)
+@api_router.get("/public/landing-content")
+async def get_landing_content():
+    """Get the marketing landing page content (video URL, stats, etc.)"""
+    content = await db.landing_content.find_one({"id": "default"}, {"_id": 0})
+    if not content:
+        # Return default content
+        return {
+            "stats": [
+                {"label": "Active Creators", "value": "50,000+"},
+                {"label": "Campaigns Completed", "value": "12,000+"},
+                {"label": "Content Pieces Generated", "value": "850k+"},
+                {"label": "Average ROI", "value": "5.2x"}
+            ],
+            "videoUrl": "",
+            "videoTitle": "How Affitarget Works"
+        }
+    return content
+
+# Admin endpoint to update marketing landing page content
+@api_router.put("/admin/landing-content")
+async def update_landing_content(
+    content_data: Dict[str, Any],
+    user: dict = Depends(require_role([UserRole.ADMIN]))
+):
+    """Update the marketing landing page content (video URL, stats, etc.)"""
+    update_data = {
+        "id": "default",
+        "stats": content_data.get("stats", [
+            {"label": "Active Creators", "value": "50,000+"},
+            {"label": "Campaigns Completed", "value": "12,000+"},
+            {"label": "Content Pieces Generated", "value": "850k+"},
+            {"label": "Average ROI", "value": "5.2x"}
+        ]),
+        "videoUrl": content_data.get("videoUrl", ""),
+        "videoTitle": content_data.get("videoTitle", "How Affitarget Works"),
+        "updated_at": datetime.now(timezone.utc).isoformat()
+    }
+    
+    await db.landing_content.update_one(
+        {"id": "default"},
+        {"$set": update_data},
+        upsert=True
+    )
+    
+    await log_audit(user["id"], "update", "landing_content", "default")
+    
+    return {"message": "Landing content updated successfully"}
+
+@api_router.get("/admin/landing-content")
+async def get_admin_landing_content(user: dict = Depends(require_role([UserRole.ADMIN]))):
+    """Get the marketing landing page content for admin editing"""
+    content = await db.landing_content.find_one({"id": "default"}, {"_id": 0})
+    if not content:
+        return {
+            "stats": [
+                {"label": "Active Creators", "value": "50,000+"},
+                {"label": "Campaigns Completed", "value": "12,000+"},
+                {"label": "Content Pieces Generated", "value": "850k+"},
+                {"label": "Average ROI", "value": "5.2x"}
+            ],
+            "videoUrl": "",
+            "videoTitle": "How Affitarget Works"
+        }
+    return content
+
 # Payment Details endpoints
 @api_router.post("/influencer/payment-details")
 async def create_payment_details(
