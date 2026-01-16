@@ -1103,6 +1103,22 @@ async def submit_product_review(
     
     await log_audit(user["id"], "create", "product_review", product_review["id"])
     
+    # Send notification email to brand
+    campaign = await db.campaigns.find_one({"id": assignment["campaign_id"]})
+    if campaign:
+        brand = await db.brands.find_one({"id": campaign["brand_id"]})
+        brand_user = await db.users.find_one({"id": brand["user_id"]}) if brand else None
+        
+        if brand_user:
+            asyncio.create_task(email_service.send_new_product_review(
+                brand_user["email"],
+                brand.get("company_name", brand_user["email"].split('@')[0]),
+                campaign["title"],
+                influencer.get("name", user["email"].split('@')[0]),
+                review_data.get("rating", 5),
+                APP_URL
+            ))
+    
     return {"id": product_review["id"], "message": "Product review submitted for review"}
 
 @api_router.get("/assignments/{assignment_id}/post-submission")
