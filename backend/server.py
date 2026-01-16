@@ -1184,6 +1184,28 @@ async def review_product_review(
         }}
     )
     
+    # Send email notification to influencer
+    influencer = await db.influencers.find_one({"id": review["influencer_id"]})
+    influencer_user = await db.users.find_one({"id": influencer["user_id"]}) if influencer else None
+    
+    if influencer_user and campaign:
+        if status == "approved":
+            asyncio.create_task(email_service.send_review_approved(
+                influencer_user["email"],
+                influencer.get("name", influencer_user["email"].split('@')[0]),
+                campaign["title"],
+                APP_URL
+            ))
+        else:
+            asyncio.create_task(email_service.send_review_rejected(
+                influencer_user["email"],
+                influencer.get("name", influencer_user["email"].split('@')[0]),
+                campaign["title"],
+                assignment["id"],
+                review_data.get("notes", ""),
+                APP_URL
+            ))
+    
     await log_audit(user["id"], "review", "product_review", review_id, {"status": status})
     
     return {"message": f"Product review {status}"}
