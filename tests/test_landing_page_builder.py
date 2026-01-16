@@ -298,6 +298,118 @@ class TestLandingPageBuilder:
         assert len(campaign["landing_page_faqs"]) == 1
         
         print(f"✓ Complete landing page update successful - all fields persisted")
+    
+    def test_09_update_landing_page_why_join(self):
+        """Test updating Why Join perks"""
+        why_join = [
+            {"title": "Get Free Products", "description": "Receive products at no cost to create authentic content."},
+            {"title": "Earn Cash Rewards", "description": "Get paid $25-$100 per approved post plus bonuses."},
+            {"title": "Grow Your Following", "description": "Partner with top brands to boost your credibility."}
+        ]
+        
+        update_data = {
+            "landing_page_enabled": True,
+            "landing_page_slug": "test-landing-page",
+            "landing_page_why_join": why_join
+        }
+        
+        response = self.session.put(
+            f"{BASE_URL}/api/v1/campaigns/{TEST_CAMPAIGN_ID}/landing-page",
+            json=update_data
+        )
+        
+        assert response.status_code == 200, f"Failed to update Why Join: {response.text}"
+        
+        # Verify by fetching campaign
+        get_response = self.session.get(f"{BASE_URL}/api/v1/campaigns/{TEST_CAMPAIGN_ID}")
+        assert get_response.status_code == 200
+        
+        campaign = get_response.json()
+        assert len(campaign["landing_page_why_join"]) == 3, "Why Join count mismatch"
+        assert campaign["landing_page_why_join"][0]["title"] == "Get Free Products", "First perk title mismatch"
+        assert campaign["landing_page_why_join"][1]["title"] == "Earn Cash Rewards", "Second perk title mismatch"
+        
+        print(f"✓ Why Join perks updated: {len(campaign['landing_page_why_join'])} perks saved")
+    
+    def test_10_update_landing_page_how_it_works(self):
+        """Test updating How It Works steps"""
+        how_it_works = [
+            {"step": 1, "title": "Apply", "description": "Fill out a quick application with your social handles."},
+            {"step": 2, "title": "Get Approved", "description": "Our team reviews your profile within 24 hours."},
+            {"step": 3, "title": "Create Content", "description": "Receive the product and create amazing content."},
+            {"step": 4, "title": "Get Paid", "description": "Submit your post and receive payment within 48 hours."}
+        ]
+        
+        update_data = {
+            "landing_page_enabled": True,
+            "landing_page_slug": "test-landing-page",
+            "landing_page_how_it_works": how_it_works
+        }
+        
+        response = self.session.put(
+            f"{BASE_URL}/api/v1/campaigns/{TEST_CAMPAIGN_ID}/landing-page",
+            json=update_data
+        )
+        
+        assert response.status_code == 200, f"Failed to update How It Works: {response.text}"
+        
+        # Verify by fetching campaign
+        get_response = self.session.get(f"{BASE_URL}/api/v1/campaigns/{TEST_CAMPAIGN_ID}")
+        assert get_response.status_code == 200
+        
+        campaign = get_response.json()
+        assert len(campaign["landing_page_how_it_works"]) == 4, "How It Works count mismatch"
+        assert campaign["landing_page_how_it_works"][0]["step"] == 1, "First step number mismatch"
+        assert campaign["landing_page_how_it_works"][0]["title"] == "Apply", "First step title mismatch"
+        assert campaign["landing_page_how_it_works"][3]["title"] == "Get Paid", "Last step title mismatch"
+        
+        print(f"✓ How It Works steps updated: {len(campaign['landing_page_how_it_works'])} steps saved")
+    
+    def test_11_complete_landing_page_with_sections(self):
+        """Test updating all landing page fields including Why Join and How It Works"""
+        complete_data = {
+            "landing_page_enabled": True,
+            "landing_page_slug": "test-landing-page",
+            "landing_page_hero_image": "https://plentum.com/cdn/shop/files/main-banner-plentum-pack.webp?v=1758543196&width=1920",
+            "landing_page_content": "<div class='my-8'><h2 class='text-2xl font-bold mb-4 text-blue-600'>Campaign Requirements</h2></div>",
+            "landing_page_cta_text": "Join Campaign Now",
+            "landing_page_testimonials": [
+                {"name": "Sarah J.", "role": "@sarahj_lifestyle", "content": "Amazing campaign!", "avatar": ""}
+            ],
+            "landing_page_faqs": [
+                {"question": "How long does approval take?", "answer": "Typically 24-48 hours."}
+            ],
+            "landing_page_why_join": [
+                {"title": "Get Free Products", "description": "Receive products at no cost to create authentic content."},
+                {"title": "Earn Cash Rewards", "description": "Get paid $25-$100 per approved post plus bonuses."},
+                {"title": "Grow Your Following", "description": "Partner with top brands to boost your credibility."}
+            ],
+            "landing_page_how_it_works": [
+                {"step": 1, "title": "Apply", "description": "Fill out a quick application with your social handles."},
+                {"step": 2, "title": "Get Approved", "description": "Our team reviews your profile within 24 hours."},
+                {"step": 3, "title": "Create Content", "description": "Receive the product and create amazing content."},
+                {"step": 4, "title": "Get Paid", "description": "Submit your post and receive payment within 48 hours."}
+            ]
+        }
+        
+        response = self.session.put(
+            f"{BASE_URL}/api/v1/campaigns/{TEST_CAMPAIGN_ID}/landing-page",
+            json=complete_data
+        )
+        
+        assert response.status_code == 200, f"Failed to update complete landing page: {response.text}"
+        
+        # Verify all fields
+        get_response = self.session.get(f"{BASE_URL}/api/v1/campaigns/{TEST_CAMPAIGN_ID}")
+        assert get_response.status_code == 200
+        
+        campaign = get_response.json()
+        assert campaign["landing_page_enabled"] == True
+        assert campaign["landing_page_slug"] == "test-landing-page"
+        assert len(campaign["landing_page_why_join"]) == 3, "Why Join count mismatch"
+        assert len(campaign["landing_page_how_it_works"]) == 4, "How It Works count mismatch"
+        
+        print(f"✓ Complete landing page with sections update successful")
 
 
 class TestPublicLandingPage:
