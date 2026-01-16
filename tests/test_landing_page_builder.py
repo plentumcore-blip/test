@@ -44,7 +44,7 @@ class TestLandingPageBuilder:
         self.session.post(f"{BASE_URL}/api/v1/auth/logout")
     
     def test_01_get_campaign_with_landing_page_fields(self):
-        """Test GET /api/v1/campaigns/:id returns landing page fields"""
+        """Test GET /api/v1/campaigns/:id returns landing page fields including Why Join and How It Works"""
         response = self.session.get(f"{BASE_URL}/api/v1/campaigns/{TEST_CAMPAIGN_ID}")
         
         assert response.status_code == 200, f"Failed to get campaign: {response.text}"
@@ -60,10 +60,16 @@ class TestLandingPageBuilder:
         assert "landing_page_testimonials" in data, "Missing landing_page_testimonials field"
         assert "landing_page_faqs" in data, "Missing landing_page_faqs field"
         
+        # Verify new Why Join and How It Works fields
+        assert "landing_page_why_join" in data, "Missing landing_page_why_join field"
+        assert "landing_page_how_it_works" in data, "Missing landing_page_how_it_works field"
+        
         print(f"✓ Campaign has all landing page fields")
         print(f"  - landing_page_enabled: {data['landing_page_enabled']}")
         print(f"  - landing_page_slug: {data['landing_page_slug']}")
         print(f"  - landing_page_cta_text: {data['landing_page_cta_text']}")
+        print(f"  - landing_page_why_join count: {len(data.get('landing_page_why_join', []))}")
+        print(f"  - landing_page_how_it_works count: {len(data.get('landing_page_how_it_works', []))}")
     
     def test_02_update_landing_page_slug(self):
         """Test updating landing page slug"""
