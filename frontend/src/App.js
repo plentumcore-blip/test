@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'sonner';
 import './App.css';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
-import Landing from './pages/Landing';
+import MarketingLandingPage from './pages/MarketingLandingPage';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import AdminDashboard from './pages/admin/Dashboard';
@@ -54,7 +54,7 @@ function App() {
     <AuthProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Landing />} />
+          <Route path="/" element={<MarketingLandingPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/campaigns/:slug" element={<CampaignLandingPage />} />
