@@ -502,7 +502,48 @@ class TestPublicLandingPage:
         else:
             print(f"✓ No FAQs configured (empty array returned)")
     
-    def test_05_public_landing_page_invalid_slug_returns_404(self):
+    def test_05_public_landing_page_returns_why_join(self):
+        """Test public landing page returns Why Join perks"""
+        response = requests.get(f"{BASE_URL}/api/v1/public/campaigns/{TEST_CAMPAIGN_SLUG}")
+        
+        assert response.status_code == 200
+        
+        data = response.json()
+        why_join = data.get("landing_page_why_join", [])
+        
+        if len(why_join) > 0:
+            # Verify Why Join structure
+            perk = why_join[0]
+            assert "title" in perk, "Why Join perk missing title"
+            assert "description" in perk, "Why Join perk missing description"
+            print(f"✓ Why Join perks returned: {len(why_join)} perks")
+            for p in why_join:
+                print(f"  - {p['title']}")
+        else:
+            print(f"✓ No Why Join perks configured (empty array returned)")
+    
+    def test_06_public_landing_page_returns_how_it_works(self):
+        """Test public landing page returns How It Works steps"""
+        response = requests.get(f"{BASE_URL}/api/v1/public/campaigns/{TEST_CAMPAIGN_SLUG}")
+        
+        assert response.status_code == 200
+        
+        data = response.json()
+        how_it_works = data.get("landing_page_how_it_works", [])
+        
+        if len(how_it_works) > 0:
+            # Verify How It Works structure
+            step = how_it_works[0]
+            assert "step" in step, "How It Works step missing step number"
+            assert "title" in step, "How It Works step missing title"
+            assert "description" in step, "How It Works step missing description"
+            print(f"✓ How It Works steps returned: {len(how_it_works)} steps")
+            for s in how_it_works:
+                print(f"  - Step {s['step']}: {s['title']}")
+        else:
+            print(f"✓ No How It Works steps configured (empty array returned)")
+    
+    def test_07_public_landing_page_invalid_slug_returns_404(self):
         """Test invalid slug returns 404"""
         response = requests.get(f"{BASE_URL}/api/v1/public/campaigns/invalid-slug-12345")
         
@@ -510,7 +551,7 @@ class TestPublicLandingPage:
         
         print(f"✓ Invalid slug correctly returns 404")
     
-    def test_06_public_landing_page_disabled_returns_404(self):
+    def test_08_public_landing_page_disabled_returns_404(self):
         """Test disabled landing page returns 404 (if we can test this)"""
         # This test would require disabling a landing page first
         # For now, we just verify the endpoint behavior
