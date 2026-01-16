@@ -937,6 +937,22 @@ async def submit_purchase_proof(
     
     await log_audit(user["id"], "submit", "purchase_proof", purchase_proof.id)
     
+    # Send notification email to brand
+    campaign = await db.campaigns.find_one({"id": assignment["campaign_id"]})
+    if campaign:
+        brand = await db.brands.find_one({"id": campaign["brand_id"]})
+        brand_user = await db.users.find_one({"id": brand["user_id"]}) if brand else None
+        
+        if brand_user:
+            asyncio.create_task(email_service.send_new_purchase_proof(
+                brand_user["email"],
+                brand.get("company_name", brand_user["email"].split('@')[0]),
+                campaign["title"],
+                influencer.get("name", user["email"].split('@')[0]),
+                proof_data["order_id"],
+                APP_URL
+            ))
+    
     return {"id": purchase_proof.id, "message": "Purchase proof submitted"}
 
 
