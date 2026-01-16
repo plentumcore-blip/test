@@ -5,6 +5,8 @@ import { AuthProvider, useAuth } from './contexts/AuthContext';
 import MarketingLandingPage from './pages/MarketingLandingPage';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
 import AdminDashboard from './pages/admin/Dashboard';
 import BrandDashboard from './pages/brand/Dashboard';
 import CampaignBuilder from './pages/brand/CampaignBuilder';
