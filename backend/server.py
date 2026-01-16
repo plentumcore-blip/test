@@ -770,6 +770,11 @@ async def update_application_status(
         }}
     )
     
+    # Get influencer and campaign data for email
+    influencer = await db.influencers.find_one({"id": application["influencer_id"]})
+    influencer_user = await db.users.find_one({"id": influencer["user_id"]}) if influencer else None
+    campaign = await db.campaigns.find_one({"id": application["campaign_id"]})
+    
     # Create assignment if accepted
     if status_data["status"] == ApplicationStatus.ACCEPTED.value:
         assignment = Assignment(
@@ -782,6 +787,24 @@ async def update_application_status(
         assign_doc['created_at'] = assign_doc['created_at'].isoformat()
         assign_doc['updated_at'] = assign_doc['updated_at'].isoformat()
         await db.assignments.insert_one(assign_doc)
+        
+        # Send approval email to influencer
+        if influencer_user and campaign:
+            asyncio.create_task(email_service.send_application_approved(
+                influencer_user["email"],
+                influencer.get("name", influencer_user["email"].split('@')[0]),
+                campaign["title"],
+                APP_URL
+            ))
+    elif status_data["status"] == ApplicationStatus.REJECTED.value:
+        # Send rejection email to influencer
+        if influencer_user and campaign:
+            asyncio.create_task(email_service.send_application_rejected(
+                influencer_user["email"],
+                influencer.get("name", influencer_user["email"].split('@')[0]),
+                campaign["title"],
+                APP_URL
+            ))
     
     await log_audit(user["id"], "update_status", "application", application_id, {"status": status_data["status"]})
     return {"message": "Application updated"}
