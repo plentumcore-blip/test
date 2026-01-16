@@ -118,9 +118,11 @@ const FileUpload = ({
 
   return (
     <div className="space-y-2">
-      <label className="block text-sm font-medium text-gray-700">
-        {label} {required && <span className="text-red-500">*</span>}
-      </label>
+      {!compact && (
+        <label className="block text-sm font-medium text-gray-700">
+          {label} {required && <span className="text-red-500">*</span>}
+        </label>
+      )}
 
       {!uploadedUrl ? (
         <div>
@@ -137,7 +139,7 @@ const FileUpload = ({
             htmlFor={inputId}
             onClick={triggerFileInput}
             className={`
-              flex flex-col items-center justify-center w-full h-32 
+              flex flex-col items-center justify-center w-full ${compact ? 'h-20' : 'h-32'}
               border-2 border-dashed rounded-xl cursor-pointer
               transition-colors
               ${uploading ? 'border-blue-300 bg-blue-50 cursor-not-allowed' : 'border-gray-300 hover:border-blue-500 hover:bg-gray-50'}
@@ -146,33 +148,39 @@ const FileUpload = ({
           >
             {uploading ? (
               <div className="flex flex-col items-center">
-                <Loader className="w-8 h-8 text-blue-600 animate-spin mb-2" />
-                <p className="text-sm text-blue-600">Uploading... {progress}%</p>
-                <div className="w-48 h-2 bg-gray-200 rounded-full mt-2 overflow-hidden">
-                  <div 
-                    className="h-full bg-blue-600 transition-all duration-300"
-                    style={{ width: `${progress}%` }}
-                  />
-                </div>
+                <Loader className={`${compact ? 'w-5 h-5' : 'w-8 h-8'} text-blue-600 animate-spin mb-2`} />
+                <p className={`${compact ? 'text-xs' : 'text-sm'} text-blue-600`}>Uploading... {progress}%</p>
+                {!compact && (
+                  <div className="w-48 h-2 bg-gray-200 rounded-full mt-2 overflow-hidden">
+                    <div 
+                      className="h-full bg-blue-600 transition-all duration-300"
+                      style={{ width: `${progress}%` }}
+                    />
+                  </div>
+                )}
               </div>
             ) : (
               <div className="flex flex-col items-center">
-                <Upload className={`w-8 h-8 mb-2 ${error ? 'text-red-500' : 'text-gray-400'}`} />
-                <p className={`text-sm ${error ? 'text-red-600' : 'text-gray-600'}`}>
-                  Click to upload or drag and drop
+                <Upload className={`${compact ? 'w-5 h-5 mb-1' : 'w-8 h-8 mb-2'} ${error ? 'text-red-500' : 'text-gray-400'}`} />
+                <p className={`${compact ? 'text-xs' : 'text-sm'} ${error ? 'text-red-600' : 'text-gray-600'}`}>
+                  {compact ? label : 'Click to upload or drag and drop'}
                 </p>
-                <p className="text-xs text-gray-500 mt-1">
-                  Max {maxSize}MB · {accept}
-                </p>
+                {!compact && (
+                  <p className="text-xs text-gray-500 mt-1">
+                    Max {maxSize}MB · {accept}
+                  </p>
+                )}
               </div>
             )}
           </label>
         </div>
       ) : (
-        <div className="flex items-center gap-3 p-4 bg-green-50 border border-green-200 rounded-xl">
-          <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0" />
+        <div className={`flex items-center gap-3 ${compact ? 'p-2' : 'p-4'} bg-green-50 border border-green-200 rounded-xl`}>
+          <CheckCircle className={`${compact ? 'w-4 h-4' : 'w-5 h-5'} text-green-600 flex-shrink-0`} />
           <div className="flex-1 min-w-0">
-            <p className="text-sm text-green-800 font-medium">File uploaded successfully</p>
+            <p className={`${compact ? 'text-xs' : 'text-sm'} text-green-800 font-medium`}>
+              {compact ? 'Uploaded' : 'File uploaded successfully'}
+            </p>
             <a 
               href={uploadedUrl} 
               target="_blank" 
@@ -188,7 +196,7 @@ const FileUpload = ({
             className="p-1 hover:bg-red-100 rounded-lg transition-colors"
             title="Remove file"
           >
-            <X className="w-5 h-5 text-red-600" />
+            <X className={`${compact ? 'w-4 h-4' : 'w-5 h-5'} text-red-600`} />
           </button>
         </div>
       )}
