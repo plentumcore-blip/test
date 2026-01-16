@@ -707,6 +707,41 @@ async def publish_campaign(campaign_id: str, user: dict = Depends(require_role([
     await log_audit(user["id"], "publish", "campaign", campaign_id)
     return {"message": "Campaign published"}
 
+@api_router.put("/campaigns/{campaign_id}/dates")
+async def update_campaign_dates(
+    campaign_id: str,
+    dates_data: Dict[str, Any],
+    user: dict = Depends(require_role([UserRole.BRAND]))
+):
+    """Update campaign dates (purchase window, post window) - allows extending published campaigns"""
+    campaign = await db.campaigns.find_one({"id": campaign_id})
+    if not campaign:
+        raise HTTPException(status_code=404, detail="Campaign not found")
+    
+    brand = await db.brands.find_one({"user_id": user["id"]})
+    if campaign["brand_id"] != brand["id"]:
+        raise HTTPException(status_code=403, detail="Not authorized")
+    
+    # Validate dates
+    update_data = {"updated_at": datetime.now(timezone.utc).isoformat()}
+    
+    if "purchase_window_start" in dates_data:
+        update_data["purchase_window_start"] = dates_data["purchase_window_start"]
+    if "purchase_window_end" in dates_data:
+        update_data["purchase_window_end"] = dates_data["purchase_window_end"]
+    if "post_window_start" in dates_data:
+        update_data["post_window_start"] = dates_data["post_window_start"]
+    if "post_window_end" in dates_data:
+        update_data["post_window_end"] = dates_data["post_window_end"]
+    
+    await db.campaigns.update_one(
+        {"id": campaign_id},
+        {"$set": update_data}
+    )
+    
+    await log_audit(user["id"], "update_dates", "campaign", campaign_id, update_data)
+    return {"message": "Campaign dates updated successfully"}
+
 # Applications
 @api_router.post("/applications")
 async def apply_to_campaign(application_data: Dict[str, Any], user: dict = Depends(require_role([UserRole.INFLUENCER]))):
