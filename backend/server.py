@@ -1574,6 +1574,8 @@ async def update_campaign_landing_page(
         "landing_page_cta_text": landing_data.get("landing_page_cta_text", "Apply Now"),
         "landing_page_testimonials": landing_data.get("landing_page_testimonials", []),
         "landing_page_faqs": landing_data.get("landing_page_faqs", []),
+        "landing_page_why_join": landing_data.get("landing_page_why_join", []),
+        "landing_page_how_it_works": landing_data.get("landing_page_how_it_works", []),
         "updated_at": datetime.now(timezone.utc).isoformat()
     }
     
