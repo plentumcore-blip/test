@@ -101,6 +101,14 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/admin/landing-content"
+            element={
+              <ProtectedRoute allowedRoles={['admin']}>
+                <AdminLandingContent />
+              </ProtectedRoute>
+            }
+          />
 
           {/* Brand Routes */}
           <Route
