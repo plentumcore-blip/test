@@ -68,12 +68,15 @@ AffiTarget is a full-stack influencer marketing platform connecting brands with 
 - ✅ Backend-manageable video section and stats
 - ✅ Admin page for managing landing content (`/admin/landing-content`)
 - ✅ **Enhanced Campaign Landing Page Builder** (`/brand/campaigns/:id/landing-page`):
+  - **3 Tabs**: Settings, Sections, Custom HTML
   - Visual editor with formatting toolbar (bold, italic, headings, lists, alignment, links)
   - HTML code editor with dark theme
-  - Quick insert templates (Product Features, Requirements List, Call to Action, Two Column, Video Embed)
+  - Quick insert templates (Product Features, Requirements List, Call to Action, Video Embed)
   - Live preview with responsive breakpoints (desktop/tablet/mobile)
+  - **Editable "Why Join" section**: Add/Edit/Delete perks with title and description
+  - **Editable "How It Works" section**: Add/Edit/Delete steps with auto-numbered step, title, description
   - Editable: slug, CTA text, hero image, testimonials, FAQs
-- ✅ Campaign landing page renders complete HTML content via `dangerouslySetInnerHTML`
+- ✅ Campaign landing page renders all sections from database with defaults if not customized
 
 ### Previous Session
 - ✅ Full assignment lifecycle (purchase proof, content post, product review)
