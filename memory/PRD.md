@@ -63,6 +63,14 @@ AffiTarget is a full-stack influencer marketing platform connecting brands with 
 
 ## What's Been Implemented
 
+### January 16, 2026 - Edit Campaign Dates Feature
+- ✅ Added `PUT /api/v1/campaigns/{id}/dates` endpoint for brands to update campaign dates
+- ✅ "Edit Dates" button visible for published/live campaigns on brand campaigns page
+- ✅ Modal with date pickers for purchase window (start/end) and post window (start/end)
+- ✅ Date validation prevents end date before start date
+- ✅ Pre-fills current dates when modal opens
+- ✅ Success toast and automatic modal close on save
+
 ### January 16, 2026 - Email Notifications System
 - ✅ Created comprehensive email service (`/app/backend/email_service.py`) with 16 email templates
 - ✅ Integrated email notifications into all key flows:
