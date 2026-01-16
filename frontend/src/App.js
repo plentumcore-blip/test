@@ -60,6 +60,8 @@ function App() {
           <Route path="/" element={<MarketingLandingPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/campaigns/:slug" element={<CampaignLandingPage />} />
 
           {/* Admin Routes */}
