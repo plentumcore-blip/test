@@ -735,6 +735,24 @@ async def apply_to_campaign(application_data: Dict[str, Any], user: dict = Depen
     await db.applications.insert_one(application)
     await log_audit(user["id"], "apply", "application", application["id"])
     
+    # Send notification email to brand
+    campaign = await db.campaigns.find_one({"id": application_data["campaign_id"]})
+    if campaign:
+        brand = await db.brands.find_one({"id": campaign["brand_id"]})
+        brand_user = await db.users.find_one({"id": brand["user_id"]}) if brand else None
+        influencer_user = await db.users.find_one({"id": user["id"]})
+        
+        if brand_user and influencer_user:
+            asyncio.create_task(email_service.send_new_application(
+                brand_user["email"],
+                brand.get("company_name", brand_user["email"].split('@')[0]),
+                campaign["title"],
+                campaign["id"],
+                influencer.get("name", influencer_user["email"].split('@')[0]),
+                influencer_user["email"],
+                APP_URL
+            ))
+    
     return {"id": application["id"], "message": "Application submitted"}
 
 @api_router.get("/campaigns/{campaign_id}/applications")
