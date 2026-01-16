@@ -471,6 +471,135 @@ async def logout(response: Response):
     response.delete_cookie(key="access_token")
     return {"message": "Logged out"}
 
+@api_router.post("/auth/forgot-password")
+async def forgot_password(data: Dict[str, Any]):
+    """Request a password reset email"""
+    email = data.get("email", "").lower().strip()
+    if not email:
+        raise HTTPException(status_code=400, detail="Email is required")
+    
+    # Find user
+    user = await db.users.find_one({"email": email, "deleted_at": None})
+    
+    # Always return success to prevent email enumeration
+    if not user:
+        return {"message": "If an account with that email exists, a password reset link has been sent."}
+    
+    # Generate reset token
+    import secrets
+    reset_token = secrets.token_urlsafe(32)
+    expires_at = datetime.now(timezone.utc) + timedelta(hours=1)
+    
+    # Store reset token
+    await db.password_resets.update_one(
+        {"user_id": user["id"]},
+        {"$set": {
+            "user_id": user["id"],
+            "token": reset_token,
+            "expires_at": expires_at.isoformat(),
+            "created_at": datetime.now(timezone.utc).isoformat(),
+            "used": False
+        }},
+        upsert=True
+    )
+    
+    # Send reset email
+    reset_url = f"{APP_URL}/reset-password?token={reset_token}"
+    user_name = email.split('@')[0]
+    
+    asyncio.create_task(email_service.send_password_reset(
+        email, user_name, reset_url, APP_URL
+    ))
+    
+    return {"message": "If an account with that email exists, a password reset link has been sent."}
+
+@api_router.post("/auth/reset-password")
+async def reset_password(data: Dict[str, Any]):
+    """Reset password using token"""
+    token = data.get("token", "")
+    new_password = data.get("password", "")
+    
+    if not token:
+        raise HTTPException(status_code=400, detail="Reset token is required")
+    if not new_password:
+        raise HTTPException(status_code=400, detail="New password is required")
+    
+    # Validate password strength
+    if len(new_password) < 8:
+        raise HTTPException(status_code=400, detail="Password must be at least 8 characters")
+    if not any(c.isupper() for c in new_password):
+        raise HTTPException(status_code=400, detail="Password must contain at least one uppercase letter")
+    if not any(c.islower() for c in new_password):
+        raise HTTPException(status_code=400, detail="Password must contain at least one lowercase letter")
+    if not any(c.isdigit() for c in new_password):
+        raise HTTPException(status_code=400, detail="Password must contain at least one number")
+    if not any(c in "!@#$%^&*()_+-=[]{}|;:,.<>?" for c in new_password):
+        raise HTTPException(status_code=400, detail="Password must contain at least one special character")
+    
+    # Find reset token
+    reset_record = await db.password_resets.find_one({
+        "token": token,
+        "used": False
+    })
+    
+    if not reset_record:
+        raise HTTPException(status_code=400, detail="Invalid or expired reset token")
+    
+    # Check if token is expired
+    expires_at = datetime.fromisoformat(reset_record["expires_at"].replace('Z', '+00:00'))
+    if datetime.now(timezone.utc) > expires_at:
+        raise HTTPException(status_code=400, detail="Reset token has expired")
+    
+    # Find user
+    user = await db.users.find_one({"id": reset_record["user_id"]})
+    if not user:
+        raise HTTPException(status_code=400, detail="User not found")
+    
+    # Update password
+    hashed_password = pwd_context.hash(new_password)
+    await db.users.update_one(
+        {"id": user["id"]},
+        {"$set": {
+            "password_hash": hashed_password,
+            "updated_at": datetime.now(timezone.utc).isoformat()
+        }}
+    )
+    
+    # Mark token as used
+    await db.password_resets.update_one(
+        {"token": token},
+        {"$set": {"used": True}}
+    )
+    
+    # Send confirmation email
+    user_name = user["email"].split('@')[0]
+    asyncio.create_task(email_service.send_password_reset_success(
+        user["email"], user_name, APP_URL
+    ))
+    
+    return {"message": "Password has been reset successfully"}
+
+@api_router.get("/auth/verify-reset-token")
+async def verify_reset_token(token: str):
+    """Verify if a reset token is valid"""
+    if not token:
+        raise HTTPException(status_code=400, detail="Token is required")
+    
+    reset_record = await db.password_resets.find_one({
+        "token": token,
+        "used": False
+    })
+    
+    if not reset_record:
+        raise HTTPException(status_code=400, detail="Invalid or expired reset token")
+    
+    # Check if token is expired
+    expires_at = datetime.fromisoformat(reset_record["expires_at"].replace('Z', '+00:00'))
+    if datetime.now(timezone.utc) > expires_at:
+        raise HTTPException(status_code=400, detail="Reset token has expired")
+    
+    return {"valid": True, "message": "Token is valid"}
+
 @api_router.get("/auth/me")
 async def get_me(user: dict = Depends(get_current_user)):
     user_data = {"id": user["id"], "email": user["email"], "role": user["role"], "status": user["status"]}
