@@ -1,7 +1,7 @@
-# AffiTarget - Product Requirements Document
+# Influiv - Product Requirements Document
 
 ## Overview
-AffiTarget is a full-stack influencer marketing platform connecting brands with influencers for authentic Amazon product campaigns. The platform enables:
+Influiv is a full-stack influencer marketing platform connecting brands with influencers for authentic Amazon product campaigns. The platform enables:
 - **Brands**: Create campaigns, review influencer applications, verify purchases and content
 - **Influencers**: Browse campaigns, apply, submit purchase proofs and content
 - **Admins**: Manage users, verify content, configure platform settings
