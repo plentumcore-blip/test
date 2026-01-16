@@ -12,7 +12,7 @@ from datetime import datetime
 from typing import Dict, Any, Optional
 
 # Configuration
-BASE_URL = "https://affitarget-1.preview.emergentagent.com/api/v1"
+BASE_URL = "https://affitarget-2.preview.emergentagent.com/api/v1"
 TIMEOUT = 30
 
 class APITester:
