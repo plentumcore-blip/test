@@ -429,6 +429,21 @@ async def register(user_data: UserRegister, response: Response):
         samesite="lax"
     )
     
+    # Send welcome email and notify admins
+    user_name = user_data.email.split('@')[0]
+    if user_data.role == UserRole.INFLUENCER:
+        asyncio.create_task(email_service.send_influencer_welcome(user_data.email, user_name, APP_URL))
+    elif user_data.role == UserRole.BRAND:
+        asyncio.create_task(email_service.send_brand_welcome(user_data.email, user_name, APP_URL))
+    
+    # Notify admins of new registration
+    admins = await db.users.find({"role": "admin", "deleted_at": None}).to_list(100)
+    for admin in admins:
+        asyncio.create_task(email_service.send_admin_new_user(
+            admin["email"], user_name, user_data.email, user_data.role.value,
+            datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC"), APP_URL
+        ))
+    
     return {"message": "Registration successful", "user": {"id": user.id, "email": user.email, "role": user.role}}
 
 @api_router.post("/auth/login")
