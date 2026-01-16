@@ -199,6 +199,8 @@ class Campaign(BaseModel):
     landing_page_cta_text: Optional[str] = "Apply Now"
     landing_page_testimonials: Optional[List[Dict]] = None
     landing_page_faqs: Optional[List[Dict]] = None
+    landing_page_why_join: Optional[List[Dict]] = None  # Why join perks
+    landing_page_how_it_works: Optional[List[Dict]] = None  # How it works steps
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     
