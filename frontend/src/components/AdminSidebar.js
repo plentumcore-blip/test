@@ -1,5 +1,5 @@
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Home, ShoppingBag, Users, FileCheck, Settings, LogOut, DollarSign, LayoutGrid, BarChart3 } from 'lucide-react';
+import { Home, ShoppingBag, Users, FileCheck, Settings, LogOut, DollarSign, LayoutGrid, BarChart3, Globe } from 'lucide-react';
 
 const AdminSidebar = ({ onLogout }) => {
   const navigate = useNavigate();
@@ -10,6 +10,7 @@ const AdminSidebar = ({ onLogout }) => {
     { icon: Users, label: 'Users', path: '/admin/users' },
     { icon: FileCheck, label: 'Verification Queue', path: '/admin/verification' },
     { icon: BarChart3, label: 'Reports', path: '/admin/reports' },
+    { icon: Globe, label: 'Landing Page', path: '/admin/landing-content' },
     { icon: Settings, label: 'Settings', path: '/admin/settings' },
   ];
 
