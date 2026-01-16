@@ -481,6 +481,76 @@ EMAIL_TEMPLATES = {
             </div>
         </div>
         """
+    },
+    
+    # ============ PASSWORD RESET EMAILS ============
+    "password_reset": {
+        "subject": "🔐 Reset Your AffiTarget Password",
+        "html": """
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+            <div style="background: linear-gradient(135deg, #1F66FF 0%, #0E2C7E 100%); padding: 40px 20px; text-align: center;">
+                <h1 style="color: white; margin: 0;">Password Reset Request</h1>
+            </div>
+            <div style="padding: 30px 20px; background: #f9fafb;">
+                <p style="font-size: 16px; color: #333;">Hi <strong>{name}</strong>,</p>
+                <p style="font-size: 16px; color: #333;">
+                    We received a request to reset your password for your AffiTarget account. 
+                    Click the button below to create a new password.
+                </p>
+                <div style="text-align: center; margin: 30px 0;">
+                    <a href="{reset_url}" style="display: inline-block; background: #1F66FF; color: white; padding: 16px 32px; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 16px;">
+                        Reset Password
+                    </a>
+                </div>
+                <div style="background: white; border-radius: 12px; padding: 20px; margin: 20px 0;">
+                    <p style="color: #555; margin: 0; font-size: 14px;">
+                        <strong>This link will expire in 1 hour.</strong><br><br>
+                        If you didn't request a password reset, you can safely ignore this email. 
+                        Your password will remain unchanged.
+                    </p>
+                </div>
+                <p style="font-size: 14px; color: #888;">
+                    If the button doesn't work, copy and paste this link into your browser:<br>
+                    <a href="{reset_url}" style="color: #1F66FF; word-break: break-all;">{reset_url}</a>
+                </p>
+            </div>
+            <div style="padding: 20px; text-align: center; color: #888; font-size: 12px;">
+                © 2025 AffiTarget. All rights reserved.
+            </div>
+        </div>
+        """
+    },
+    
+    "password_reset_success": {
+        "subject": "✅ Your Password Has Been Reset",
+        "html": """
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+            <div style="background: linear-gradient(135deg, #10B981 0%, #059669 100%); padding: 40px 20px; text-align: center;">
+                <h1 style="color: white; margin: 0;">Password Reset Successful</h1>
+            </div>
+            <div style="padding: 30px 20px; background: #f9fafb;">
+                <p style="font-size: 16px; color: #333;">Hi <strong>{name}</strong>,</p>
+                <p style="font-size: 16px; color: #333;">
+                    Your password has been successfully reset. You can now log in with your new password.
+                </p>
+                <div style="text-align: center; margin: 30px 0;">
+                    <a href="{app_url}/login" style="display: inline-block; background: #10B981; color: white; padding: 16px 32px; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 16px;">
+                        Log In Now
+                    </a>
+                </div>
+                <div style="background: #FEF2F2; border-radius: 12px; padding: 20px; margin: 20px 0; border-left: 4px solid #EF4444;">
+                    <p style="color: #991B1B; margin: 0; font-size: 14px;">
+                        <strong>Didn't reset your password?</strong><br>
+                        If you didn't make this change, please contact our support team immediately 
+                        as your account may have been compromised.
+                    </p>
+                </div>
+            </div>
+            <div style="padding: 20px; text-align: center; color: #888; font-size: 12px;">
+                © 2025 AffiTarget. All rights reserved.
+            </div>
+        </div>
+        """
     }
 }
 
