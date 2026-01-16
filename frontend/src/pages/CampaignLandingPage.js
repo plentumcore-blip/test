@@ -184,20 +184,23 @@ export default function CampaignLandingPage() {
       <Section className="py-12">
         <h2 className="text-2xl font-bold text-[#0E2C7E] mb-6">How it works</h2>
         <div className="grid gap-6 md:grid-cols-4">
-          {[
-            { step: 1, title: 'Apply', text: 'Answer a few questions and submit your profile.' },
-            { step: 2, title: 'Buy via link', text: 'Use your unique redirect to purchase on Amazon.' },
-            { step: 3, title: 'Upload proof', text: 'Order ID + screenshots → approval unlocks posting.' },
-            { step: 4, title: 'Post & submit', text: 'Share content, add links/hashtags, upload metrics.' },
-          ].map((s) => (
-            <Card key={s.step} className="p-6">
+          {(campaign.landing_page_how_it_works && campaign.landing_page_how_it_works.length > 0 
+            ? campaign.landing_page_how_it_works 
+            : [
+                { step: 1, title: 'Apply', description: 'Answer a few questions and submit your profile.' },
+                { step: 2, title: 'Buy via link', description: 'Use your unique redirect to purchase on Amazon.' },
+                { step: 3, title: 'Upload proof', description: 'Order ID + screenshots → approval unlocks posting.' },
+                { step: 4, title: 'Post & submit', description: 'Share content, add links/hashtags, upload metrics.' }
+              ]
+          ).map((s, index) => (
+            <Card key={index} className="p-6">
               <div className="flex items-center gap-3">
                 <div className="h-9 w-9 rounded-xl bg-[#1F66FF] text-white grid place-items-center font-bold">
                   {s.step}
                 </div>
                 <h3 className="font-semibold">{s.title}</h3>
               </div>
-              <p className="mt-3 text-sm text-[#0B1220]/80">{s.text}</p>
+              <p className="mt-3 text-sm text-[#0B1220]/80">{s.description}</p>
             </Card>
           ))}
         </div>
