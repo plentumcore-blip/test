@@ -1,9 +1,11 @@
 """
 Test suite for Campaign Landing Page Builder feature
 Tests:
-- PUT /api/v1/campaigns/:id/landing-page - Save landing page data
+- PUT /api/v1/campaigns/:id/landing-page - Save landing page data (including Why Join & How It Works)
 - GET /api/v1/public/campaigns/:slug - Public campaign landing page
 - GET /api/v1/campaigns/:id - Get campaign with landing page fields
+- Why Join section: Add/Edit/Delete perks with title and description
+- How It Works section: Add/Edit/Delete steps with step number, title, and description
 """
 
 import pytest
