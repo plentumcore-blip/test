@@ -787,3 +787,23 @@ class EmailService:
             {"name": name, "email": email, "role": role, "registered_at": registered_at},
             app_url
         )
+    
+    async def send_password_reset(
+        self, email: str, name: str, reset_url: str, app_url: str = ""
+    ):
+        """Send password reset email"""
+        return await self.send_email(
+            email, "password_reset",
+            {"name": name, "reset_url": reset_url},
+            app_url
+        )
+    
+    async def send_password_reset_success(
+        self, email: str, name: str, app_url: str = ""
+    ):
+        """Send password reset success confirmation"""
+        return await self.send_email(
+            email, "password_reset_success",
+            {"name": name},
+            app_url
+        )
