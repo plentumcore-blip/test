@@ -76,14 +76,28 @@ export default function AssignmentDetail() {
     setSubmitting(true);
 
     try {
+      // Convert screenshot_url to screenshot_urls array for backend
+      const payload = {
+        ...purchaseData,
+        screenshot_urls: purchaseData.screenshot_url ? [purchaseData.screenshot_url] : []
+      };
+      delete payload.screenshot_url;
+
       await axios.post(
         `${API_BASE}/assignments/${id}/purchase-proof`,
-        purchaseData,
+        payload,
         { withCredentials: true }
       );
       toast.success('Purchase proof submitted for review!');
       fetchAssignment();
       setShowPurchaseForm(false);
+      setPurchaseData({
+        order_id: '',
+        order_date: '',
+        asin: '',
+        total: '',
+        screenshot_url: ''
+      });
     } catch (error) {
       toast.error(error.response?.data?.detail || 'Failed to submit purchase proof');
     } finally {
