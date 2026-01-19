@@ -16,7 +16,8 @@ export default function AdminLandingContent() {
       { label: "Average ROI", value: "5.2x" }
     ],
     videoUrl: "",
-    videoTitle: "How Influiv Works"
+    videoTitle: "How Influiv Works",
+    portfolioVideos: []
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
