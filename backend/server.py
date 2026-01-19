@@ -2511,16 +2511,23 @@ async def upload_file(
     if not file.filename:
         raise HTTPException(status_code=400, detail="No file provided")
     
+    # Ensure uploads directory exists with proper permissions
+    uploads_dir = Path("/app/backend/uploads")
+    uploads_dir.mkdir(parents=True, exist_ok=True)
+    os.chmod(uploads_dir, 0o775)
+    
     # Generate unique filename
     file_extension = Path(file.filename).suffix
     unique_filename = f"{str(uuid.uuid4())}{file_extension}"
-    file_path = Path("/app/backend/uploads") / unique_filename
+    file_path = uploads_dir / unique_filename
     
     # Save file
     try:
         async with aiofiles.open(file_path, 'wb') as f:
             content = await file.read()
             await f.write(content)
+        # Set file permissions
+        os.chmod(file_path, 0o664)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to save file: {str(e)}")
     
