@@ -466,21 +466,60 @@ const MarketingLandingPage = () => {
 
         <div className="relative w-full">
           <div className="flex gap-6 overflow-hidden px-4 justify-center flex-wrap">
-            {[1, 2, 3, 4].map((item) => (
-              <div key={item} className="w-64 aspect-[9/16] bg-slate-800 rounded-2xl border border-slate-700 relative group overflow-hidden hover:scale-105 transition-transform duration-300">
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-10"></div>
-                <div className="absolute bottom-0 left-0 p-4 z-20 w-full">
-                  <div className="flex items-center gap-2 mb-2">
-                    <div className="w-6 h-6 rounded-full bg-indigo-500"></div>
-                    <span className="text-xs font-bold text-white">@creator_{item}</span>
+            {landingContent.portfolioVideos && landingContent.portfolioVideos.length > 0 ? (
+              landingContent.portfolioVideos.map((video, index) => (
+                <div key={index} className="w-64 aspect-[9/16] bg-slate-800 rounded-2xl border border-slate-700 relative group overflow-hidden hover:scale-105 transition-transform duration-300">
+                  {video.videoUrl.includes('youtube.com') || video.videoUrl.includes('vimeo.com') ? (
+                    <iframe
+                      src={video.videoUrl}
+                      className="w-full h-full"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    />
+                  ) : (
+                    <video
+                      src={video.videoUrl}
+                      className="w-full h-full object-cover"
+                      loop
+                      muted
+                      playsInline
+                    />
+                  )}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-10"></div>
+                  <div className="absolute bottom-0 left-0 p-4 z-20 w-full">
+                    {video.creator && (
+                      <div className="flex items-center gap-2 mb-2">
+                        <div className="w-6 h-6 rounded-full bg-indigo-500"></div>
+                        <span className="text-xs font-bold text-white">{video.creator}</span>
+                      </div>
+                    )}
+                    {video.description && (
+                      <p className="text-xs text-slate-300 line-clamp-2">{video.description}</p>
+                    )}
                   </div>
-                  <p className="text-xs text-slate-300 line-clamp-2">Loving this new product from Influiv! #ad #ugc</p>
+                  <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white/20 backdrop-blur-sm p-4 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                    <PlayCircle size={32} fill="white" className="text-transparent" />
+                  </div>
                 </div>
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white/20 backdrop-blur-sm p-4 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
-                  <PlayCircle size={32} fill="white" className="text-transparent" />
+              ))
+            ) : (
+              // Fallback to placeholder if no videos
+              [1, 2, 3, 4].map((item) => (
+                <div key={item} className="w-64 aspect-[9/16] bg-slate-800 rounded-2xl border border-slate-700 relative group overflow-hidden hover:scale-105 transition-transform duration-300">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-10"></div>
+                  <div className="absolute bottom-0 left-0 p-4 z-20 w-full">
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className="w-6 h-6 rounded-full bg-indigo-500"></div>
+                      <span className="text-xs font-bold text-white">@creator_{item}</span>
+                    </div>
+                    <p className="text-xs text-slate-300 line-clamp-2">Loving this new product from Influiv! #ad #ugc</p>
+                  </div>
+                  <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white/20 backdrop-blur-sm p-4 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                    <PlayCircle size={32} fill="white" className="text-transparent" />
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))
+            )}
           </div>
         </div>
       </section>
