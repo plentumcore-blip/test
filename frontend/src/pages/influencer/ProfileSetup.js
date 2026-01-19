@@ -440,9 +440,10 @@ export default function InfluencerProfileSetup() {
               {profile.portfolio_images.map((image, index) => (
                 <div key={index} className="relative group aspect-square rounded-lg overflow-hidden">
                   <img
-                    src={image}
+                    src={getFileUrl(image)}
                     alt={`Portfolio ${index + 1}`}
                     className="w-full h-full object-cover"
+                    onError={(e) => { e.target.style.display = 'none'; }}
                   />
                   <button
                     onClick={() => removeImage(index)}
