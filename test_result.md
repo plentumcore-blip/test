@@ -410,6 +410,18 @@ frontend:
         agent: "testing"
         comment: "✅ RE-TESTED: Brand campaign isolation confirmed working perfectly. Brand (brand@example.com) sees exactly 1 campaign: 'Summer Product Launch Campaign'. Tested multiple times with consistent results. No cross-contamination detected. UI properly displays only brand-specific campaigns with correct action buttons (View Applications, Landing Page, Edit Dates)."
 
+  - task: "Fix static file upload 404 error"
+    implemented: true
+    working: "NA"
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Fixed 404 error for uploaded files. Changed static file mount path from /uploads to /api/uploads for Kubernetes ingress compatibility. Updated file URL construction to use /api/uploads/ prefix. Local curl test confirms 200 OK response."
+
 metadata:
   created_by: "main_agent"
   version: "1.0"
