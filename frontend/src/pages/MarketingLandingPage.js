@@ -19,6 +19,7 @@ import {
   PlayCircle,
   Award
 } from 'lucide-react';
+import { getFileUrl } from '../utils/fileUrl';
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
 
