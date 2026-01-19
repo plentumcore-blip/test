@@ -62,9 +62,10 @@ export default function InfluencerPublicProfile() {
           <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
             {profile.avatar_url ? (
               <img
-                src={profile.avatar_url}
+                src={getFileUrl(profile.avatar_url)}
                 alt={profile.name}
                 className="w-32 h-32 rounded-full object-cover border-4 border-[#1F66FF]"
+                onError={(e) => { e.target.style.display = 'none'; }}
               />
             ) : (
               <div className="w-32 h-32 rounded-full bg-gray-200 flex items-center justify-center border-4 border-[#1F66FF]">
