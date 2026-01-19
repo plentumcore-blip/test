@@ -28,9 +28,6 @@ export default function InfluencerProfileSetup() {
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [uploadingImage, setUploadingImage] = useState(false);
-  const [uploadingVideo, setUploadingVideo] = useState(false);
-  const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
