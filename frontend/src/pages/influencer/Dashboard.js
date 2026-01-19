@@ -64,6 +64,54 @@ export default function InfluencerDashboard() {
         </header>
 
         <div className="p-8">
+          {/* Profile Quick Access Card */}
+          {profile && (
+            <div className="card mb-6 bg-gradient-to-r from-blue-50 to-purple-50 border-2 border-[#1F66FF]">
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div className="flex items-center gap-4">
+                  {profile.avatar_url ? (
+                    <img
+                      src={profile.avatar_url}
+                      alt={profile.name}
+                      className="w-16 h-16 rounded-full object-cover border-2 border-[#1F66FF]"
+                    />
+                  ) : (
+                    <div className="w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center border-2 border-[#1F66FF]">
+                      <User className="w-8 h-8 text-gray-400" />
+                    </div>
+                  )}
+                  <div>
+                    <h3 className="text-xl font-bold text-[#0B1220]">{profile.name}</h3>
+                    {profile.bio && <p className="text-gray-700 text-sm mt-1">{profile.bio}</p>}
+                    {profile.public_profile_slug && (
+                      <p className="text-xs text-gray-600 mt-1">
+                        Public Profile: /influencer-profile/{profile.public_profile_slug}
+                      </p>
+                    )}
+                  </div>
+                </div>
+                <div className="flex gap-3">
+                  <button
+                    onClick={() => navigate('/influencer/profile-setup')}
+                    className="btn-secondary flex items-center gap-2"
+                  >
+                    <Edit className="w-4 h-4" />
+                    Edit Profile
+                  </button>
+                  {profile.public_profile_slug && (
+                    <button
+                      onClick={() => window.open(`/influencer-profile/${profile.public_profile_slug}`, '_blank')}
+                      className="btn-primary flex items-center gap-2"
+                    >
+                      <Eye className="w-4 h-4" />
+                      View Public Profile
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             <div className="card hover:shadow-xl transition-shadow" data-testid="stat-active-assignments">
               <div className="flex items-start justify-between mb-4">
