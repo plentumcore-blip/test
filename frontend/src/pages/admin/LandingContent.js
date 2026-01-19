@@ -91,7 +91,12 @@ export default function AdminLandingContent() {
     }
     setContent({
       ...content,
-      portfolioVideos: [...content.portfolioVideos, { videoUrl: '', creator: '', description: '' }]
+      portfolioVideos: [...content.portfolioVideos, { 
+        videoUrl: '', 
+        creator: '', 
+        description: '', 
+        uploadType: 'upload' // 'upload', 'youtube', 'instagram'
+      }]
     });
   };
 
@@ -104,6 +109,23 @@ export default function AdminLandingContent() {
   const removePortfolioVideo = (index) => {
     const newVideos = content.portfolioVideos.filter((_, i) => i !== index);
     setContent({ ...content, portfolioVideos: newVideos });
+  };
+
+  const handleVideoUpload = async (index, file) => {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const response = await axios.post(`${API_BASE}/upload`, formData, {
+        withCredentials: true,
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+
+      updatePortfolioVideo(index, 'videoUrl', response.data.url);
+      toast.success('Video uploaded successfully!');
+    } catch (error) {
+      toast.error('Failed to upload video');
+    }
   };
 
   return (
