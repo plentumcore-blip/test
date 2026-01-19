@@ -312,74 +312,187 @@ export default function AdminLandingContent() {
                           </button>
                         </div>
 
-                        <div className="grid grid-cols-1 gap-4">
-                          <div>
+                        {/* Upload Type Selection */}
+                        <div className="mb-4">
+                          <label className="block text-sm font-semibold text-[#0B1220] mb-3">
+                            Video Source
+                          </label>
+                          <div className="grid grid-cols-3 gap-3">
+                            <button
+                              type="button"
+                              onClick={() => updatePortfolioVideo(index, 'uploadType', 'upload')}
+                              className={`p-3 border-2 rounded-lg flex flex-col items-center gap-2 transition-all ${
+                                (video.uploadType || 'upload') === 'upload'
+                                  ? 'border-[#1F66FF] bg-blue-50'
+                                  : 'border-gray-200 hover:border-gray-300'
+                              }`}
+                            >
+                              <Upload className="w-5 h-5" />
+                              <span className="text-xs font-medium">Upload File</span>
+                            </button>
+                            
+                            <button
+                              type="button"
+                              onClick={() => updatePortfolioVideo(index, 'uploadType', 'youtube')}
+                              className={`p-3 border-2 rounded-lg flex flex-col items-center gap-2 transition-all ${
+                                video.uploadType === 'youtube'
+                                  ? 'border-[#1F66FF] bg-blue-50'
+                                  : 'border-gray-200 hover:border-gray-300'
+                              }`}
+                            >
+                              <svg className="w-5 h-5 text-red-600" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                              </svg>
+                              <span className="text-xs font-medium">YouTube</span>
+                            </button>
+                            
+                            <button
+                              type="button"
+                              onClick={() => updatePortfolioVideo(index, 'uploadType', 'instagram')}
+                              className={`p-3 border-2 rounded-lg flex flex-col items-center gap-2 transition-all ${
+                                video.uploadType === 'instagram'
+                                  ? 'border-[#1F66FF] bg-blue-50'
+                                  : 'border-gray-200 hover:border-gray-300'
+                              }`}
+                            >
+                              <svg className="w-5 h-5 text-pink-600" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                              </svg>
+                              <span className="text-xs font-medium">Instagram</span>
+                            </button>
+                          </div>
+                        </div>
+
+                        {/* Upload File Option */}
+                        {(video.uploadType || 'upload') === 'upload' && (
+                          <div className="mb-4">
                             <label className="block text-sm font-semibold text-[#0B1220] mb-2">
-                              Video URL *
+                              Upload Video File
+                            </label>
+                            <input
+                              type="file"
+                              accept="video/*"
+                              onChange={(e) => {
+                                const file = e.target.files[0];
+                                if (file) {
+                                  if (file.size > 50 * 1024 * 1024) { // 50MB limit
+                                    toast.error('Video file must be under 50MB');
+                                    return;
+                                  }
+                                  handleVideoUpload(index, file);
+                                }
+                              }}
+                              className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-[#1F66FF] file:text-white hover:file:bg-blue-700 cursor-pointer"
+                            />
+                            <p className="text-xs text-gray-500 mt-1">
+                              MP4, MOV, AVI (Max 50MB) - Vertical format recommended (9:16)
+                            </p>
+                            {video.videoUrl && (
+                              <p className="text-xs text-green-600 mt-2 flex items-center gap-1">
+                                <Check className="w-4 h-4" />
+                                Video uploaded successfully
+                              </p>
+                            )}
+                          </div>
+                        )}
+
+                        {/* YouTube Shorts Option */}
+                        {video.uploadType === 'youtube' && (
+                          <div className="mb-4">
+                            <label className="block text-sm font-semibold text-[#0B1220] mb-2">
+                              YouTube Shorts URL
                             </label>
                             <input
                               type="url"
                               value={video.videoUrl}
                               onChange={(e) => updatePortfolioVideo(index, 'videoUrl', e.target.value)}
                               className="input"
-                              placeholder="https://example.com/video.mp4 or embed URL"
-                              required
+                              placeholder="https://www.youtube.com/shorts/VIDEO_ID"
                             />
                             <p className="text-xs text-gray-500 mt-1">
-                              Direct video URL or embed URL (YouTube, Vimeo, etc.)
+                              Paste the YouTube Shorts URL (e.g., https://www.youtube.com/shorts/abc123)
                             </p>
                           </div>
+                        )}
 
-                          <div className="grid grid-cols-2 gap-4">
-                            <div>
-                              <label className="block text-sm font-semibold text-[#0B1220] mb-2">
-                                Creator Handle
-                              </label>
-                              <input
-                                type="text"
-                                value={video.creator}
-                                onChange={(e) => updatePortfolioVideo(index, 'creator', e.target.value)}
-                                className="input"
-                                placeholder="@creator_name"
-                              />
-                            </div>
+                        {/* Instagram Reel Option */}
+                        {video.uploadType === 'instagram' && (
+                          <div className="mb-4">
+                            <label className="block text-sm font-semibold text-[#0B1220] mb-2">
+                              Instagram Reel URL
+                            </label>
+                            <input
+                              type="url"
+                              value={video.videoUrl}
+                              onChange={(e) => updatePortfolioVideo(index, 'videoUrl', e.target.value)}
+                              className="input"
+                              placeholder="https://www.instagram.com/reel/ABC123/"
+                            />
+                            <p className="text-xs text-gray-500 mt-1">
+                              Paste the Instagram Reel URL (e.g., https://www.instagram.com/reel/...)
+                            </p>
+                          </div>
+                        )}
 
-                            <div>
-                              <label className="block text-sm font-semibold text-[#0B1220] mb-2">
-                                Description
-                              </label>
-                              <input
-                                type="text"
-                                value={video.description}
-                                onChange={(e) => updatePortfolioVideo(index, 'description', e.target.value)}
-                                className="input"
-                                placeholder="Short description or caption"
-                              />
-                            </div>
+                        <div className="grid grid-cols-2 gap-4 mb-4">
+                          <div>
+                            <label className="block text-sm font-semibold text-[#0B1220] mb-2">
+                              Creator Handle
+                            </label>
+                            <input
+                              type="text"
+                              value={video.creator}
+                              onChange={(e) => updatePortfolioVideo(index, 'creator', e.target.value)}
+                              className="input"
+                              placeholder="@creator_name"
+                            />
                           </div>
 
-                          {video.videoUrl && (
-                            <div>
-                              <label className="block text-sm font-semibold text-[#0B1220] mb-2">Preview</label>
-                              <div className="w-64 aspect-[9/16] bg-slate-100 rounded-lg overflow-hidden">
-                                {video.videoUrl.includes('youtube.com') || video.videoUrl.includes('vimeo.com') ? (
-                                  <iframe
-                                    src={video.videoUrl}
-                                    className="w-full h-full"
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                    allowFullScreen
-                                  />
-                                ) : (
-                                  <video
-                                    src={video.videoUrl}
-                                    controls
-                                    className="w-full h-full object-cover"
-                                  />
-                                )}
-                              </div>
-                            </div>
-                          )}
+                          <div>
+                            <label className="block text-sm font-semibold text-[#0B1220] mb-2">
+                              Description
+                            </label>
+                            <input
+                              type="text"
+                              value={video.description}
+                              onChange={(e) => updatePortfolioVideo(index, 'description', e.target.value)}
+                              className="input"
+                              placeholder="Short description or caption"
+                            />
+                          </div>
                         </div>
+
+                        {video.videoUrl && (
+                          <div>
+                            <label className="block text-sm font-semibold text-[#0B1220] mb-2">Preview</label>
+                            <div className="w-64 aspect-[9/16] bg-slate-100 rounded-lg overflow-hidden">
+                              {video.uploadType === 'youtube' && video.videoUrl.includes('youtube.com') ? (
+                                <iframe
+                                  src={video.videoUrl.replace('/shorts/', '/embed/')}
+                                  className="w-full h-full"
+                                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                  allowFullScreen
+                                />
+                              ) : video.uploadType === 'instagram' && video.videoUrl.includes('instagram.com') ? (
+                                <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-purple-500 to-pink-500 text-white">
+                                  <div className="text-center p-4">
+                                    <svg className="w-12 h-12 mx-auto mb-2" fill="currentColor" viewBox="0 0 24 24">
+                                      <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                                    </svg>
+                                    <p className="text-xs">Instagram Reel</p>
+                                    <p className="text-xs opacity-75 mt-1">Preview on Instagram</p>
+                                  </div>
+                                </div>
+                              ) : (
+                                <video
+                                  src={video.videoUrl}
+                                  controls
+                                  className="w-full h-full object-cover"
+                                />
+                              )}
+                            </div>
+                          </div>
+                        )}
                       </div>
                     ))}
                   </div>
