@@ -366,6 +366,136 @@ export default function InfluencerProfileSetup() {
           )}
         </div>
 
+        {/* Portfolio Images */}
+        <div className="card mb-6">
+          <h2 className="text-2xl font-bold text-[#0B1220] mb-4">Portfolio Images</h2>
+          <p className="text-gray-600 mb-4">Showcase your best content to help brands make decisions</p>
+          
+          <div className="mb-4">
+            <FileUpload
+              onFileSelect={handleImageUpload}
+              accept="image/*"
+              label="Upload Portfolio Image"
+              uploading={uploadingImage}
+            />
+          </div>
+
+          {profile.portfolio_images.length > 0 ? (
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+              {profile.portfolio_images.map((image, index) => (
+                <div key={index} className="relative group aspect-square rounded-lg overflow-hidden">
+                  <img
+                    src={image}
+                    alt={`Portfolio ${index + 1}`}
+                    className="w-full h-full object-cover"
+                  />
+                  <button
+                    onClick={() => removeImage(index)}
+                    className="absolute top-2 right-2 p-2 bg-red-600 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-8 bg-gray-50 rounded-lg">
+              <Upload className="w-12 h-12 text-gray-300 mx-auto mb-2" />
+              <p className="text-gray-600">No portfolio images yet</p>
+            </div>
+          )}
+          
+          <button
+            onClick={saveProfile}
+            disabled={saving}
+            className="btn-primary mt-4"
+          >
+            {saving ? 'Saving...' : 'Save Portfolio'}
+          </button>
+        </div>
+
+        {/* Portfolio Videos */}
+        <div className="card mb-6">
+          <h2 className="text-2xl font-bold text-[#0B1220] mb-4">Portfolio Videos</h2>
+          <p className="text-gray-600 mb-4">Add video samples of your content</p>
+          
+          <div className="mb-4">
+            <FileUpload
+              onFileSelect={handleVideoUpload}
+              accept="video/*"
+              label="Upload Portfolio Video"
+              uploading={uploadingVideo}
+            />
+          </div>
+
+          {profile.portfolio_videos.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {profile.portfolio_videos.map((video, index) => (
+                <div key={index} className="relative group">
+                  <video
+                    src={video}
+                    controls
+                    className="w-full rounded-lg"
+                  />
+                  <button
+                    onClick={() => removeVideo(index)}
+                    className="absolute top-2 right-2 p-2 bg-red-600 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-8 bg-gray-50 rounded-lg">
+              <Upload className="w-12 h-12 text-gray-300 mx-auto mb-2" />
+              <p className="text-gray-600">No portfolio videos yet</p>
+            </div>
+          )}
+          
+          <button
+            onClick={saveProfile}
+            disabled={saving}
+            className="btn-primary mt-4"
+          >
+            {saving ? 'Saving...' : 'Save Portfolio'}
+          </button>
+        </div>
+
+        {/* View Public Profile */}
+        {profile.public_profile_slug && (
+          <div className="card mb-6 bg-gradient-to-r from-blue-50 to-purple-50 border-2 border-[#1F66FF]">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div>
+                <h3 className="text-xl font-bold text-[#0B1220] mb-2">Your Public Profile is Live!</h3>
+                <p className="text-gray-700">Share this link with brands or add it to your bio</p>
+                <code className="text-sm bg-white px-3 py-1 rounded mt-2 inline-block">
+                  {window.location.origin}/influencer-profile/{profile.public_profile_slug}
+                </code>
+              </div>
+              <div className="flex gap-3">
+                <button
+                  onClick={() => window.open(`/influencer-profile/${profile.public_profile_slug}`, '_blank')}
+                  className="btn-secondary flex items-center gap-2"
+                >
+                  <Eye className="w-5 h-5" />
+                  Preview Profile
+                </button>
+                <button
+                  onClick={() => {
+                    navigator.clipboard.writeText(`${window.location.origin}/influencer-profile/${profile.public_profile_slug}`);
+                    toast.success('Link copied to clipboard!');
+                  }}
+                  className="btn-primary flex items-center gap-2"
+                >
+                  <ExternalLink className="w-5 h-5" />
+                  Copy Link
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Complete Setup Button */}
         <div className="mt-8 card bg-[#E8F1FF]">
           <div className="flex items-center justify-between">
