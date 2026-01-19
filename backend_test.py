@@ -1,7 +1,17 @@
 #!/usr/bin/env python3
 """
-Backend API Testing for Influencer Payment Settings and Admin Reports
-Tests the newly implemented features for payment details and admin reports.
+Backend API Testing for Bug Fixes and Features
+Tests the recently implemented bug fixes:
+1. Purchase proof submission data format fix (array vs string)
+2. Amazon redirect link fix (/api/redirect/ prefix)
+3. Brand campaign filtering fix (brands only see their campaigns)
+4. Seed database fix (correct database name)
+
+Also tests existing features:
+- Payment details endpoints
+- Transaction history
+- Admin reports
+- Campaign landing pages
 """
 
 import requests
