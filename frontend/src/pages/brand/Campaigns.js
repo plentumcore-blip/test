@@ -244,6 +244,15 @@ export default function BrandCampaigns() {
                       >
                         Landing Page
                       </button>
+                      <button
+                        data-testid={`delete-campaign-btn-${campaign.id}`}
+                        onClick={() => handleDeleteCampaign(campaign.id, campaign.title)}
+                        disabled={deletingCampaignId === campaign.id}
+                        className="btn-secondary text-sm flex items-center gap-2 text-red-600 hover:bg-red-50 border-red-200 hover:border-red-300"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                        {deletingCampaignId === campaign.id ? 'Deleting...' : 'Delete'}
+                      </button>
                     </div>
                   </div>
                 </div>
