@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Instagram, Youtube, ExternalLink, User } from 'lucide-react';
 import { toast } from 'sonner';
+import { getFileUrl } from '../utils/fileUrl';
 
 const API_BASE = `${process.env.REACT_APP_BACKEND_URL}/api/v1`;
 
