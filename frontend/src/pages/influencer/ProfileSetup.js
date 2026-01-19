@@ -90,8 +90,20 @@ export default function InfluencerProfileSetup() {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       
-      setProfile({ ...profile, avatar_url: response.data.url });
-      toast.success('Avatar uploaded!');
+      const updatedProfile = { ...profile, avatar_url: response.data.url };
+      setProfile(updatedProfile);
+      
+      // Automatically save the profile with the new avatar
+      const saveResponse = await axios.put(`${API_BASE}/influencer/profile`, updatedProfile, { 
+        withCredentials: true 
+      });
+      
+      if (saveResponse.data.slug) {
+        setProfile({ ...updatedProfile, public_profile_slug: saveResponse.data.slug });
+      }
+      
+      toast.success('Avatar uploaded and saved!');
+      fetchProfile(); // Refresh to get latest data
     } catch (error) {
       toast.error('Failed to upload avatar');
     } finally {
