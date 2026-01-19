@@ -37,7 +37,8 @@ const MarketingLandingPage = () => {
       { label: "Average ROI", value: "5.2x" }
     ],
     videoUrl: "",
-    videoTitle: "How Influiv Works"
+    videoTitle: "How Influiv Works",
+    portfolioVideos: []
   });
 
   // Redirect authenticated users to their dashboard
