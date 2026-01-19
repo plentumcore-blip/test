@@ -408,10 +408,7 @@ metadata:
   run_ui: false
 
 test_plan:
-  current_focus:
-    - "Fix purchase proof submission data format"
-    - "Fix Amazon attribution redirect link"
-    - "Fix brand campaign filtering"
+  current_focus: []
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
