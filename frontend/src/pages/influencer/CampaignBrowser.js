@@ -90,13 +90,18 @@ export default function CampaignBrowser() {
           </div>
         ) : (
           <div className="grid md:grid-cols-2 gap-6">
-            {campaigns.map((campaign) => (
+            {campaigns.map((campaign) => {
+              const isPurchaseWindowPassed = campaign.purchase_window_end 
+                ? new Date() > new Date(campaign.purchase_window_end) 
+                : false;
+              
+              return (
               <div key={campaign.id} className="card hover:scale-[1.02] transition-transform" data-testid={`campaign-card-${campaign.id}`}>
                 <div className="mb-4">
                   <div className="flex items-center justify-between mb-3">
                     <h3 className="text-2xl font-bold text-[#0B1220]">{campaign.title}</h3>
-                    <span className="badge badge-success">
-                      {campaign.status === 'live' ? 'Live' : 'Active'}
+                    <span className={`badge ${isPurchaseWindowPassed ? 'badge-error' : 'badge-success'}`}>
+                      {isPurchaseWindowPassed ? 'Closed' : (campaign.status === 'live' ? 'Live' : 'Active')}
                     </span>
                   </div>
                   <p className="text-gray-600">{campaign.description}</p>
@@ -108,6 +113,9 @@ export default function CampaignBrowser() {
                     <span className="ml-2">
                       {new Date(campaign.purchase_window_start).toLocaleDateString()} - {new Date(campaign.purchase_window_end).toLocaleDateString()}
                     </span>
+                    {isPurchaseWindowPassed && (
+                      <span className="ml-2 text-red-600 font-semibold">(Ended)</span>
+                    )}
                   </div>
                   <div>
                     <span className="font-semibold">Post Window:</span>
@@ -128,11 +136,17 @@ export default function CampaignBrowser() {
                   </button>
                   <button
                     data-testid={`apply-btn-${campaign.id}`}
-                    onClick={() => applyToCampaign(campaign.id)}
-                    className="btn-primary flex-1 flex items-center justify-center gap-2"
+                    onClick={() => !isPurchaseWindowPassed && applyToCampaign(campaign.id)}
+                    disabled={isPurchaseWindowPassed}
+                    className={`flex-1 flex items-center justify-center gap-2 ${
+                      isPurchaseWindowPassed 
+                        ? 'btn-secondary opacity-50 cursor-not-allowed' 
+                        : 'btn-primary'
+                    }`}
+                    title={isPurchaseWindowPassed ? 'Purchase window has ended' : 'Apply to this campaign'}
                   >
                     <ExternalLink className="w-5 h-5" />
-                    Apply Now
+                    {isPurchaseWindowPassed ? 'Closed' : 'Apply Now'}
                   </button>
                 </div>
               </div>
