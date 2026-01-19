@@ -6,6 +6,7 @@ import { toast } from 'sonner';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../../components/ui/dialog';
 import { Button } from '../../components/ui/button';
 import FileUpload from '../../components/FileUpload';
+import { getFileUrl } from '../../utils/fileUrl';
 
 const API_BASE = `${process.env.REACT_APP_BACKEND_URL}/api/v1`;
 
