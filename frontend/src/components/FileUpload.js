@@ -1,5 +1,5 @@
-import { useState, useRef } from 'react';
-import { Upload, X, CheckCircle, AlertCircle, Loader } from 'lucide-react';
+import { useState, useRef, useEffect } from 'react';
+import { Upload, X, CheckCircle, AlertCircle, Loader, Image, Video } from 'lucide-react';
 import axios from 'axios';
 
 const API_BASE = process.env.REACT_APP_BACKEND_URL || import.meta.env.VITE_REACT_APP_BACKEND_URL;
@@ -11,14 +11,34 @@ const FileUpload = ({
   label = "Upload File",
   currentUrl = null,
   required = false,
-  compact = false 
+  compact = false,
+  showPreview = true // Show image/video preview when uploaded
 }) => {
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [error, setError] = useState('');
   const [uploadedUrl, setUploadedUrl] = useState(currentUrl);
+  const [previewError, setPreviewError] = useState(false);
   const fileInputRef = useRef(null);
   const inputId = useRef(`file-upload-${Math.random().toString(36).substr(2, 9)}`).current;
+
+  // Update uploadedUrl when currentUrl prop changes
+  useEffect(() => {
+    setUploadedUrl(currentUrl);
+    setPreviewError(false);
+  }, [currentUrl]);
+
+  const isImageFile = (url) => {
+    if (!url) return false;
+    const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg'];
+    return imageExtensions.some(ext => url.toLowerCase().includes(ext));
+  };
+
+  const isVideoFile = (url) => {
+    if (!url) return false;
+    const videoExtensions = ['.mp4', '.mov', '.avi', '.webm', '.mkv'];
+    return videoExtensions.some(ext => url.toLowerCase().includes(ext));
+  };
 
   const validateFile = (file) => {
     // Check file size
@@ -31,7 +51,7 @@ const FileUpload = ({
     if (accept && !accept.includes('*')) {
       const acceptedTypes = accept.split(',').map(t => t.trim());
       const fileType = file.type;
-      const fileExtension = '.' + file.name.split('.').pop();
+      const fileExtension = '.' + file.name.split('.').pop().toLowerCase();
       
       const isValid = acceptedTypes.some(type => {
         if (type.endsWith('/*')) {
@@ -57,6 +77,7 @@ const FileUpload = ({
 
     console.log('File selected:', file.name, file.size, file.type);
     setError('');
+    setPreviewError(false);
     
     // Validate file
     const validationError = validateFile(file);
@@ -74,9 +95,10 @@ const FileUpload = ({
       const formData = new FormData();
       formData.append('file', file);
 
-      console.log('Starting upload to:', `${API_BASE}/api/v1/upload`);
+      const uploadUrl = `${API_BASE}/api/v1/upload`;
+      console.log('Starting upload to:', uploadUrl);
 
-      const response = await axios.post(`${API_BASE}/api/v1/upload`, formData, {
+      const response = await axios.post(uploadUrl, formData, {
         withCredentials: true,
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -91,12 +113,18 @@ const FileUpload = ({
       console.log('Upload successful:', response.data);
       const fileUrl = response.data.url;
       setUploadedUrl(fileUrl);
-      onUploadComplete(fileUrl);
+      
+      // Call the callback with the URL
+      if (onUploadComplete) {
+        onUploadComplete(fileUrl);
+      }
+      
       setProgress(100);
     } catch (err) {
       console.error('Upload failed:', err);
       console.error('Error response:', err.response?.data);
-      setError(err.response?.data?.detail || 'Failed to upload file');
+      const errorMessage = err.response?.data?.detail || 'Failed to upload file. Please try again.';
+      setError(errorMessage);
     } finally {
       setUploading(false);
     }
@@ -106,7 +134,10 @@ const FileUpload = ({
     setUploadedUrl(null);
     setError('');
     setProgress(0);
-    onUploadComplete('');
+    setPreviewError(false);
+    if (onUploadComplete) {
+      onUploadComplete('');
+    }
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
@@ -114,6 +145,44 @@ const FileUpload = ({
 
   const triggerFileInput = () => {
     fileInputRef.current?.click();
+  };
+
+  const handlePreviewError = () => {
+    console.warn('Failed to load preview for:', uploadedUrl);
+    setPreviewError(true);
+  };
+
+  // Render preview based on file type
+  const renderPreview = () => {
+    if (!showPreview || !uploadedUrl || previewError) return null;
+
+    if (isImageFile(uploadedUrl)) {
+      return (
+        <div className="mt-2 relative">
+          <img 
+            src={uploadedUrl} 
+            alt="Uploaded preview" 
+            className="max-h-32 rounded-lg object-cover border border-gray-200"
+            onError={handlePreviewError}
+          />
+        </div>
+      );
+    }
+
+    if (isVideoFile(uploadedUrl)) {
+      return (
+        <div className="mt-2 relative">
+          <video 
+            src={uploadedUrl} 
+            className="max-h-32 rounded-lg border border-gray-200"
+            controls
+            onError={handlePreviewError}
+          />
+        </div>
+      );
+    }
+
+    return null;
   };
 
   return (
@@ -175,29 +244,34 @@ const FileUpload = ({
           </label>
         </div>
       ) : (
-        <div className={`flex items-center gap-3 ${compact ? 'p-2' : 'p-4'} bg-green-50 border border-green-200 rounded-xl`}>
-          <CheckCircle className={`${compact ? 'w-4 h-4' : 'w-5 h-5'} text-green-600 flex-shrink-0`} />
-          <div className="flex-1 min-w-0">
-            <p className={`${compact ? 'text-xs' : 'text-sm'} text-green-800 font-medium`}>
-              {compact ? 'Uploaded' : 'File uploaded successfully'}
-            </p>
-            <a 
-              href={uploadedUrl} 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="text-xs text-blue-600 hover:underline truncate block"
+        <div className="space-y-2">
+          <div className={`flex items-center gap-3 ${compact ? 'p-2' : 'p-4'} bg-green-50 border border-green-200 rounded-xl`}>
+            <CheckCircle className={`${compact ? 'w-4 h-4' : 'w-5 h-5'} text-green-600 flex-shrink-0`} />
+            <div className="flex-1 min-w-0">
+              <p className={`${compact ? 'text-xs' : 'text-sm'} text-green-800 font-medium`}>
+                {compact ? 'Uploaded' : 'File uploaded successfully'}
+              </p>
+              <a 
+                href={uploadedUrl} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-xs text-blue-600 hover:underline truncate block"
+              >
+                View file
+              </a>
+            </div>
+            <button
+              type="button"
+              onClick={handleRemove}
+              className="p-1 hover:bg-red-100 rounded-lg transition-colors"
+              title="Remove file"
             >
-              View file
-            </a>
+              <X className={`${compact ? 'w-4 h-4' : 'w-5 h-5'} text-red-600`} />
+            </button>
           </div>
-          <button
-            type="button"
-            onClick={handleRemove}
-            className="p-1 hover:bg-red-100 rounded-lg transition-colors"
-            title="Remove file"
-          >
-            <X className={`${compact ? 'w-4 h-4' : 'w-5 h-5'} text-red-600`} />
-          </button>
+          
+          {/* Preview */}
+          {renderPreview()}
         </div>
       )}
 
