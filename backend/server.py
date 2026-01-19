@@ -2691,8 +2691,8 @@ async def upload_file(
 # Include router
 app.include_router(api_router)
 
-# Serve uploaded files
-app.mount("/uploads", StaticFiles(directory="/app/backend/uploads"), name="uploads")
+# Serve uploaded files with /api prefix for Kubernetes ingress routing
+app.mount("/api/uploads", StaticFiles(directory="/app/backend/uploads"), name="uploads")
 
 app.add_middleware(
     CORSMiddleware,
