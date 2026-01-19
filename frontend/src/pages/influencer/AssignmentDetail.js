@@ -284,6 +284,7 @@ export default function AssignmentDetail() {
                           type="date"
                           value={purchaseData.order_date}
                           onChange={(e) => setPurchaseData({ ...purchaseData, order_date: e.target.value })}
+                          max={new Date().toISOString().split('T')[0]}
                           className="input"
                           required
                         />
