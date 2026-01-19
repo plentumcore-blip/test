@@ -168,6 +168,9 @@ class Influencer(BaseModel):
     name: str
     bio: Optional[str] = None
     avatar_url: Optional[str] = None
+    portfolio_images: List[str] = []  # URLs to portfolio images
+    portfolio_videos: List[str] = []  # URLs to portfolio videos
+    public_profile_slug: Optional[str] = None  # URL-friendly slug for public profile
     status: InfluencerStatus = InfluencerStatus.PENDING
     profile_completed: bool = False
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
