@@ -488,9 +488,10 @@ export default function InfluencerProfileSetup() {
               {profile.portfolio_videos.map((video, index) => (
                 <div key={index} className="relative group">
                   <video
-                    src={video}
+                    src={getFileUrl(video)}
                     controls
                     className="w-full rounded-lg"
+                    onError={(e) => { e.target.style.display = 'none'; }}
                   />
                   <button
                     onClick={() => removeVideo(index)}
