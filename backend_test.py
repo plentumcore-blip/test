@@ -929,11 +929,20 @@ class APITester:
     
     def run_all_tests(self):
         """Run all tests"""
-        print("🚀 Starting Backend API Tests for Payment Settings, Admin Reports, and Campaign Landing Pages")
+        print("🚀 Starting Backend API Tests for Bug Fixes and Features")
         print(f"Testing against: {BASE_URL}")
         print("=" * 80)
         
         try:
+            # Test the specific bug fixes from review request
+            print("\n🔧 TESTING BUG FIXES (HIGH PRIORITY)")
+            self.test_purchase_proof_submission_fix()
+            self.test_amazon_redirect_link_fix()
+            self.test_brand_campaign_filtering_fix()
+            self.test_seed_database_fix()
+            
+            # Test existing features
+            print("\n📋 TESTING EXISTING FEATURES")
             self.test_payment_details_endpoints()
             self.test_transaction_history()
             self.test_payout_validation()
@@ -957,8 +966,25 @@ class APITester:
         print(f"❌ Failed: {failed_tests}")
         print(f"Success Rate: {(passed_tests/total_tests*100):.1f}%" if total_tests > 0 else "No tests run")
         
+        # Separate bug fix results from feature results
+        bug_fix_tests = [t for t in self.test_results if any(keyword in t['test'].lower() for keyword in 
+                        ['purchase proof', 'amazon redirect', 'brand campaign filtering', 'seed account'])]
+        feature_tests = [t for t in self.test_results if t not in bug_fix_tests]
+        
+        if bug_fix_tests:
+            print(f"\n🔧 BUG FIX RESULTS:")
+            bug_fix_passed = len([t for t in bug_fix_tests if t['success']])
+            bug_fix_failed = len(bug_fix_tests) - bug_fix_passed
+            print(f"  Bug Fixes Passed: {bug_fix_passed}/{len(bug_fix_tests)}")
+            
+            if bug_fix_failed > 0:
+                print("  🚨 FAILED BUG FIXES:")
+                for test in bug_fix_tests:
+                    if not test['success']:
+                        print(f"    • {test['test']}: {test['message']}")
+        
         if failed_tests > 0:
-            print("\n🔍 FAILED TESTS:")
+            print("\n🔍 ALL FAILED TESTS:")
             for test in self.test_results:
                 if not test['success']:
                     print(f"  • {test['test']}: {test['message']}")
