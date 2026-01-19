@@ -241,6 +241,129 @@ export default function AdminLandingContent() {
                 </div>
               </div>
 
+              {/* Portfolio Videos Section */}
+              <div className="card">
+                <div className="flex items-center justify-between mb-6">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+                      <Video className="w-5 h-5 text-purple-600" />
+                    </div>
+                    <div>
+                      <h2 className="text-xl font-bold text-[#0B1220]">Quality Content that Converts</h2>
+                      <p className="text-sm text-gray-500">Manage showcase videos for the landing page</p>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={addPortfolioVideo}
+                    className="btn-secondary flex items-center gap-2 text-sm"
+                  >
+                    <Plus className="w-4 h-4" />
+                    Add Video
+                  </button>
+                </div>
+
+                {content.portfolioVideos.length === 0 ? (
+                  <div className="text-center py-12 bg-gray-50 rounded-lg border-2 border-dashed border-gray-200">
+                    <Video className="w-12 h-12 text-gray-400 mx-auto mb-3" />
+                    <p className="text-gray-600 mb-4">No portfolio videos yet</p>
+                    <button
+                      type="button"
+                      onClick={addPortfolioVideo}
+                      className="btn-primary"
+                    >
+                      Add Your First Video
+                    </button>
+                  </div>
+                ) : (
+                  <div className="space-y-6">
+                    {content.portfolioVideos.map((video, index) => (
+                      <div key={index} className="p-4 border border-gray-200 rounded-lg">
+                        <div className="flex items-center justify-between mb-4">
+                          <h3 className="font-semibold text-[#0B1220]">Video #{index + 1}</h3>
+                          <button
+                            type="button"
+                            onClick={() => removePortfolioVideo(index)}
+                            className="text-red-600 hover:text-red-700 p-2"
+                          >
+                            <Trash2 className="w-5 h-5" />
+                          </button>
+                        </div>
+
+                        <div className="grid grid-cols-1 gap-4">
+                          <div>
+                            <label className="block text-sm font-semibold text-[#0B1220] mb-2">
+                              Video URL *
+                            </label>
+                            <input
+                              type="url"
+                              value={video.videoUrl}
+                              onChange={(e) => updatePortfolioVideo(index, 'videoUrl', e.target.value)}
+                              className="input"
+                              placeholder="https://example.com/video.mp4 or embed URL"
+                              required
+                            />
+                            <p className="text-xs text-gray-500 mt-1">
+                              Direct video URL or embed URL (YouTube, Vimeo, etc.)
+                            </p>
+                          </div>
+
+                          <div className="grid grid-cols-2 gap-4">
+                            <div>
+                              <label className="block text-sm font-semibold text-[#0B1220] mb-2">
+                                Creator Handle
+                              </label>
+                              <input
+                                type="text"
+                                value={video.creator}
+                                onChange={(e) => updatePortfolioVideo(index, 'creator', e.target.value)}
+                                className="input"
+                                placeholder="@creator_name"
+                              />
+                            </div>
+
+                            <div>
+                              <label className="block text-sm font-semibold text-[#0B1220] mb-2">
+                                Description
+                              </label>
+                              <input
+                                type="text"
+                                value={video.description}
+                                onChange={(e) => updatePortfolioVideo(index, 'description', e.target.value)}
+                                className="input"
+                                placeholder="Short description or caption"
+                              />
+                            </div>
+                          </div>
+
+                          {video.videoUrl && (
+                            <div>
+                              <label className="block text-sm font-semibold text-[#0B1220] mb-2">Preview</label>
+                              <div className="w-64 aspect-[9/16] bg-slate-100 rounded-lg overflow-hidden">
+                                {video.videoUrl.includes('youtube.com') || video.videoUrl.includes('vimeo.com') ? (
+                                  <iframe
+                                    src={video.videoUrl}
+                                    className="w-full h-full"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowFullScreen
+                                  />
+                                ) : (
+                                  <video
+                                    src={video.videoUrl}
+                                    controls
+                                    className="w-full h-full object-cover"
+                                  />
+                                )}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
               {/* Save Button */}
               <div className="flex justify-end">
                 <button
