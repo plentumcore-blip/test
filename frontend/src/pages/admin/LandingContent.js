@@ -84,6 +84,28 @@ export default function AdminLandingContent() {
     setContent({ ...content, stats: newStats });
   };
 
+  const addPortfolioVideo = () => {
+    if (content.portfolioVideos.length >= 8) {
+      toast.error('Maximum 8 portfolio videos allowed');
+      return;
+    }
+    setContent({
+      ...content,
+      portfolioVideos: [...content.portfolioVideos, { videoUrl: '', creator: '', description: '' }]
+    });
+  };
+
+  const updatePortfolioVideo = (index, field, value) => {
+    const newVideos = [...content.portfolioVideos];
+    newVideos[index] = { ...newVideos[index], [field]: value };
+    setContent({ ...content, portfolioVideos: newVideos });
+  };
+
+  const removePortfolioVideo = (index) => {
+    const newVideos = content.portfolioVideos.filter((_, i) => i !== index);
+    setContent({ ...content, portfolioVideos: newVideos });
+  };
+
   return (
     <div className="flex min-h-screen bg-gray-50">
       <AdminSidebar onLogout={logout} />
