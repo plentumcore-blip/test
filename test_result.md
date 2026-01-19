@@ -408,7 +408,11 @@ metadata:
   run_ui: false
 
 test_plan:
-  current_focus: []
+  current_focus:
+    - "Frontend: Purchase proof submission with screenshot upload"
+    - "Frontend: Order date validation (no future dates)"
+    - "Frontend: Amazon redirect link click"
+    - "Frontend: Brand campaign isolation verification"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
