@@ -412,15 +412,18 @@ frontend:
 
   - task: "Fix static file upload 404 error"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Fixed 404 error for uploaded files. Changed static file mount path from /uploads to /api/uploads for Kubernetes ingress compatibility. Updated file URL construction to use /api/uploads/ prefix. Local curl test confirms 200 OK response."
+      - working: true
+        agent: "testing"
+        comment: "✅ TESTED: File upload and static file serving fix working perfectly! Successfully tested complete flow: 1) Login as influencer (creator@example.com), 2) Upload test PNG file to POST /api/v1/upload, 3) Verified response contains URL with /api/uploads/ prefix (https://affbridge.preview.emergentagent.com/api/uploads/2274ea0a-5ef4-4871-932c-14e586a035c7.png), 4) Accessed uploaded file URL directly - returns 200 OK with correct content-type (image/png), 5) Tested existing file access - works correctly, 6) Verified file content is valid (287 bytes). Upload endpoint returns all required fields (filename, original_filename, url, size, message). Static file serving with /api/uploads/ prefix is working correctly for Kubernetes ingress routing. Minor: Old /uploads path still returns 200 (likely handled by frontend/ingress) but this doesn't affect the fix functionality."
 
 metadata:
   created_by: "main_agent"
