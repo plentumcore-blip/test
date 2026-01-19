@@ -60,6 +60,10 @@ export default function CampaignDetail() {
     return null;
   }
 
+  const isPurchaseWindowPassed = campaign.purchase_window_end 
+    ? new Date() > new Date(campaign.purchase_window_end) 
+    : false;
+
   return (
     <div className="min-h-screen bg-[#F8FAFC]">
       {/* Header */}
@@ -74,8 +78,8 @@ export default function CampaignDetail() {
           </button>
           <h1 className="text-3xl font-bold text-[#0B1220]">{campaign.title}</h1>
           <div className="flex items-center gap-2 mt-2">
-            <span className="badge badge-success">
-              {campaign.status === 'live' || campaign.status === 'published' ? 'Live' : campaign.status}
+            <span className={`badge ${isPurchaseWindowPassed ? 'badge-error' : 'badge-success'}`}>
+              {isPurchaseWindowPassed ? 'Closed' : (campaign.status === 'live' || campaign.status === 'published' ? 'Live' : campaign.status)}
             </span>
           </div>
         </div>
