@@ -611,3 +611,46 @@ agent_communication:
       - API responses follow expected format with proper error handling
       
       ✨ ALL BUG FIXES VERIFIED AND WORKING CORRECTLY
+  - agent: "main"
+    message: |
+      REQUESTING FRONTEND TESTING for bug fixes:
+      
+      All backend fixes have been tested and verified working (52/52 tests passed).
+      Now need to test the frontend UI to ensure:
+      
+      1. PURCHASE PROOF SUBMISSION FLOW:
+         - Login as influencer and navigate to assignment detail
+         - Verify order date field has max date validation (cannot select future dates)
+         - Upload screenshot file using FileUpload component
+         - Fill in purchase proof form and submit
+         - Verify success message appears and assignment status updates
+      
+      2. AMAZON REDIRECT LINK:
+         - Navigate to assignment detail page
+         - Verify "Buy on Amazon" button is visible
+         - Click the button and verify it redirects (opens new tab/window)
+         - Verify user is redirected to Amazon (not staying on app)
+      
+      3. BRAND CAMPAIGN ISOLATION:
+         - Login as brand (brand@example.com / Brand@123)
+         - Navigate to campaigns page
+         - Verify only this brand's campaigns are visible
+         - Count total campaigns shown
+         - Create a second brand account and campaign if needed for isolation testing
+      
+      4. ORDER DATE VALIDATION:
+         - Try to select a future date in the order date field
+         - Verify the date picker prevents future date selection
+         - Verify only today and past dates are selectable
+      
+      All frontend pages should be tested for:
+      - No console errors
+      - Proper loading states
+      - Success/error messages displaying correctly
+      - Form validation working
+      - Navigation working properly
+      
+      Test credentials:
+      - Admin: admin@example.com / Admin@123
+      - Brand: brand@example.com / Brand@123
+      - Influencer: creator@example.com / Creator@123
