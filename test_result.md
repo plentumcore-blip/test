@@ -371,6 +371,21 @@ frontend:
         agent: "testing"
         comment: "✅ TESTED: Amazon redirect link fix working perfectly! Successfully tested complete flow: 1) Got assignment and called GET /api/v1/assignments/{assignment_id}/amazon-link, 2) Verified redirect_url contains correct /api/redirect/ prefix (https://runapp-6.preview.emergentagent.com/api/redirect/5576cd616fa34ca9), 3) Tested redirect endpoint WITHOUT authentication and received 302 redirect to Amazon URL (https://www.amazon.com/dp/B08N5WRWNW?tag=demo-20), 4) Confirmed click logging is working (302 response indicates successful click log creation). The Kubernetes ingress routing fix is working correctly."
 
+  - task: "Fix seed database name"
+    implemented: true
+    working: true
+    file: "/app/backend/seed.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Fixed seed.py to use correct database name (affitarget_db instead of influiv_db) to match the backend configuration."
+      - working: true
+        agent: "testing"
+        comment: "✅ TESTED: Seed database fix working perfectly! Successfully tested all three seed accounts: 1) admin@example.com / Admin@123 (role: admin), 2) brand@example.com / Brand@123 (role: brand), 3) creator@example.com / Creator@123 (role: influencer). All accounts login successfully with correct roles. Database seeding is working correctly with affitarget_db."
+
   - task: "Fix brand campaign filtering"
     implemented: true
     working: true
