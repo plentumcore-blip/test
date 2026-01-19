@@ -81,6 +81,10 @@ export default function BrandCampaigns() {
       toast.error('Post window end date must be after start date');
       return;
     }
+    if (postStart < purchaseStart) {
+      toast.error('Post start date cannot be earlier than purchase start date');
+      return;
+    }
     
     setSaving(true);
     try {
