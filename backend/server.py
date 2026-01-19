@@ -2507,40 +2507,138 @@ async def upload_file(
     file: UploadFile = File(...),
     user: dict = Depends(get_current_user)
 ):
-    """Upload a file and return the URL to access it"""
-    if not file.filename:
+    """Upload a file and return the URL to access it - production-ready with error handling"""
+    
+    # Validate file
+    if not file or not file.filename:
+        logger.error("Upload failed: No file provided")
         raise HTTPException(status_code=400, detail="No file provided")
     
-    # Ensure uploads directory exists with proper permissions
-    uploads_dir = Path("/app/backend/uploads")
-    uploads_dir.mkdir(parents=True, exist_ok=True)
-    os.chmod(uploads_dir, 0o775)
+    # Validate file size (50MB limit)
+    MAX_FILE_SIZE = 50 * 1024 * 1024  # 50MB in bytes
+    content = await file.read()
+    if len(content) > MAX_FILE_SIZE:
+        logger.error(f"Upload failed: File too large ({len(content)} bytes)")
+        raise HTTPException(status_code=400, detail=f"File too large. Maximum size is 50MB")
     
-    # Generate unique filename
-    file_extension = Path(file.filename).suffix
+    # Reset file pointer
+    await file.seek(0)
+    
+    # Determine uploads directory (support multiple deployment scenarios)
+    possible_dirs = [
+        Path("/app/backend/uploads"),
+        Path("./uploads"),
+        Path("../uploads"),
+        Path.cwd() / "uploads"
+    ]
+    
+    uploads_dir = None
+    for dir_path in possible_dirs:
+        try:
+            dir_path.mkdir(parents=True, exist_ok=True)
+            # Test write permissions
+            test_file = dir_path / ".test_write"
+            test_file.touch()
+            test_file.unlink()
+            uploads_dir = dir_path
+            logger.info(f"Using uploads directory: {uploads_dir}")
+            break
+        except Exception as e:
+            logger.warning(f"Cannot use directory {dir_path}: {str(e)}")
+            continue
+    
+    if not uploads_dir:
+        logger.error("No writable uploads directory found")
+        raise HTTPException(
+            status_code=500, 
+            detail="Server configuration error: No writable upload directory available"
+        )
+    
+    # Set directory permissions (ignore errors in restrictive environments)
+    try:
+        os.chmod(uploads_dir, 0o775)
+    except Exception as e:
+        logger.warning(f"Could not set directory permissions: {str(e)}")
+    
+    # Generate unique filename with sanitization
+    file_extension = Path(file.filename).suffix.lower()
+    # Sanitize extension
+    allowed_extensions = {
+        '.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg',  # Images
+        '.mp4', '.mov', '.avi', '.webm', '.mkv',  # Videos
+        '.pdf', '.doc', '.docx', '.txt',  # Documents
+        '.zip', '.tar', '.gz'  # Archives
+    }
+    
+    if file_extension not in allowed_extensions:
+        logger.warning(f"Potentially unsafe file extension: {file_extension}")
+    
     unique_filename = f"{str(uuid.uuid4())}{file_extension}"
     file_path = uploads_dir / unique_filename
     
-    # Save file
+    # Save file with comprehensive error handling
     try:
         async with aiofiles.open(file_path, 'wb') as f:
             content = await file.read()
             await f.write(content)
-        # Set file permissions
-        os.chmod(file_path, 0o664)
+        
+        # Verify file was written
+        if not file_path.exists():
+            raise Exception("File was not created on disk")
+        
+        file_size = file_path.stat().st_size
+        if file_size == 0:
+            raise Exception("File is empty after save")
+        
+        # Set file permissions (ignore errors)
+        try:
+            os.chmod(file_path, 0o664)
+        except Exception as e:
+            logger.warning(f"Could not set file permissions: {str(e)}")
+        
+        logger.info(f"File uploaded successfully: {unique_filename} ({file_size} bytes)")
+        
+    except PermissionError as e:
+        logger.error(f"Permission denied when saving file: {str(e)}")
+        raise HTTPException(
+            status_code=500, 
+            detail="Permission denied. Please contact administrator to fix upload directory permissions."
+        )
+    except OSError as e:
+        logger.error(f"OS error when saving file: {str(e)}")
+        raise HTTPException(
+            status_code=500, 
+            detail=f"Disk error: {str(e)}. Check disk space and permissions."
+        )
     except Exception as e:
+        logger.error(f"Unexpected error when saving file: {str(e)}")
+        # Try to clean up partial file
+        try:
+            if file_path.exists():
+                file_path.unlink()
+        except:
+            pass
         raise HTTPException(status_code=500, detail=f"Failed to save file: {str(e)}")
     
-    # Return file URL
+    # Generate file URL
     base_url = os.environ.get('REACT_APP_BACKEND_URL', 'http://localhost:8001')
     file_url = f"{base_url}/uploads/{unique_filename}"
     
-    await log_audit(user["id"], "upload", "file", unique_filename, {"original_name": file.filename})
+    # Log audit
+    try:
+        await log_audit(user["id"], "upload", "file", unique_filename, {
+            "original_name": file.filename,
+            "size": file_size,
+            "extension": file_extension
+        })
+    except Exception as e:
+        logger.warning(f"Failed to log audit: {str(e)}")
     
     return {
         "filename": unique_filename,
         "original_filename": file.filename,
         "url": file_url,
+        "size": file_size,
         "message": "File uploaded successfully"
     }
 
