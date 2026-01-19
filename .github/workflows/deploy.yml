@@ -1,0 +1,65 @@
+name: Deploy influiv.com
+
+on:
+  push:
+    branches: ["main"]
+
+concurrency:
+  group: influiv-deploy
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: [self-hosted, influiv]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Sync repo to /opt/influiv/app (preserve server secrets + data)
+        run: |
+          mkdir -p /opt/influiv/app
+
+          rsync -a --delete \
+            --exclude ".git/" \
+            --exclude ".github/" \
+            --exclude "backend/.env" \
+            --exclude "backend/venv/" \
+            --exclude "backend/uploads/" \
+            --exclude "storage/" \
+            --exclude "test/" \
+            --exclude "tests/" \
+            --exclude "test_reports/" \
+            --exclude "memory/" \
+            --exclude ".emergent/" \
+            ./ /opt/influiv/app/
+
+      - name: Backend deps (Python 3.11)
+        run: |
+          cd /opt/influiv/app/backend
+          if [ ! -d "venv" ]; then
+            python3.11 -m venv venv
+          fi
+          ./venv/bin/pip install --upgrade pip setuptools wheel
+          ./venv/bin/pip install -r requirements.txt
+          ./venv/bin/pip uninstall -y bcrypt passlib || true
+          ./venv/bin/pip install "bcrypt==4.0.1" "passlib==1.7.4"
+
+      - name: Frontend build
+        env:
+          REACT_APP_BACKEND_URL: https://influiv.com
+        run: |
+          cd /opt/influiv/app/frontend
+          corepack enable || true
+          yarn install --frozen-lockfile || yarn install
+          yarn build
+
+      - name: Restart backend + reload nginx
+        run: |
+          sudo systemctl restart influiv-backend
+          sudo systemctl reload nginx
+
+      - name: Smoke test
+        run: |
+          curl -I https://influiv.com/ || true
+          curl -I https://influiv.com/api/v1/campaigns || true
