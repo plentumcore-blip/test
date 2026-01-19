@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Save, Plus, Trash2, Video, BarChart3 } from 'lucide-react';
+import { Save, Plus, Trash2, Video, BarChart3, Upload, Check } from 'lucide-react';
 import { toast } from 'sonner';
 import AdminSidebar from '../../components/AdminSidebar';
 import { useAuth } from '../../contexts/AuthContext';
