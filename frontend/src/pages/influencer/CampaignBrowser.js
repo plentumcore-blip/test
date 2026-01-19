@@ -117,14 +117,24 @@ export default function CampaignBrowser() {
                   </div>
                 </div>
 
-                <button
-                  data-testid={`apply-btn-${campaign.id}`}
-                  onClick={() => applyToCampaign(campaign.id)}
-                  className="btn-primary w-full flex items-center justify-center gap-2"
-                >
-                  <ExternalLink className="w-5 h-5" />
-                  Apply Now
-                </button>
+                <div className="flex gap-3">
+                  <button
+                    data-testid={`view-btn-${campaign.id}`}
+                    onClick={() => navigate(`/influencer/campaigns/${campaign.id}`)}
+                    className="btn-secondary flex-1 flex items-center justify-center gap-2"
+                  >
+                    <ShoppingBag className="w-5 h-5" />
+                    View Campaign
+                  </button>
+                  <button
+                    data-testid={`apply-btn-${campaign.id}`}
+                    onClick={() => applyToCampaign(campaign.id)}
+                    className="btn-primary flex-1 flex items-center justify-center gap-2"
+                  >
+                    <ExternalLink className="w-5 h-5" />
+                    Apply Now
+                  </button>
+                </div>
               </div>
             ))}
           </div>
