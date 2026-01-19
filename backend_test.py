@@ -1308,12 +1308,20 @@ class APITester:
         print("=" * 80)
         
         try:
+            # Test the CRITICAL file upload and static serving fix first
+            print("\n🔥 TESTING CRITICAL FILE UPLOAD FIX (HIGHEST PRIORITY)")
+            self.test_file_upload_and_static_serving_fix()
+            
             # Test the specific bug fixes from review request
-            print("\n🔧 TESTING BUG FIXES (HIGH PRIORITY)")
+            print("\n🔧 TESTING OTHER BUG FIXES (HIGH PRIORITY)")
             self.test_purchase_proof_submission_fix()
             self.test_amazon_redirect_link_fix()
             self.test_brand_campaign_filtering_fix()
             self.test_seed_database_fix()
+            
+            # Test purchase proof with file upload integration
+            print("\n📎 TESTING PURCHASE PROOF WITH FILE UPLOAD")
+            self.test_purchase_proof_with_file_upload()
             
             # Test existing features
             print("\n📋 TESTING EXISTING FEATURES")
@@ -1340,13 +1348,27 @@ class APITester:
         print(f"❌ Failed: {failed_tests}")
         print(f"Success Rate: {(passed_tests/total_tests*100):.1f}%" if total_tests > 0 else "No tests run")
         
-        # Separate bug fix results from feature results
+        # Separate file upload tests from other tests
+        file_upload_tests = [t for t in self.test_results if any(keyword in t['test'].lower() for keyword in 
+                            ['file upload', 'static file', 'upload', '/api/uploads'])]
         bug_fix_tests = [t for t in self.test_results if any(keyword in t['test'].lower() for keyword in 
-                        ['purchase proof', 'amazon redirect', 'brand campaign filtering', 'seed account'])]
-        feature_tests = [t for t in self.test_results if t not in bug_fix_tests]
+                        ['purchase proof', 'amazon redirect', 'brand campaign filtering', 'seed account']) and t not in file_upload_tests]
+        feature_tests = [t for t in self.test_results if t not in file_upload_tests and t not in bug_fix_tests]
+        
+        if file_upload_tests:
+            print(f"\n🔥 FILE UPLOAD & STATIC SERVING FIX RESULTS (CRITICAL):")
+            file_upload_passed = len([t for t in file_upload_tests if t['success']])
+            file_upload_failed = len(file_upload_tests) - file_upload_passed
+            print(f"  File Upload Tests Passed: {file_upload_passed}/{len(file_upload_tests)}")
+            
+            if file_upload_failed > 0:
+                print("  🚨 FAILED FILE UPLOAD TESTS:")
+                for test in file_upload_tests:
+                    if not test['success']:
+                        print(f"    • {test['test']}: {test['message']}")
         
         if bug_fix_tests:
-            print(f"\n🔧 BUG FIX RESULTS:")
+            print(f"\n🔧 OTHER BUG FIX RESULTS:")
             bug_fix_passed = len([t for t in bug_fix_tests if t['success']])
             bug_fix_failed = len(bug_fix_tests) - bug_fix_passed
             print(f"  Bug Fixes Passed: {bug_fix_passed}/{len(bug_fix_tests)}")
