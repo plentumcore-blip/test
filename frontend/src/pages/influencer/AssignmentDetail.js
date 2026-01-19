@@ -73,6 +73,21 @@ export default function AssignmentDetail() {
 
   const handlePurchaseSubmit = async (e) => {
     e.preventDefault();
+    
+    // Validate required fields
+    if (!purchaseData.order_id) {
+      toast.error('Order ID is required');
+      return;
+    }
+    if (!purchaseData.order_date) {
+      toast.error('Order date is required');
+      return;
+    }
+    if (!purchaseData.screenshot_url) {
+      toast.error('Please upload a screenshot of your order');
+      return;
+    }
+    
     setSubmitting(true);
 
     try {
