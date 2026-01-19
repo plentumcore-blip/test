@@ -203,12 +203,17 @@ export default function CampaignDetail() {
             Browse More Campaigns
           </button>
           <button
-            onClick={applyToCampaign}
-            disabled={applying}
-            className="btn-primary flex-1 flex items-center justify-center gap-2"
+            onClick={() => !isPurchaseWindowPassed && applyToCampaign()}
+            disabled={applying || isPurchaseWindowPassed}
+            className={`flex-1 flex items-center justify-center gap-2 ${
+              isPurchaseWindowPassed 
+                ? 'btn-secondary opacity-50 cursor-not-allowed' 
+                : 'btn-primary'
+            }`}
+            title={isPurchaseWindowPassed ? 'Purchase window has ended' : 'Apply to this campaign'}
           >
             <ExternalLink className="w-5 h-5" />
-            {applying ? 'Applying...' : 'Apply Now'}
+            {applying ? 'Applying...' : (isPurchaseWindowPassed ? 'Campaign Closed' : 'Apply Now')}
           </button>
         </div>
       </div>
