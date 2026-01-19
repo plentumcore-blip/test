@@ -478,7 +478,6 @@ export default function InfluencerProfileSetup() {
               onUploadComplete={handleVideoUpload}
               accept="video/*"
               label="Upload Portfolio Video"
-              uploading={uploadingVideo}
             />
           </div>
 
