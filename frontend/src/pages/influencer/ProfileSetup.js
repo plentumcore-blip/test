@@ -242,15 +242,37 @@ export default function InfluencerProfileSetup() {
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-[#0B1220] mb-2">Avatar URL</label>
-              <input
-                data-testid="avatar-input"
-                type="url"
-                value={profile.avatar_url}
-                onChange={(e) => setProfile({ ...profile, avatar_url: e.target.value })}
-                className="input"
-                placeholder="https://example.com/avatar.jpg"
-              />
+              <label className="block text-sm font-semibold text-[#0B1220] mb-2">Profile Avatar</label>
+              <div className="flex flex-col sm:flex-row items-center gap-4">
+                {profile.avatar_url ? (
+                  <div className="relative">
+                    <img
+                      src={profile.avatar_url}
+                      alt="Avatar"
+                      className="w-24 h-24 rounded-full object-cover border-4 border-[#1F66FF]"
+                    />
+                    <button
+                      onClick={() => setProfile({ ...profile, avatar_url: '' })}
+                      className="absolute -top-2 -right-2 p-1 bg-red-600 text-white rounded-full hover:bg-red-700"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+                ) : (
+                  <div className="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center border-4 border-gray-300">
+                    <User className="w-12 h-12 text-gray-400" />
+                  </div>
+                )}
+                <div className="flex-1">
+                  <FileUpload
+                    onFileSelect={handleAvatarUpload}
+                    accept="image/*"
+                    label="Upload Avatar"
+                    uploading={uploadingAvatar}
+                  />
+                  <p className="text-xs text-gray-600 mt-2">Recommended: Square image, at least 200x200px</p>
+                </div>
+              </div>
             </div>
 
             <button
