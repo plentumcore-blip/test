@@ -301,8 +301,12 @@ export default function BrandCampaigns() {
                       type="date"
                       value={dateForm.post_window_start}
                       onChange={(e) => setDateForm({ ...dateForm, post_window_start: e.target.value })}
+                      min={dateForm.purchase_window_start}
                       className="input"
                     />
+                    {dateForm.purchase_window_start && (
+                      <p className="text-xs text-gray-600 mt-1">Must be on or after purchase start date</p>
+                    )}
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">End Date</label>
@@ -311,6 +315,7 @@ export default function BrandCampaigns() {
                       type="date"
                       value={dateForm.post_window_end}
                       onChange={(e) => setDateForm({ ...dateForm, post_window_end: e.target.value })}
+                      min={dateForm.post_window_start}
                       className="input"
                     />
                   </div>
