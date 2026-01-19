@@ -988,6 +988,43 @@ async def update_campaign_dates(
     await log_audit(user["id"], "update_dates", "campaign", campaign_id, update_data)
     return {"message": "Campaign dates updated successfully"}
 
+@api_router.delete("/campaigns/{campaign_id}")
+async def delete_campaign(
+    campaign_id: str,
+    user: dict = Depends(require_role([UserRole.BRAND, UserRole.ADMIN]))
+):
+    """Delete a campaign and all associated data"""
+    campaign = await db.campaigns.find_one({"id": campaign_id})
+    if not campaign:
+        raise HTTPException(status_code=404, detail="Campaign not found")
+    
+    # Check authorization (brands can only delete their own campaigns)
+    if user["role"] == UserRole.BRAND.value:
+        brand = await db.brands.find_one({"user_id": user["id"]})
+        if campaign["brand_id"] != brand["id"]:
+            raise HTTPException(status_code=403, detail="Not authorized to delete this campaign")
+    
+    # Check if campaign has active assignments
+    active_assignments = await db.assignments.find_one({
+        "campaign_id": campaign_id,
+        "status": {"$nin": ["completed", "cancelled"]}
+    })
+    
+    if active_assignments:
+        raise HTTPException(
+            status_code=400, 
+            detail="Cannot delete campaign with active assignments. Please complete or cancel all assignments first."
+        )
+    
+    # Delete associated data
+    await db.applications.delete_many({"campaign_id": campaign_id})
+    await db.assignments.delete_many({"campaign_id": campaign_id})
+    await db.campaigns.delete_one({"id": campaign_id})
+    
+    await log_audit(user["id"], "delete", "campaign", campaign_id)
+    
+    return {"message": "Campaign deleted successfully"}
+
 # Applications
 @api_router.post("/applications")
 async def apply_to_campaign(application_data: Dict[str, Any], user: dict = Depends(require_role([UserRole.INFLUENCER]))):
