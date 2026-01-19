@@ -431,7 +431,6 @@ export default function InfluencerProfileSetup() {
               onUploadComplete={handleImageUpload}
               accept="image/*"
               label="Upload Portfolio Image"
-              uploading={uploadingImage}
             />
           </div>
 
