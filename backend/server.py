@@ -1026,14 +1026,14 @@ async def get_amazon_link(assignment_id: str, user: dict = Depends(require_role(
     if assignment["influencer_id"] != influencer["id"]:
         raise HTTPException(status_code=403, detail="Not authorized")
     
-    # Generate redirect URL
+    # Generate redirect URL with /api prefix for proper routing
     base_url = os.environ.get('REACT_APP_BACKEND_URL', 'http://localhost:8001')
-    redirect_url = f"{base_url}/a/{assignment['redirect_token']}"
+    redirect_url = f"{base_url}/api/redirect/{assignment['redirect_token']}"
     
     return {"redirect_url": redirect_url, "token": assignment["redirect_token"]}
 
-# Public redirect endpoint (no /api/v1 prefix)
-@app.get("/a/{token}")
+# Public redirect endpoint (with /api prefix for Kubernetes ingress)
+@app.get("/api/redirect/{token}")
 async def redirect_amazon(token: str, request: Request):
     assignment = await db.assignments.find_one({"redirect_token": token})
     if not assignment:
