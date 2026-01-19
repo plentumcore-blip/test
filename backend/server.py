@@ -309,6 +309,51 @@ class Transaction(BaseModel):
 app = FastAPI()
 api_router = APIRouter(prefix="/api/v1")
 
+# Startup event - ensure uploads directory is ready
+@app.on_event("startup")
+async def startup_event():
+    """Initialize application - ensure uploads directory exists and is writable"""
+    logger.info("Starting application initialization...")
+    
+    # Setup uploads directory
+    possible_dirs = [
+        Path("/app/backend/uploads"),
+        Path("./uploads"),
+        Path("../uploads"),
+        Path.cwd() / "uploads"
+    ]
+    
+    uploads_ready = False
+    for dir_path in possible_dirs:
+        try:
+            # Create directory
+            dir_path.mkdir(parents=True, exist_ok=True)
+            
+            # Test write permissions
+            test_file = dir_path / ".startup_test"
+            test_file.write_text("test")
+            test_file.unlink()
+            
+            # Try to set permissions (ignore errors in restrictive environments)
+            try:
+                os.chmod(dir_path, 0o775)
+            except:
+                pass
+            
+            logger.info(f"✓ Uploads directory ready: {dir_path.absolute()}")
+            uploads_ready = True
+            break
+            
+        except Exception as e:
+            logger.warning(f"✗ Cannot use uploads directory {dir_path}: {str(e)}")
+            continue
+    
+    if not uploads_ready:
+        logger.error("❌ CRITICAL: No writable uploads directory found! File uploads will fail.")
+        logger.error("Please ensure /app/backend/uploads directory exists with write permissions.")
+    
+    logger.info("Application startup complete")
+
 # Helper functions
 def hash_password(password: str) -> str:
     return pwd_context.hash(password)
