@@ -2540,10 +2540,15 @@ async def get_admin_reports(user: dict = Depends(require_role([UserRole.ADMIN]))
 # File Upload Endpoint
 @api_router.post("/upload")
 async def upload_file(
+    request: Request,
     file: UploadFile = File(...),
     user: dict = Depends(get_current_user)
 ):
-    """Upload a file and return the URL to access it - production-ready with error handling"""
+    """
+    Upload a file and return the filename.
+    The file can be accessed via /api/files/{filename}
+    This approach stores only filenames, making it work across all environments.
+    """
     
     # Validate file
     if not file or not file.filename:
@@ -2560,35 +2565,9 @@ async def upload_file(
     # Reset file pointer
     await file.seek(0)
     
-    # Determine uploads directory (support multiple deployment scenarios)
-    possible_dirs = [
-        Path("/app/backend/uploads"),
-        Path("./uploads"),
-        Path("../uploads"),
-        Path.cwd() / "uploads"
-    ]
-    
-    uploads_dir = None
-    for dir_path in possible_dirs:
-        try:
-            dir_path.mkdir(parents=True, exist_ok=True)
-            # Test write permissions
-            test_file = dir_path / ".test_write"
-            test_file.touch()
-            test_file.unlink()
-            uploads_dir = dir_path
-            logger.info(f"Using uploads directory: {uploads_dir}")
-            break
-        except Exception as e:
-            logger.warning(f"Cannot use directory {dir_path}: {str(e)}")
-            continue
-    
-    if not uploads_dir:
-        logger.error("No writable uploads directory found")
-        raise HTTPException(
-            status_code=500, 
-            detail="Server configuration error: No writable upload directory available"
-        )
+    # Use fixed uploads directory
+    uploads_dir = Path("/app/backend/uploads")
+    uploads_dir.mkdir(parents=True, exist_ok=True)
     
     # Set directory permissions (ignore errors in restrictive environments)
     try:
@@ -2656,9 +2635,24 @@ async def upload_file(
             pass
         raise HTTPException(status_code=500, detail=f"Failed to save file: {str(e)}")
     
-    # Generate file URL - use /api/uploads/ prefix for Kubernetes ingress routing
-    base_url = os.environ.get('REACT_APP_BACKEND_URL', 'http://localhost:8001')
-    file_url = f"{base_url}/api/uploads/{unique_filename}"
+    # Construct the URL dynamically based on request origin
+    # This makes it work in any environment (dev, staging, production)
+    origin = request.headers.get('origin', '')
+    host = request.headers.get('host', '')
+    
+    # Determine base URL from request
+    if origin:
+        base_url = origin
+    elif host:
+        # Determine protocol
+        forwarded_proto = request.headers.get('x-forwarded-proto', 'https')
+        base_url = f"{forwarded_proto}://{host}"
+    else:
+        # Fallback to environment variable
+        base_url = os.environ.get('REACT_APP_BACKEND_URL', 'http://localhost:8001')
+    
+    # Construct full URL using the /api/files/ endpoint
+    file_url = f"{base_url}/api/files/{unique_filename}"
     
     # Log audit
     try:
@@ -2679,11 +2673,65 @@ async def upload_file(
     }
 
 
+# Dynamic file serving endpoint - works across all environments
+@api_router.get("/files/{filename}")
+async def get_file(filename: str):
+    """
+    Serve uploaded files dynamically.
+    This endpoint allows files to be accessed regardless of deployment environment.
+    """
+    # Sanitize filename to prevent directory traversal
+    safe_filename = Path(filename).name
+    if safe_filename != filename or '..' in filename or '/' in filename:
+        raise HTTPException(status_code=400, detail="Invalid filename")
+    
+    uploads_dir = Path("/app/backend/uploads")
+    file_path = uploads_dir / safe_filename
+    
+    if not file_path.exists():
+        logger.warning(f"File not found: {safe_filename}")
+        raise HTTPException(status_code=404, detail="File not found")
+    
+    # Determine content type
+    extension = file_path.suffix.lower()
+    content_types = {
+        '.jpg': 'image/jpeg',
+        '.jpeg': 'image/jpeg',
+        '.png': 'image/png',
+        '.gif': 'image/gif',
+        '.webp': 'image/webp',
+        '.svg': 'image/svg+xml',
+        '.mp4': 'video/mp4',
+        '.mov': 'video/quicktime',
+        '.avi': 'video/x-msvideo',
+        '.webm': 'video/webm',
+        '.mkv': 'video/x-matroska',
+        '.pdf': 'application/pdf',
+        '.doc': 'application/msword',
+        '.docx': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        '.txt': 'text/plain',
+        '.zip': 'application/zip',
+        '.tar': 'application/x-tar',
+        '.gz': 'application/gzip'
+    }
+    
+    content_type = content_types.get(extension, 'application/octet-stream')
+    
+    return FileResponse(
+        path=file_path,
+        media_type=content_type,
+        filename=safe_filename
+    )
+
+
 # Include router
 app.include_router(api_router)
 
-# Serve uploaded files with /api prefix for Kubernetes ingress routing
-app.mount("/api/uploads", StaticFiles(directory="/app/backend/uploads"), name="uploads")
+# Also keep static files mount as backup (for backwards compatibility)
+try:
+    app.mount("/api/uploads", StaticFiles(directory="/app/backend/uploads"), name="uploads")
+except Exception as e:
+    logger.warning(f"Could not mount static files: {str(e)}")
 
 app.add_middleware(
     CORSMiddleware,
