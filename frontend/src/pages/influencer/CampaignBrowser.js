@@ -96,7 +96,7 @@ export default function CampaignBrowser() {
                 : false;
               
               return (
-              <div key={campaign.id} className="card hover:scale-[1.02] transition-transform" data-testid={`campaign-card-${campaign.id}`}>
+                <div key={campaign.id} className="card hover:scale-[1.02] transition-transform" data-testid={`campaign-card-${campaign.id}`}>
                 <div className="mb-4">
                   <div className="flex items-center justify-between mb-3">
                     <h3 className="text-2xl font-bold text-[#0B1220]">{campaign.title}</h3>
