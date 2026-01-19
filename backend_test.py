@@ -22,7 +22,7 @@ from datetime import datetime
 from typing import Dict, Any, Optional
 
 # Configuration
-BASE_URL = "https://runapp-6.preview.emergentagent.com/api/v1"
+BASE_URL = "https://affbridge.preview.emergentagent.com/api/v1"
 TIMEOUT = 30
 
 class APITester:
@@ -659,7 +659,7 @@ class APITester:
                             redirect_path = redirect_url
                         
                         # Test the redirect endpoint
-                        base_domain = "https://runapp-6.preview.emergentagent.com"
+                        base_domain = "https://affbridge.preview.emergentagent.com"
                         full_redirect_url = f"{base_domain}{redirect_path}"
                         
                         redirect_response = public_session.get(full_redirect_url, allow_redirects=False)

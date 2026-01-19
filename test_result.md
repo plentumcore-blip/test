@@ -375,7 +375,7 @@ frontend:
         comment: "Changed redirect URL from /a/{token} to /api/redirect/{token} to properly route through Kubernetes ingress which requires /api prefix for backend routes. This should fix the issue where clicking 'Buy on Amazon' was redirecting to the wrong URL."
       - working: true
         agent: "testing"
-        comment: "✅ TESTED: Amazon redirect link fix working perfectly! Successfully tested complete flow: 1) Got assignment and called GET /api/v1/assignments/{assignment_id}/amazon-link, 2) Verified redirect_url contains correct /api/redirect/ prefix (https://runapp-6.preview.emergentagent.com/api/redirect/5576cd616fa34ca9), 3) Tested redirect endpoint WITHOUT authentication and received 302 redirect to Amazon URL (https://www.amazon.com/dp/B08N5WRWNW?tag=demo-20), 4) Confirmed click logging is working (302 response indicates successful click log creation). The Kubernetes ingress routing fix is working correctly."
+        comment: "✅ TESTED: Amazon redirect link fix working perfectly! Successfully tested complete flow: 1) Got assignment and called GET /api/v1/assignments/{assignment_id}/amazon-link, 2) Verified redirect_url contains correct /api/redirect/ prefix (https://affbridge.preview.emergentagent.com/api/redirect/5576cd616fa34ca9), 3) Tested redirect endpoint WITHOUT authentication and received 302 redirect to Amazon URL (https://www.amazon.com/dp/B08N5WRWNW?tag=demo-20), 4) Confirmed click logging is working (302 response indicates successful click log creation). The Kubernetes ingress routing fix is working correctly."
 
   - task: "Fix seed database name"
     implemented: true
@@ -591,7 +591,7 @@ agent_communication:
       - Verified GET /api/v1/assignments/{assignment_id}/amazon-link returns correct URL format
       - Tested redirect endpoint WITHOUT authentication: returns 302 to Amazon URL
       - Confirmed click logging functionality working (302 response indicates successful DB logging)
-      - Example redirect: https://runapp-6.preview.emergentagent.com/api/redirect/5576cd616fa34ca9 → Amazon
+      - Example redirect: https://affbridge.preview.emergentagent.com/api/redirect/5576cd616fa34ca9 → Amazon
       
       ✅ BRAND CAMPAIGN FILTERING FIX (HIGH PRIORITY):
       - Successfully tested campaign isolation between brands
