@@ -542,3 +542,31 @@ agent_communication:
       - NEW public landing page API endpoint working perfectly ✓
       
       ✨ READY FOR PRODUCTION: All backend functionality tested and verified working correctly
+  - agent: "main"
+    message: |
+      FIXED THREE USER-REPORTED ISSUES:
+      
+      1. PURCHASE PROOF SUBMISSION BUG:
+         - Issue: Backend expected screenshot_urls as array, frontend was sending screenshot_url as string
+         - Fix: Updated frontend to convert single URL to array format before submission
+         - File: /app/frontend/src/pages/influencer/AssignmentDetail.js
+      
+      2. AMAZON REDIRECT LINK NOT WORKING:
+         - Issue: Buy on Amazon link was redirecting to wrong URL (Emergent app link instead of Amazon)
+         - Root cause: /a/{token} route not properly routing through Kubernetes ingress
+         - Fix: Changed to /api/redirect/{token} to align with ingress requirements
+         - File: /app/backend/server.py
+      
+      3. BRAND SEEING ALL CAMPAIGNS:
+         - Issue: Brand dashboard showing campaigns from other brands
+         - Fix: Enhanced campaign filtering to ensure brand_id filter is always applied
+         - File: /app/backend/server.py
+      
+      4. ORDER DATE VALIDATION:
+         - Issue: Order date could be set to future dates
+         - Fix: Added max date attribute to prevent future date selection
+         - File: /app/frontend/src/pages/influencer/AssignmentDetail.js
+      
+      Also fixed database name mismatch in seed.py to use affitarget_db instead of influiv_db.
+      
+      Backend restarted and running. Ready for comprehensive testing of all fixes.
