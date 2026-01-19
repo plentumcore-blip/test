@@ -281,7 +281,6 @@ export default function InfluencerProfileSetup() {
                     onUploadComplete={handleAvatarUpload}
                     accept="image/*"
                     label="Upload Avatar"
-                    uploading={uploadingAvatar}
                   />
                   <p className="text-xs text-gray-600 mt-2">Recommended: Square image, at least 200x200px</p>
                 </div>
