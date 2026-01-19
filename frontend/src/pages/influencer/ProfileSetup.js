@@ -1,15 +1,23 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { User, Instagram, Music, Trash2, Plus, Check } from 'lucide-react';
+import { User, Instagram, Music, Trash2, Plus, Check, Eye, Upload, X, ExternalLink } from 'lucide-react';
 import { toast } from 'sonner';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../../components/ui/dialog';
 import { Button } from '../../components/ui/button';
+import FileUpload from '../../components/FileUpload';
 
 const API_BASE = `${process.env.REACT_APP_BACKEND_URL}/api/v1`;
 
 export default function InfluencerProfileSetup() {
-  const [profile, setProfile] = useState({ name: '', bio: '', avatar_url: '' });
+  const [profile, setProfile] = useState({ 
+    name: '', 
+    bio: '', 
+    avatar_url: '',
+    portfolio_images: [],
+    portfolio_videos: [],
+    public_profile_slug: ''
+  });
   const [platforms, setPlatforms] = useState([]);
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [platformForm, setPlatformForm] = useState({
@@ -20,6 +28,8 @@ export default function InfluencerProfileSetup() {
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const [uploadingVideo, setUploadingVideo] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -37,7 +47,10 @@ export default function InfluencerProfileSetup() {
         setProfile({
           name: meRes.data.profile.name || '',
           bio: meRes.data.profile.bio || '',
-          avatar_url: meRes.data.profile.avatar_url || ''
+          avatar_url: meRes.data.profile.avatar_url || '',
+          portfolio_images: meRes.data.profile.portfolio_images || [],
+          portfolio_videos: meRes.data.profile.portfolio_videos || [],
+          public_profile_slug: meRes.data.profile.public_profile_slug || ''
         });
       }
       
@@ -52,13 +65,69 @@ export default function InfluencerProfileSetup() {
   const saveProfile = async () => {
     setSaving(true);
     try {
-      await axios.put(`${API_BASE}/influencer/profile`, profile, { withCredentials: true });
+      const response = await axios.put(`${API_BASE}/influencer/profile`, profile, { withCredentials: true });
+      if (response.data.slug) {
+        setProfile({ ...profile, public_profile_slug: response.data.slug });
+      }
       toast.success('Profile updated!');
+      fetchProfile(); // Refresh to get updated slug
     } catch (error) {
       toast.error('Failed to update profile');
     } finally {
       setSaving(false);
     }
+  };
+
+  const handleImageUpload = async (file) => {
+    setUploadingImage(true);
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      
+      const response = await axios.post(`${API_BASE}/upload`, formData, {
+        withCredentials: true,
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+      
+      const newImages = [...profile.portfolio_images, response.data.url];
+      setProfile({ ...profile, portfolio_images: newImages });
+      toast.success('Image added to portfolio!');
+    } catch (error) {
+      toast.error('Failed to upload image');
+    } finally {
+      setUploadingImage(false);
+    }
+  };
+
+  const handleVideoUpload = async (file) => {
+    setUploadingVideo(true);
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      
+      const response = await axios.post(`${API_BASE}/upload`, formData, {
+        withCredentials: true,
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+      
+      const newVideos = [...profile.portfolio_videos, response.data.url];
+      setProfile({ ...profile, portfolio_videos: newVideos });
+      toast.success('Video added to portfolio!');
+    } catch (error) {
+      toast.error('Failed to upload video');
+    } finally {
+      setUploadingVideo(false);
+    }
+  };
+
+  const removeImage = (index) => {
+    const newImages = profile.portfolio_images.filter((_, i) => i !== index);
+    setProfile({ ...profile, portfolio_images: newImages });
+  };
+
+  const removeVideo = (index) => {
+    const newVideos = profile.portfolio_videos.filter((_, i) => i !== index);
+    setProfile({ ...profile, portfolio_videos: newVideos });
   };
 
   const addPlatform = async (e) => {
