@@ -20,6 +20,8 @@ import sys
 import uuid
 from datetime import datetime
 from typing import Dict, Any, Optional
+import io
+from PIL import Image
 
 # Configuration
 BASE_URL = "https://affbridge.preview.emergentagent.com/api/v1"
