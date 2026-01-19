@@ -65,6 +65,11 @@ export default function CampaignLandingPage() {
   }
 
   const brandName = campaign.brand?.company_name || 'Influiv';
+  
+  // Check if purchase window has passed
+  const isPurchaseWindowPassed = campaign.purchase_window_end 
+    ? new Date() > new Date(campaign.purchase_window_end) 
+    : false;
 
   return (
     <div className="min-h-screen bg-white text-[#0B1220]">
