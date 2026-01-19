@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { ShoppingBag, Clock, CheckCircle } from 'lucide-react';
+import { ShoppingBag, Clock, CheckCircle, User, Eye, Edit } from 'lucide-react';
 import { toast } from 'sonner';
 import InfluencerSidebar from '../../components/InfluencerSidebar';
 
@@ -10,6 +10,7 @@ const API_BASE = `${process.env.REACT_APP_BACKEND_URL}/api/v1`;
 
 export default function InfluencerDashboard() {
   const [assignments, setAssignments] = useState([]);
+  const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const { logout, user } = useAuth();
   const navigate = useNavigate();
@@ -26,6 +27,7 @@ export default function InfluencerDashboard() {
         return;
       }
       
+      setProfile(meRes.data.profile);
       await fetchAssignments();
     } catch (error) {
       console.error('Error checking profile:', error);
