@@ -207,6 +207,14 @@ function App() {
             }
           />
           <Route
+            path="/influencer/campaigns/:id"
+            element={
+              <ProtectedRoute allowedRoles={['influencer']}>
+                <CampaignDetail />
+              </ProtectedRoute>
+            }
+          />
+          <Route
             path="/influencer/assignments"
             element={
               <ProtectedRoute allowedRoles={['influencer']}>
