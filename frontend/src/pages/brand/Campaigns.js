@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
-import { ShoppingBag, Plus, Calendar, X, Save } from 'lucide-react';
+import { ShoppingBag, Plus, Calendar, X, Save, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 import BrandSidebar from '../../components/BrandSidebar';
 
@@ -12,6 +12,7 @@ export default function BrandCampaigns() {
   const [campaigns, setCampaigns] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editingCampaign, setEditingCampaign] = useState(null);
+  const [deletingCampaignId, setDeletingCampaignId] = useState(null);
   const [dateForm, setDateForm] = useState({
     purchase_window_start: '',
     purchase_window_end: '',
