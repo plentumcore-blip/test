@@ -507,7 +507,7 @@ export default function InfluencerProfileSetup() {
           
           <div className="mb-4">
             <FileUpload
-              onFileSelect={handleVideoUpload}
+              onUploadComplete={handleVideoUpload}
               accept="video/*"
               label="Upload Portfolio Video"
               uploading={uploadingVideo}
