@@ -125,29 +125,42 @@ export default function CampaignBrowser() {
                   </div>
                 </div>
 
-                <div className="flex gap-3">
-                  <button
-                    data-testid={`view-btn-${campaign.id}`}
-                    onClick={() => navigate(`/influencer/campaigns/${campaign.id}`)}
-                    className="btn-secondary flex-1 flex items-center justify-center gap-2"
-                  >
-                    <ShoppingBag className="w-5 h-5" />
-                    View Campaign
-                  </button>
-                  <button
-                    data-testid={`apply-btn-${campaign.id}`}
-                    onClick={() => !isPurchaseWindowPassed && applyToCampaign(campaign.id)}
-                    disabled={isPurchaseWindowPassed}
-                    className={`flex-1 flex items-center justify-center gap-2 ${
-                      isPurchaseWindowPassed 
-                        ? 'btn-secondary opacity-50 cursor-not-allowed' 
-                        : 'btn-primary'
-                    }`}
-                    title={isPurchaseWindowPassed ? 'Purchase window has ended' : 'Apply to this campaign'}
-                  >
-                    <ExternalLink className="w-5 h-5" />
-                    {isPurchaseWindowPassed ? 'Closed' : 'Apply Now'}
-                  </button>
+                <div className="flex flex-col gap-3">
+                  <div className="flex gap-3">
+                    <button
+                      data-testid={`view-btn-${campaign.id}`}
+                      onClick={() => navigate(`/influencer/campaigns/${campaign.id}`)}
+                      className="btn-secondary flex-1 flex items-center justify-center gap-2"
+                    >
+                      <ShoppingBag className="w-5 h-5" />
+                      View Details
+                    </button>
+                    <button
+                      data-testid={`apply-btn-${campaign.id}`}
+                      onClick={() => !isPurchaseWindowPassed && applyToCampaign(campaign.id)}
+                      disabled={isPurchaseWindowPassed}
+                      className={`flex-1 flex items-center justify-center gap-2 ${
+                        isPurchaseWindowPassed 
+                          ? 'btn-secondary opacity-50 cursor-not-allowed' 
+                          : 'btn-primary'
+                      }`}
+                      title={isPurchaseWindowPassed ? 'Purchase window has ended' : 'Apply to this campaign'}
+                    >
+                      <ExternalLink className="w-5 h-5" />
+                      {isPurchaseWindowPassed ? 'Closed' : 'Apply Now'}
+                    </button>
+                  </div>
+                  
+                  {campaign.landing_page_enabled && campaign.landing_page_slug && (
+                    <button
+                      data-testid={`landing-page-btn-${campaign.id}`}
+                      onClick={() => window.open(`/campaigns/${campaign.landing_page_slug}`, '_blank')}
+                      className="btn-secondary w-full flex items-center justify-center gap-2 text-sm"
+                    >
+                      <ExternalLink className="w-4 h-4" />
+                      View Campaign Landing Page
+                    </button>
+                  )}
                 </div>
               </div>
             );
