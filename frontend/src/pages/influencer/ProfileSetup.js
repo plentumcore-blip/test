@@ -261,9 +261,10 @@ export default function InfluencerProfileSetup() {
                 {profile.avatar_url ? (
                   <div className="relative">
                     <img
-                      src={profile.avatar_url}
+                      src={getFileUrl(profile.avatar_url)}
                       alt="Avatar"
                       className="w-24 h-24 rounded-full object-cover border-4 border-[#1F66FF]"
+                      onError={(e) => { e.target.src = ''; e.target.style.display = 'none'; }}
                     />
                     <button
                       onClick={() => setProfile({ ...profile, avatar_url: '' })}
