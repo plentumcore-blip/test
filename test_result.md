@@ -326,6 +326,54 @@ frontend:
         agent: "testing"
         comment: "✅ TESTED: Routes working correctly. Both /influencer/payment-settings and /admin/reports routes are properly protected and accessible to appropriate user roles. Navigation and authentication working as expected."
 
+  - task: "Fix purchase proof submission data format"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/pages/influencer/AssignmentDetail.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Fixed purchase proof submission - backend expects screenshot_urls as array but frontend was sending screenshot_url as string. Updated frontend to convert single URL to array format before sending to backend."
+
+  - task: "Add order date validation to prevent future dates"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/pages/influencer/AssignmentDetail.js"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Added max date validation to order date input field to prevent users from selecting future dates. Only today and past dates are now allowed."
+
+  - task: "Fix Amazon attribution redirect link"
+    implemented: true
+    working: "NA"
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Changed redirect URL from /a/{token} to /api/redirect/{token} to properly route through Kubernetes ingress which requires /api prefix for backend routes. This should fix the issue where clicking 'Buy on Amazon' was redirecting to the wrong URL."
+
+  - task: "Fix brand campaign filtering"
+    implemented: true
+    working: "NA"
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Enhanced GET /api/v1/campaigns endpoint to ensure brand_id filter is always applied for brand users, even when status filters are provided. Added defensive check to return empty list if brand profile doesn't exist. This should prevent brands from seeing other brands' campaigns."
+
 metadata:
   created_by: "main_agent"
   version: "1.0"
