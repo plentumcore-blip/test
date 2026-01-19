@@ -2116,7 +2116,7 @@ async def get_campaign_landing_page(slug: str):
 # Marketing Landing Page Content (public endpoint - no auth required)
 @api_router.get("/public/landing-content")
 async def get_landing_content():
-    """Get the marketing landing page content (video URL, stats, etc.)"""
+    """Get the marketing landing page content (video URL, stats, portfolio videos, etc.)"""
     content = await db.landing_content.find_one({"id": "default"}, {"_id": 0})
     if not content:
         # Return default content
@@ -2128,7 +2128,8 @@ async def get_landing_content():
                 {"label": "Average ROI", "value": "5.2x"}
             ],
             "videoUrl": "",
-            "videoTitle": "How Influiv Works"
+            "videoTitle": "How Influiv Works",
+            "portfolioVideos": []
         }
     return content
 
