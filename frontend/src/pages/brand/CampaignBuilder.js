@@ -45,6 +45,28 @@ export default function CampaignBuilder() {
         toast.error('Please set all date windows');
         return false;
       }
+      
+      // Validate purchase window dates
+      const purchaseStart = new Date(formData.purchase_window_start);
+      const purchaseEnd = new Date(formData.purchase_window_end);
+      if (purchaseEnd <= purchaseStart) {
+        toast.error('Purchase end date must be after purchase start date');
+        return false;
+      }
+      
+      // Validate post window dates
+      const postStart = new Date(formData.post_window_start);
+      const postEnd = new Date(formData.post_window_end);
+      if (postEnd <= postStart) {
+        toast.error('Post end date must be after post start date');
+        return false;
+      }
+      
+      // Validate post start is not before purchase start
+      if (postStart < purchaseStart) {
+        toast.error('Post start date cannot be earlier than purchase start date');
+        return false;
+      }
     }
     return true;
   };
