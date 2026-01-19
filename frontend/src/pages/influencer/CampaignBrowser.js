@@ -150,7 +150,8 @@ export default function CampaignBrowser() {
                   </button>
                 </div>
               </div>
-            ))}
+            );
+            })}
           </div>
         )}
       </div>
