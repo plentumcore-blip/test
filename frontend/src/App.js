@@ -15,6 +15,7 @@ import ApplicationsBoard from './pages/brand/ApplicationsBoard';
 import BrandAssignments from './pages/brand/Assignments';
 import InfluencerDashboard from './pages/influencer/Dashboard';
 import CampaignBrowser from './pages/influencer/CampaignBrowser';
+import CampaignDetail from './pages/influencer/CampaignDetail';
 import InfluencerAssignments from './pages/influencer/Assignments';
 import AssignmentDetail from './pages/influencer/AssignmentDetail';
 import AdminUsers from './pages/admin/Users';
