@@ -751,15 +751,29 @@ async def create_campaign(campaign_data: Dict[str, Any], user: dict = Depends(re
     if not brand:
         raise HTTPException(status_code=404, detail="Brand profile not found")
     
+    # Parse dates for validation
+    purchase_start = datetime.fromisoformat(campaign_data["purchase_window_start"])
+    purchase_end = datetime.fromisoformat(campaign_data["purchase_window_end"])
+    post_start = datetime.fromisoformat(campaign_data["post_window_start"])
+    post_end = datetime.fromisoformat(campaign_data["post_window_end"])
+    
+    # Validate date windows
+    if purchase_end <= purchase_start:
+        raise HTTPException(status_code=400, detail="Purchase end date must be after purchase start date")
+    if post_end <= post_start:
+        raise HTTPException(status_code=400, detail="Post end date must be after post start date")
+    if post_start < purchase_start:
+        raise HTTPException(status_code=400, detail="Post start date cannot be earlier than purchase start date")
+    
     campaign = Campaign(
         brand_id=brand["id"],
         title=campaign_data["title"],
         description=campaign_data["description"],
         amazon_attribution_url=campaign_data["amazon_attribution_url"],
-        purchase_window_start=datetime.fromisoformat(campaign_data["purchase_window_start"]),
-        purchase_window_end=datetime.fromisoformat(campaign_data["purchase_window_end"]),
-        post_window_start=datetime.fromisoformat(campaign_data["post_window_start"]),
-        post_window_end=datetime.fromisoformat(campaign_data["post_window_end"]),
+        purchase_window_start=purchase_start,
+        purchase_window_end=purchase_end,
+        post_window_start=post_start,
+        post_window_end=post_end,
         asin_allowlist=campaign_data.get("asin_allowlist")
     )
     
