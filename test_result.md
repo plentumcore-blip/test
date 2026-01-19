@@ -711,3 +711,28 @@ agent_communication:
       - No major functionality issues detected
       
       ✨ CONCLUSION: All tested bug fixes are working correctly. The assignment being in "purchase_review" status actually validates that the purchase proof submission is working - the form was already submitted successfully.
+  - agent: "main"
+    message: |
+      CRITICAL FIX APPLIED: Static file 404 error resolved
+      
+      ROOT CAUSE: The static file serving route was mounted at `/uploads` but Kubernetes ingress requires 
+      all backend routes to have `/api` prefix to route correctly to port 8001.
+      
+      FIXES APPLIED:
+      1. Changed static file mount path from `/uploads` to `/api/uploads` (line 2695 in server.py)
+      2. Updated file URL construction in upload endpoint to use `/api/uploads/` prefix (line 2670 in server.py)
+      
+      VERIFICATION:
+      - Backend restarted successfully
+      - curl test to http://localhost:8001/api/uploads/{filename}.png returns 200 OK
+      - Content-Type is correctly detected as image/png
+      
+      READY FOR TESTING:
+      1. Test file upload - POST /api/v1/upload with a file
+      2. Verify the returned URL uses /api/uploads/ prefix
+      3. Test accessing the uploaded file URL directly
+      4. Test purchase proof submission flow end-to-end
+      
+      Test credentials:
+      - Influencer: creator@example.com / Creator@123
+      - Brand: brand@example.com / Brand@123
