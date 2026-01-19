@@ -308,7 +308,7 @@ export default function InfluencerProfileSetup() {
                 )}
                 <div className="flex-1">
                   <FileUpload
-                    onFileSelect={handleAvatarUpload}
+                    onUploadComplete={handleAvatarUpload}
                     accept="image/*"
                     label="Upload Avatar"
                     uploading={uploadingAvatar}
