@@ -109,6 +109,28 @@ export default function BrandCampaigns() {
     }
   };
 
+  const handleDeleteCampaign = async (campaignId, campaignTitle) => {
+    const confirmed = window.confirm(
+      `Are you sure you want to delete "${campaignTitle}"?\n\nThis will delete:\n- All applications\n- All assignments\n- All campaign data\n\nThis action cannot be undone.`
+    );
+    
+    if (!confirmed) return;
+
+    setDeletingCampaignId(campaignId);
+    try {
+      await axios.delete(`${API_BASE}/campaigns/${campaignId}`, {
+        withCredentials: true
+      });
+      toast.success('Campaign deleted successfully!');
+      fetchCampaigns(); // Refresh list
+    } catch (error) {
+      const errorMsg = error.response?.data?.detail || 'Failed to delete campaign';
+      toast.error(errorMsg);
+    } finally {
+      setDeletingCampaignId(null);
+    }
+  };
+
   return (
     <div className="flex min-h-screen bg-[#F8FAFC]">
       <BrandSidebar onLogout={handleLogout} />
