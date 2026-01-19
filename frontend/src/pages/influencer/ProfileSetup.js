@@ -123,8 +123,16 @@ export default function InfluencerProfileSetup() {
       });
       
       const newImages = [...profile.portfolio_images, response.data.url];
-      setProfile({ ...profile, portfolio_images: newImages });
-      toast.success('Image added to portfolio!');
+      const updatedProfile = { ...profile, portfolio_images: newImages };
+      setProfile(updatedProfile);
+      
+      // Automatically save the profile
+      await axios.put(`${API_BASE}/influencer/profile`, updatedProfile, { 
+        withCredentials: true 
+      });
+      
+      toast.success('Image added and saved to portfolio!');
+      fetchProfile(); // Refresh to get latest data
     } catch (error) {
       toast.error('Failed to upload image');
     } finally {
@@ -144,8 +152,16 @@ export default function InfluencerProfileSetup() {
       });
       
       const newVideos = [...profile.portfolio_videos, response.data.url];
-      setProfile({ ...profile, portfolio_videos: newVideos });
-      toast.success('Video added to portfolio!');
+      const updatedProfile = { ...profile, portfolio_videos: newVideos };
+      setProfile(updatedProfile);
+      
+      // Automatically save the profile
+      await axios.put(`${API_BASE}/influencer/profile`, updatedProfile, { 
+        withCredentials: true 
+      });
+      
+      toast.success('Video added and saved to portfolio!');
+      fetchProfile(); // Refresh to get latest data
     } catch (error) {
       toast.error('Failed to upload video');
     } finally {
@@ -156,11 +172,13 @@ export default function InfluencerProfileSetup() {
   const removeImage = (index) => {
     const newImages = profile.portfolio_images.filter((_, i) => i !== index);
     setProfile({ ...profile, portfolio_images: newImages });
+    toast.info('Click "Save Portfolio" to persist changes');
   };
 
   const removeVideo = (index) => {
     const newVideos = profile.portfolio_videos.filter((_, i) => i !== index);
     setProfile({ ...profile, portfolio_videos: newVideos });
+    toast.info('Click "Save Portfolio" to persist changes');
   };
 
   const addPlatform = async (e) => {
