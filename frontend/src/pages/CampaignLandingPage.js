@@ -296,13 +296,22 @@ export default function CampaignLandingPage() {
       <div className="sticky bottom-0 z-30 border-t border-[#E8F1FF] bg-white/95 backdrop-blur">
         <Section className="flex flex-wrap items-center justify-between gap-4 py-3">
           <div className="text-sm">
-            <span className="font-semibold text-[#0E2C7E]">Ready to join?</span> Posting window: {new Date(campaign.post_window_start).toLocaleDateString()} – {new Date(campaign.post_window_end).toLocaleDateString()}
+            <span className="font-semibold text-[#0E2C7E]">
+              {isPurchaseWindowPassed ? 'Campaign ended' : 'Ready to join?'}
+            </span> 
+            {' '}Purchase window: {new Date(campaign.purchase_window_start).toLocaleDateString()} – {new Date(campaign.purchase_window_end).toLocaleDateString()}
           </div>
           <button
-            onClick={() => navigate('/register')}
-            className="inline-flex items-center rounded-xl bg-[#1F66FF] px-5 py-2.5 text-white font-semibold shadow-sm hover:bg-[#0E2C7E]"
+            onClick={() => !isPurchaseWindowPassed && navigate('/register')}
+            disabled={isPurchaseWindowPassed}
+            className={`inline-flex items-center rounded-xl px-5 py-2.5 font-semibold shadow-sm ${
+              isPurchaseWindowPassed 
+                ? 'bg-gray-300 text-gray-500 cursor-not-allowed' 
+                : 'bg-[#1F66FF] text-white hover:bg-[#0E2C7E]'
+            }`}
+            title={isPurchaseWindowPassed ? 'Purchase window has ended' : 'Apply to this campaign'}
           >
-            {campaign.landing_page_cta_text || 'Apply Now'}
+            {isPurchaseWindowPassed ? 'Campaign Closed' : (campaign.landing_page_cta_text || 'Apply Now')}
           </button>
         </Section>
       </div>
