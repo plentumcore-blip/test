@@ -132,10 +132,16 @@ export default function CampaignLandingPage() {
             </ul>
             <div className="flex flex-wrap gap-3 pt-2">
               <button
-                onClick={() => navigate('/register')}
-                className="inline-flex items-center rounded-xl bg-[#1F66FF] px-5 py-3 text-white font-semibold shadow-sm hover:bg-[#0E2C7E]"
+                onClick={() => !isPurchaseWindowPassed && navigate('/register')}
+                disabled={isPurchaseWindowPassed}
+                className={`inline-flex items-center rounded-xl px-5 py-3 font-semibold shadow-sm ${
+                  isPurchaseWindowPassed 
+                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed' 
+                    : 'bg-[#1F66FF] text-white hover:bg-[#0E2C7E]'
+                }`}
+                title={isPurchaseWindowPassed ? 'Purchase window has ended' : 'Apply to this campaign'}
               >
-                Apply Now
+                {isPurchaseWindowPassed ? 'Campaign Closed' : 'Apply Now'}
               </button>
               <a
                 href="#timeline"
