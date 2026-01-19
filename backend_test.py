@@ -418,6 +418,103 @@ class APITester:
         except Exception as e:
             self.log_test("GET Admin Reports", False, f"Error: {str(e)}")
     
+    def create_test_assignment(self):
+        """Create a test assignment for testing purchase proof and redirect functionality"""
+        print("\n=== Creating Test Assignment ===")
+        
+        # Step 1: Login as influencer and apply to campaign
+        influencer = self.login_user("creator@example.com", "Creator@123")
+        if not influencer:
+            self.log_test("Create Assignment - Influencer Login", False, "Could not login as influencer")
+            return None
+        
+        # Get campaigns to apply to
+        try:
+            response = self.session.get(f"{BASE_URL}/campaigns")
+            if response.status_code != 200:
+                self.log_test("Create Assignment - Get Campaigns", False, f"Failed to get campaigns: {response.status_code}")
+                return None
+            
+            campaigns = response.json().get('data', [])
+            if not campaigns:
+                self.log_test("Create Assignment - Get Campaigns", False, "No campaigns available")
+                return None
+            
+            campaign_id = campaigns[0]['id']
+            
+            # Apply to campaign
+            application_data = {
+                "campaign_id": campaign_id,
+                "answers": {"why_interested": "Test application for assignment creation"}
+            }
+            
+            response = self.session.post(f"{BASE_URL}/applications", json=application_data)
+            
+            if response.status_code == 200:
+                application_id = response.json().get('id')
+                self.log_test("Create Assignment - Apply to Campaign", True, f"Application created: {application_id}")
+            elif response.status_code == 400 and "already applied" in response.text:
+                self.log_test("Create Assignment - Apply to Campaign", True, "Already applied to campaign")
+                # Get existing application
+                applications_response = self.session.get(f"{BASE_URL}/campaigns/{campaign_id}/applications")
+                if applications_response.status_code == 403:
+                    # Influencer can't see applications, that's expected
+                    application_id = "existing"
+                else:
+                    application_id = "existing"
+            else:
+                self.log_test("Create Assignment - Apply to Campaign", False, f"Application failed: {response.status_code}")
+                return None
+                
+        except Exception as e:
+            self.log_test("Create Assignment - Apply to Campaign", False, f"Error: {str(e)}")
+            return None
+        
+        # Step 2: Login as brand and accept the application
+        brand = self.login_user("brand@example.com", "Brand@123")
+        if not brand:
+            self.log_test("Create Assignment - Brand Login", False, "Could not login as brand")
+            return None
+        
+        try:
+            # Get applications for the campaign
+            response = self.session.get(f"{BASE_URL}/campaigns/{campaign_id}/applications")
+            if response.status_code == 200:
+                applications = response.json().get('data', [])
+                if applications:
+                    # Find the application from our influencer
+                    app_to_accept = None
+                    for app in applications:
+                        if app.get('influencer', {}).get('name') == 'creator':  # Default name from seed
+                            app_to_accept = app
+                            break
+                    
+                    if not app_to_accept:
+                        app_to_accept = applications[0]  # Take first application
+                    
+                    # Accept the application
+                    response = self.session.put(
+                        f"{BASE_URL}/applications/{app_to_accept['id']}/status",
+                        json={"status": "accepted", "notes": "Test acceptance"}
+                    )
+                    
+                    if response.status_code == 200:
+                        self.log_test("Create Assignment - Accept Application", True, "Application accepted, assignment created")
+                        return campaign_id  # Return campaign_id for further testing
+                    else:
+                        self.log_test("Create Assignment - Accept Application", False, f"Failed to accept: {response.status_code}")
+                        return None
+                else:
+                    self.log_test("Create Assignment - Accept Application", False, "No applications found")
+                    return None
+            else:
+                self.log_test("Create Assignment - Get Applications", False, f"Failed to get applications: {response.status_code}")
+                return None
+                
+        except Exception as e:
+            self.log_test("Create Assignment - Accept Application", False, f"Error: {str(e)}")
+            return None
+
     def test_purchase_proof_submission_fix(self):
         """Test purchase proof submission with array format fix"""
         print("\n=== Testing Purchase Proof Submission Fix (HIGH PRIORITY) ===")
@@ -437,9 +534,18 @@ class APITester:
             
             assignments = response.json().get('data', [])
             if not assignments:
-                # Create assignment flow if none exist
-                self.log_test("Get Assignments", True, "No assignments found, will need to create test scenario")
-                return
+                # Try to create assignment
+                campaign_id = self.create_test_assignment()
+                if campaign_id:
+                    # Get assignments again
+                    influencer = self.login_user("creator@example.com", "Creator@123")
+                    response = self.session.get(f"{BASE_URL}/assignments")
+                    if response.status_code == 200:
+                        assignments = response.json().get('data', [])
+                
+                if not assignments:
+                    self.log_test("Get Assignments", False, "No assignments found even after creation attempt")
+                    return
             
             assignment_id = assignments[0]['id']
             self.log_test("Get Assignment for Testing", True, f"Using assignment ID: {assignment_id}")
@@ -447,7 +553,7 @@ class APITester:
             # Test purchase proof submission with correct array format
             purchase_proof_data = {
                 "order_id": "123-4567890-1234567",
-                "order_date": "2026-01-15",  # Past date as specified
+                "order_date": "2024-01-15",  # Past date as specified
                 "asin": "B08N5WRWNW",
                 "total": 49.99,
                 "screenshot_urls": ["https://example.com/screenshot.jpg"]  # Array format (fixed)
@@ -513,8 +619,18 @@ class APITester:
             
             assignments = response.json().get('data', [])
             if not assignments:
-                self.log_test("Get Assignment for Redirect", False, "No assignments found for testing")
-                return
+                # Try to create assignment
+                campaign_id = self.create_test_assignment()
+                if campaign_id:
+                    # Get assignments again
+                    influencer = self.login_user("creator@example.com", "Creator@123")
+                    response = self.session.get(f"{BASE_URL}/assignments")
+                    if response.status_code == 200:
+                        assignments = response.json().get('data', [])
+                
+                if not assignments:
+                    self.log_test("Get Assignment for Redirect", False, "No assignments found even after creation attempt")
+                    return
             
             assignment_id = assignments[0]['id']
             
