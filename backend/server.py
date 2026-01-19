@@ -2665,9 +2665,9 @@ async def upload_file(
             pass
         raise HTTPException(status_code=500, detail=f"Failed to save file: {str(e)}")
     
-    # Generate file URL
+    # Generate file URL - use /api/uploads/ prefix for Kubernetes ingress routing
     base_url = os.environ.get('REACT_APP_BACKEND_URL', 'http://localhost:8001')
-    file_url = f"{base_url}/uploads/{unique_filename}"
+    file_url = f"{base_url}/api/uploads/{unique_filename}"
     
     # Log audit
     try:
