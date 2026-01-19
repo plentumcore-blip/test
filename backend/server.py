@@ -2138,7 +2138,7 @@ async def update_landing_content(
     content_data: Dict[str, Any],
     user: dict = Depends(require_role([UserRole.ADMIN]))
 ):
-    """Update the marketing landing page content (video URL, stats, etc.)"""
+    """Update the marketing landing page content (video URL, stats, portfolio videos, etc.)"""
     update_data = {
         "id": "default",
         "stats": content_data.get("stats", [
@@ -2149,6 +2149,7 @@ async def update_landing_content(
         ]),
         "videoUrl": content_data.get("videoUrl", ""),
         "videoTitle": content_data.get("videoTitle", "How Influiv Works"),
+        "portfolioVideos": content_data.get("portfolioVideos", []),
         "updated_at": datetime.now(timezone.utc).isoformat()
     }
     
@@ -2175,7 +2176,8 @@ async def get_admin_landing_content(user: dict = Depends(require_role([UserRole.
                 {"label": "Average ROI", "value": "5.2x"}
             ],
             "videoUrl": "",
-            "videoTitle": "How Influiv Works"
+            "videoTitle": "How Influiv Works",
+            "portfolioVideos": []
         }
     return content
 
