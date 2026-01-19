@@ -788,18 +788,33 @@ async def list_campaigns(
     
     if user["role"] == "brand":
         brand = await db.brands.find_one({"user_id": user["id"]})
+        if not brand:
+            # If brand profile doesn't exist, return empty list
+            return {
+                "data": [],
+                "page": page,
+                "page_size": page_size,
+                "total": 0
+            }
         query["brand_id"] = brand["id"]
     elif user["role"] == "influencer":
         # Influencers should see both published and live campaigns
         query["status"] = {"$in": [CampaignStatus.PUBLISHED.value, CampaignStatus.LIVE.value]}
     
     if status:
-        # If status filter is provided, override the above
-        if status == "live":
-            # For backwards compatibility, "live" filter should include published campaigns
-            query["status"] = {"$in": [CampaignStatus.PUBLISHED.value, CampaignStatus.LIVE.value]}
+        # If status filter is provided, override the above for non-brand users
+        if user["role"] == "brand":
+            # For brands, always filter by their brand_id regardless of status filter
+            if status == "live":
+                query["status"] = {"$in": [CampaignStatus.PUBLISHED.value, CampaignStatus.LIVE.value]}
+            else:
+                query["status"] = status
         else:
-            query["status"] = status
+            # For other roles
+            if status == "live":
+                query["status"] = {"$in": [CampaignStatus.PUBLISHED.value, CampaignStatus.LIVE.value]}
+            else:
+                query["status"] = status
     
     campaigns = await db.campaigns.find(query, {"_id": 0}).skip(skip).limit(page_size).to_list(page_size)
     total = await db.campaigns.count_documents(query)
