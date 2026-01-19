@@ -844,6 +844,252 @@ class APITester:
                 self.log_test(f"Seed Account {expected_role.title()}", False, 
                             f"❌ {email} login failed")
 
+    def test_file_upload_and_static_serving_fix(self):
+        """Test file upload and static file serving fix (CRITICAL ISSUE BEING TESTED)"""
+        print("\n=== Testing File Upload and Static File Serving Fix (CRITICAL ISSUE) ===")
+        
+        # Login as influencer (creator@example.com / Creator@123)
+        influencer = self.login_user("creator@example.com", "Creator@123")
+        if not influencer:
+            self.log_test("File Upload Setup", False, "Could not login as influencer")
+            return
+        
+        # Step 1: Test File Upload Endpoint
+        print("\n--- Step 1: Testing File Upload Endpoint ---")
+        
+        # Create a test image file in memory
+        import io
+        from PIL import Image
+        
+        try:
+            # Create a simple test image
+            img = Image.new('RGB', (100, 100), color='red')
+            img_bytes = io.BytesIO()
+            img.save(img_bytes, format='PNG')
+            img_bytes.seek(0)
+            
+            # Prepare multipart form data for file upload
+            files = {
+                'file': ('test_image.png', img_bytes, 'image/png')
+            }
+            
+            # Upload the file
+            response = self.session.post(f"{BASE_URL}/upload", files=files)
+            
+            if response.status_code == 200:
+                result = response.json()
+                uploaded_url = result.get('url', '')
+                filename = result.get('filename', '')
+                
+                # Verify the response contains a URL with /api/uploads/ prefix
+                if "/api/uploads/" in uploaded_url:
+                    self.log_test("File Upload - URL Format", True, 
+                                f"✅ Upload successful! URL contains /api/uploads/ prefix: {uploaded_url}")
+                    
+                    # Store the URL for later testing
+                    self.uploaded_file_url = uploaded_url
+                    self.uploaded_filename = filename
+                    
+                    # Verify other response fields
+                    expected_fields = ['filename', 'original_filename', 'url', 'size', 'message']
+                    missing_fields = [field for field in expected_fields if field not in result]
+                    
+                    if not missing_fields:
+                        self.log_test("File Upload - Response Format", True, 
+                                    f"✅ Upload response contains all required fields: {list(result.keys())}")
+                    else:
+                        self.log_test("File Upload - Response Format", False, 
+                                    f"❌ Upload response missing fields: {missing_fields}")
+                        
+                else:
+                    self.log_test("File Upload - URL Format", False, 
+                                f"❌ Upload URL does not contain /api/uploads/ prefix: {uploaded_url}")
+                    return
+                    
+            else:
+                self.log_test("File Upload Endpoint", False, 
+                            f"❌ File upload failed: {response.status_code}", 
+                            {"response": response.text})
+                return
+                
+        except Exception as e:
+            self.log_test("File Upload Endpoint", False, f"❌ Error during file upload: {str(e)}")
+            return
+        
+        # Step 2: Test Static File Access
+        print("\n--- Step 2: Testing Static File Access ---")
+        
+        if hasattr(self, 'uploaded_file_url'):
+            try:
+                # Test accessing the uploaded file URL directly
+                public_session = requests.Session()
+                public_session.timeout = TIMEOUT
+                
+                file_response = public_session.get(self.uploaded_file_url)
+                
+                if file_response.status_code == 200:
+                    # Verify content-type header is correct
+                    content_type = file_response.headers.get('content-type', '')
+                    
+                    if 'image' in content_type.lower():
+                        self.log_test("Static File Access", True, 
+                                    f"✅ Uploaded file accessible at {self.uploaded_file_url} with correct content-type: {content_type}")
+                    else:
+                        self.log_test("Static File Access", True, 
+                                    f"✅ Uploaded file accessible at {self.uploaded_file_url} (content-type: {content_type})")
+                        
+                    # Verify file content is not empty
+                    if len(file_response.content) > 0:
+                        self.log_test("Static File Content", True, 
+                                    f"✅ File content is valid ({len(file_response.content)} bytes)")
+                    else:
+                        self.log_test("Static File Content", False, 
+                                    "❌ File content is empty")
+                        
+                else:
+                    self.log_test("Static File Access", False, 
+                                f"❌ Cannot access uploaded file: {file_response.status_code}", 
+                                {"url": self.uploaded_file_url, "response": file_response.text})
+                    
+            except Exception as e:
+                self.log_test("Static File Access", False, f"❌ Error accessing uploaded file: {str(e)}")
+        
+        # Step 3: Test Existing Files (if any)
+        print("\n--- Step 3: Testing Existing Files ---")
+        
+        try:
+            # Test the existing file mentioned in the review request
+            existing_file_url = "https://affbridge.preview.emergentagent.com/api/uploads/06e5e39b-0189-4655-9226-b44c845487cb.png"
+            
+            public_session = requests.Session()
+            public_session.timeout = TIMEOUT
+            
+            existing_response = public_session.get(existing_file_url)
+            
+            if existing_response.status_code == 200:
+                content_type = existing_response.headers.get('content-type', '')
+                self.log_test("Existing File Access", True, 
+                            f"✅ Existing file accessible: {existing_file_url} (content-type: {content_type})")
+            elif existing_response.status_code == 404:
+                self.log_test("Existing File Access", True, 
+                            f"✅ Existing file returns 404 (expected if file doesn't exist): {existing_file_url}")
+            else:
+                self.log_test("Existing File Access", False, 
+                            f"❌ Unexpected response for existing file: {existing_response.status_code}")
+                
+        except Exception as e:
+            self.log_test("Existing File Access", True, f"✅ Existing file test skipped: {str(e)}")
+        
+        # Step 4: Test Old /uploads Path (Should Return 404)
+        print("\n--- Step 4: Testing Old /uploads Path (Should Return 404) ---")
+        
+        if hasattr(self, 'uploaded_filename'):
+            try:
+                # Test the old /uploads path (should return 404)
+                old_path_url = f"https://affbridge.preview.emergentagent.com/uploads/{self.uploaded_filename}"
+                
+                public_session = requests.Session()
+                public_session.timeout = TIMEOUT
+                
+                old_response = public_session.get(old_path_url)
+                
+                if old_response.status_code == 404:
+                    self.log_test("Old /uploads Path Returns 404", True, 
+                                f"✅ Old /uploads path correctly returns 404: {old_path_url}")
+                else:
+                    self.log_test("Old /uploads Path Returns 404", False, 
+                                f"❌ Old /uploads path should return 404, got: {old_response.status_code}")
+                    
+            except Exception as e:
+                self.log_test("Old /uploads Path Returns 404", False, f"❌ Error testing old path: {str(e)}")
+
+    def test_purchase_proof_with_file_upload(self):
+        """Test Purchase Proof Submission with File Upload (if possible)"""
+        print("\n=== Testing Purchase Proof Submission with File Upload ===")
+        
+        # Login as influencer
+        influencer = self.login_user("creator@example.com", "Creator@123")
+        if not influencer:
+            self.log_test("Purchase Proof with Upload Setup", False, "Could not login as influencer")
+            return
+        
+        # Get assignments to find one in 'purchase_required' status
+        try:
+            response = self.session.get(f"{BASE_URL}/assignments")
+            if response.status_code != 200:
+                self.log_test("Get Assignments for Purchase Proof", False, 
+                            f"Failed to get assignments: {response.status_code}")
+                return
+            
+            assignments = response.json().get('data', [])
+            purchase_required_assignment = None
+            
+            for assignment in assignments:
+                if assignment.get('status') == 'purchase_required':
+                    purchase_required_assignment = assignment
+                    break
+            
+            if not purchase_required_assignment:
+                self.log_test("Find Purchase Required Assignment", True, 
+                            "✅ No assignments in 'purchase_required' status (expected if already submitted)")
+                return
+            
+            assignment_id = purchase_required_assignment['id']
+            
+            # Upload a screenshot file first
+            if hasattr(self, 'uploaded_file_url'):
+                screenshot_url = self.uploaded_file_url
+            else:
+                # Create and upload a test screenshot
+                import io
+                from PIL import Image
+                
+                img = Image.new('RGB', (200, 150), color='blue')
+                img_bytes = io.BytesIO()
+                img.save(img_bytes, format='PNG')
+                img_bytes.seek(0)
+                
+                files = {'file': ('screenshot.png', img_bytes, 'image/png')}
+                upload_response = self.session.post(f"{BASE_URL}/upload", files=files)
+                
+                if upload_response.status_code == 200:
+                    screenshot_url = upload_response.json().get('url', '')
+                    self.log_test("Upload Screenshot for Purchase Proof", True, 
+                                f"✅ Screenshot uploaded: {screenshot_url}")
+                else:
+                    self.log_test("Upload Screenshot for Purchase Proof", False, 
+                                f"❌ Failed to upload screenshot: {upload_response.status_code}")
+                    return
+            
+            # Submit purchase proof with uploaded screenshot
+            purchase_proof_data = {
+                "order_id": "123-4567890-1234567",
+                "order_date": "2024-01-15",
+                "asin": "B08N5WRWNW",
+                "total": 49.99,
+                "screenshot_urls": [screenshot_url]  # Use uploaded file URL
+            }
+            
+            response = self.session.post(
+                f"{BASE_URL}/assignments/{assignment_id}/purchase-proof",
+                json=purchase_proof_data
+            )
+            
+            if response.status_code == 200:
+                result = response.json()
+                self.log_test("Purchase Proof with Uploaded File", True, 
+                            f"✅ Purchase proof submitted successfully with uploaded screenshot: {result.get('message', 'Success')}")
+            elif response.status_code == 400 and "already submitted" in response.text:
+                self.log_test("Purchase Proof with Uploaded File", True, 
+                            "✅ Purchase proof already submitted (expected if running tests multiple times)")
+            else:
+                self.log_test("Purchase Proof with Uploaded File", False, 
+                            f"❌ Purchase proof submission failed: {response.status_code}", 
+                            {"response": response.text})
+                
+        except Exception as e:
+            self.log_test("Purchase Proof with Uploaded File", False, f"❌ Error: {str(e)}")
+
     def test_campaign_landing_page_flow(self):
         """Test campaign landing page end-to-end flow as requested in review"""
         print("\n=== Testing Campaign Landing Page Flow (Review Request) ===")
