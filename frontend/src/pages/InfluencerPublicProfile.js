@@ -132,15 +132,16 @@ export default function InfluencerPublicProfile() {
               {profile.portfolio_images.map((image, index) => (
                 <a
                   key={index}
-                  href={image}
+                  href={getFileUrl(image)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="group relative aspect-square rounded-lg overflow-hidden hover:shadow-lg transition-shadow"
                 >
                   <img
-                    src={image}
+                    src={getFileUrl(image)}
                     alt={`Portfolio ${index + 1}`}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                    onError={(e) => { e.target.style.display = 'none'; }}
                   />
                   <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />
                 </a>
@@ -157,9 +158,10 @@ export default function InfluencerPublicProfile() {
               {profile.portfolio_videos.map((video, index) => (
                 <div key={index} className="rounded-lg overflow-hidden">
                   <video
-                    src={video}
+                    src={getFileUrl(video)}
                     controls
                     className="w-full h-auto"
+                    onError={(e) => { e.target.style.display = 'none'; }}
                   />
                 </div>
               ))}
