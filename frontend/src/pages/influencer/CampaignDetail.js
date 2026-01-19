@@ -123,7 +123,7 @@ export default function CampaignDetail() {
               <p className="text-gray-600">
                 You must purchase the product between:
               </p>
-              <p className="text-lg font-semibold text-[#1F66FF] mt-1">
+              <p className={`text-lg font-semibold mt-1 ${isPurchaseWindowPassed ? 'text-red-600' : 'text-[#1F66FF]'}`}>
                 {new Date(campaign.purchase_window_start).toLocaleDateString('en-US', { 
                   year: 'numeric', 
                   month: 'long', 
@@ -136,6 +136,11 @@ export default function CampaignDetail() {
                   day: 'numeric' 
                 })}
               </p>
+              {isPurchaseWindowPassed && (
+                <p className="text-sm text-red-600 font-semibold mt-2">
+                  ⚠️ This purchase window has ended. Applications are no longer accepted.
+                </p>
+              )}
             </div>
 
             <div className="pt-4 border-t border-gray-200">
