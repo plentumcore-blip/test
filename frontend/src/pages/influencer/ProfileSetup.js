@@ -30,6 +30,7 @@ export default function InfluencerProfileSetup() {
   const [saving, setSaving] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
   const [uploadingVideo, setUploadingVideo] = useState(false);
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -75,6 +76,26 @@ export default function InfluencerProfileSetup() {
       toast.error('Failed to update profile');
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleAvatarUpload = async (file) => {
+    setUploadingAvatar(true);
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      
+      const response = await axios.post(`${API_BASE}/upload`, formData, {
+        withCredentials: true,
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+      
+      setProfile({ ...profile, avatar_url: response.data.url });
+      toast.success('Avatar uploaded!');
+    } catch (error) {
+      toast.error('Failed to upload avatar');
+    } finally {
+      setUploadingAvatar(false);
     }
   };
 
