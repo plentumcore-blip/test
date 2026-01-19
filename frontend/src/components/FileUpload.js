@@ -1,18 +1,18 @@
 import { useState, useRef, useEffect } from 'react';
-import { Upload, X, CheckCircle, AlertCircle, Loader, Image, Video } from 'lucide-react';
+import { Upload, X, CheckCircle, AlertCircle, Loader } from 'lucide-react';
 import axios from 'axios';
 
-const API_BASE = process.env.REACT_APP_BACKEND_URL || import.meta.env.VITE_REACT_APP_BACKEND_URL;
+const API_BASE = process.env.REACT_APP_BACKEND_URL || '';
 
 const FileUpload = ({ 
   onUploadComplete, 
   accept = "image/*",
-  maxSize = 5, // MB
+  maxSize = 50, // MB - increased to match backend
   label = "Upload File",
   currentUrl = null,
   required = false,
   compact = false,
-  showPreview = true // Show image/video preview when uploaded
+  showPreview = true
 }) => {
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -27,6 +27,28 @@ const FileUpload = ({
     setUploadedUrl(currentUrl);
     setPreviewError(false);
   }, [currentUrl]);
+
+  // Helper to normalize file URL - ensures it works in any environment
+  const normalizeFileUrl = (url) => {
+    if (!url) return null;
+    
+    // If it's already a full URL, return as is
+    if (url.startsWith('http://') || url.startsWith('https://')) {
+      return url;
+    }
+    
+    // If it's just a filename, construct the URL
+    if (!url.includes('/')) {
+      return `${API_BASE}/api/files/${url}`;
+    }
+    
+    // If it's a relative path, prepend the API base
+    if (url.startsWith('/')) {
+      return `${API_BASE}${url}`;
+    }
+    
+    return url;
+  };
 
   const isImageFile = (url) => {
     if (!url) return false;
@@ -95,6 +117,7 @@ const FileUpload = ({
       const formData = new FormData();
       formData.append('file', file);
 
+      // Use the API_BASE which includes /api/v1
       const uploadUrl = `${API_BASE}/api/v1/upload`;
       console.log('Starting upload to:', uploadUrl);
 
@@ -111,6 +134,8 @@ const FileUpload = ({
       });
 
       console.log('Upload successful:', response.data);
+      
+      // The backend now returns a URL that uses /api/files/ endpoint
       const fileUrl = response.data.url;
       setUploadedUrl(fileUrl);
       
@@ -152,15 +177,18 @@ const FileUpload = ({
     setPreviewError(true);
   };
 
+  // Get the display URL (normalized for current environment)
+  const displayUrl = normalizeFileUrl(uploadedUrl);
+
   // Render preview based on file type
   const renderPreview = () => {
-    if (!showPreview || !uploadedUrl || previewError) return null;
+    if (!showPreview || !displayUrl || previewError) return null;
 
-    if (isImageFile(uploadedUrl)) {
+    if (isImageFile(displayUrl)) {
       return (
         <div className="mt-2 relative">
           <img 
-            src={uploadedUrl} 
+            src={displayUrl} 
             alt="Uploaded preview" 
             className="max-h-32 rounded-lg object-cover border border-gray-200"
             onError={handlePreviewError}
@@ -169,11 +197,11 @@ const FileUpload = ({
       );
     }
 
-    if (isVideoFile(uploadedUrl)) {
+    if (isVideoFile(displayUrl)) {
       return (
         <div className="mt-2 relative">
           <video 
-            src={uploadedUrl} 
+            src={displayUrl} 
             className="max-h-32 rounded-lg border border-gray-200"
             controls
             onError={handlePreviewError}
@@ -252,7 +280,7 @@ const FileUpload = ({
                 {compact ? 'Uploaded' : 'File uploaded successfully'}
               </p>
               <a 
-                href={uploadedUrl} 
+                href={displayUrl} 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="text-xs text-blue-600 hover:underline truncate block"
