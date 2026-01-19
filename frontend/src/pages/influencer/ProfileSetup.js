@@ -79,20 +79,13 @@ export default function InfluencerProfileSetup() {
     }
   };
 
-  const handleAvatarUpload = async (file) => {
-    setUploadingAvatar(true);
+  const handleAvatarUpload = async (fileUrl) => {
+    if (!fileUrl) return;
+    
+    const updatedProfile = { ...profile, avatar_url: fileUrl };
+    setProfile(updatedProfile);
+    
     try {
-      const formData = new FormData();
-      formData.append('file', file);
-      
-      const response = await axios.post(`${API_BASE}/upload`, formData, {
-        withCredentials: true,
-        headers: { 'Content-Type': 'multipart/form-data' }
-      });
-      
-      const updatedProfile = { ...profile, avatar_url: response.data.url };
-      setProfile(updatedProfile);
-      
       // Automatically save the profile with the new avatar
       const saveResponse = await axios.put(`${API_BASE}/influencer/profile`, updatedProfile, { 
         withCredentials: true 
@@ -105,27 +98,18 @@ export default function InfluencerProfileSetup() {
       toast.success('Avatar uploaded and saved!');
       fetchProfile(); // Refresh to get latest data
     } catch (error) {
-      toast.error('Failed to upload avatar');
-    } finally {
-      setUploadingAvatar(false);
+      toast.error('Failed to save avatar');
     }
   };
 
-  const handleImageUpload = async (file) => {
-    setUploadingImage(true);
+  const handleImageUpload = async (fileUrl) => {
+    if (!fileUrl) return;
+    
+    const newImages = [...profile.portfolio_images, fileUrl];
+    const updatedProfile = { ...profile, portfolio_images: newImages };
+    setProfile(updatedProfile);
+    
     try {
-      const formData = new FormData();
-      formData.append('file', file);
-      
-      const response = await axios.post(`${API_BASE}/upload`, formData, {
-        withCredentials: true,
-        headers: { 'Content-Type': 'multipart/form-data' }
-      });
-      
-      const newImages = [...profile.portfolio_images, response.data.url];
-      const updatedProfile = { ...profile, portfolio_images: newImages };
-      setProfile(updatedProfile);
-      
       // Automatically save the profile
       await axios.put(`${API_BASE}/influencer/profile`, updatedProfile, { 
         withCredentials: true 
@@ -134,27 +118,18 @@ export default function InfluencerProfileSetup() {
       toast.success('Image added and saved to portfolio!');
       fetchProfile(); // Refresh to get latest data
     } catch (error) {
-      toast.error('Failed to upload image');
-    } finally {
-      setUploadingImage(false);
+      toast.error('Failed to save image');
     }
   };
 
-  const handleVideoUpload = async (file) => {
-    setUploadingVideo(true);
+  const handleVideoUpload = async (fileUrl) => {
+    if (!fileUrl) return;
+    
+    const newVideos = [...profile.portfolio_videos, fileUrl];
+    const updatedProfile = { ...profile, portfolio_videos: newVideos };
+    setProfile(updatedProfile);
+    
     try {
-      const formData = new FormData();
-      formData.append('file', file);
-      
-      const response = await axios.post(`${API_BASE}/upload`, formData, {
-        withCredentials: true,
-        headers: { 'Content-Type': 'multipart/form-data' }
-      });
-      
-      const newVideos = [...profile.portfolio_videos, response.data.url];
-      const updatedProfile = { ...profile, portfolio_videos: newVideos };
-      setProfile(updatedProfile);
-      
       // Automatically save the profile
       await axios.put(`${API_BASE}/influencer/profile`, updatedProfile, { 
         withCredentials: true 
@@ -163,9 +138,7 @@ export default function InfluencerProfileSetup() {
       toast.success('Video added and saved to portfolio!');
       fetchProfile(); // Refresh to get latest data
     } catch (error) {
-      toast.error('Failed to upload video');
-    } finally {
-      setUploadingVideo(false);
+      toast.error('Failed to save video');
     }
   };
 
