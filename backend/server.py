@@ -1259,11 +1259,25 @@ async def submit_purchase_proof(
     if assignment["influencer_id"] != influencer["id"]:
         raise HTTPException(status_code=403, detail="Not authorized")
     
+    # Validate required fields
+    if not proof_data.get("order_id"):
+        raise HTTPException(status_code=400, detail="Order ID is required")
+    if not proof_data.get("order_date"):
+        raise HTTPException(status_code=400, detail="Order date is required")
+    if not proof_data.get("screenshot_urls") or len(proof_data.get("screenshot_urls", [])) == 0:
+        raise HTTPException(status_code=400, detail="At least one screenshot is required")
+    
+    # Parse order date with error handling
+    try:
+        order_date = datetime.fromisoformat(proof_data["order_date"])
+    except (ValueError, TypeError) as e:
+        raise HTTPException(status_code=400, detail=f"Invalid order date format: {str(e)}")
+    
     # Create purchase proof
     purchase_proof = PurchaseProof(
         assignment_id=assignment_id,
         order_id=proof_data["order_id"],
-        order_date=datetime.fromisoformat(proof_data["order_date"]),
+        order_date=order_date,
         asin=proof_data.get("asin"),
         total=proof_data.get("total"),
         screenshot_urls=proof_data.get("screenshot_urls", [])
