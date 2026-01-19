@@ -251,8 +251,12 @@ export default function CampaignBuilder() {
                     type="datetime-local"
                     value={formData.post_window_start}
                     onChange={(e) => setFormData({ ...formData, post_window_start: e.target.value })}
+                    min={formData.purchase_window_start}
                     className="input"
                   />
+                  {formData.purchase_window_start && (
+                    <p className="text-xs text-gray-600 mt-1">Must be on or after purchase start date</p>
+                  )}
                 </div>
                 <div>
                   <label className="block text-sm font-semibold text-[#0B1220] mb-2">Post End Date *</label>
@@ -261,6 +265,7 @@ export default function CampaignBuilder() {
                     type="datetime-local"
                     value={formData.post_window_end}
                     onChange={(e) => setFormData({ ...formData, post_window_end: e.target.value })}
+                    min={formData.post_window_start}
                     className="input"
                   />
                 </div>
