@@ -30,6 +30,7 @@ import InfluencerPaymentSettings from './pages/influencer/PaymentSettings';
 import AdminReports from './pages/admin/Reports';
 import AdminLandingContent from './pages/admin/LandingContent';
 import CampaignLandingPage from './pages/CampaignLandingPage';
+import InfluencerPublicProfile from './pages/InfluencerPublicProfile';
 
 const ProtectedRoute = ({ children, allowedRoles }) => {
   const { user, loading } = useAuth();
