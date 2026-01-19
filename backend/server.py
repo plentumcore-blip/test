@@ -880,6 +880,20 @@ async def update_campaign_dates(
     if campaign["brand_id"] != brand["id"]:
         raise HTTPException(status_code=403, detail="Not authorized")
     
+    # Parse dates for validation
+    purchase_start = datetime.fromisoformat(dates_data.get("purchase_window_start", campaign["purchase_window_start"]))
+    purchase_end = datetime.fromisoformat(dates_data.get("purchase_window_end", campaign["purchase_window_end"]))
+    post_start = datetime.fromisoformat(dates_data.get("post_window_start", campaign["post_window_start"]))
+    post_end = datetime.fromisoformat(dates_data.get("post_window_end", campaign["post_window_end"]))
+    
+    # Validate date windows
+    if purchase_end <= purchase_start:
+        raise HTTPException(status_code=400, detail="Purchase end date must be after purchase start date")
+    if post_end <= post_start:
+        raise HTTPException(status_code=400, detail="Post end date must be after post start date")
+    if post_start < purchase_start:
+        raise HTTPException(status_code=400, detail="Post start date cannot be earlier than purchase start date")
+    
     # Validate dates
     update_data = {"updated_at": datetime.now(timezone.utc).isoformat()}
     
