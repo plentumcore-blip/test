@@ -90,10 +90,16 @@ export default function CampaignLandingPage() {
             <a href="#faqs" className="hover:text-[#1F66FF]">FAQs</a>
           </div>
           <button
-            onClick={() => navigate('/register')}
-            className="inline-flex items-center rounded-xl bg-[#1F66FF] px-4 py-2 text-white font-medium shadow-sm hover:bg-[#0E2C7E]"
+            onClick={() => !isPurchaseWindowPassed && navigate('/register')}
+            disabled={isPurchaseWindowPassed}
+            className={`inline-flex items-center rounded-xl px-4 py-2 font-medium shadow-sm ${
+              isPurchaseWindowPassed 
+                ? 'bg-gray-300 text-gray-500 cursor-not-allowed' 
+                : 'bg-[#1F66FF] text-white hover:bg-[#0E2C7E]'
+            }`}
+            title={isPurchaseWindowPassed ? 'Purchase window has ended' : 'Apply to this campaign'}
           >
-            Apply Now
+            {isPurchaseWindowPassed ? 'Campaign Closed' : 'Apply Now'}
           </button>
         </Section>
       </nav>
