@@ -49,7 +49,7 @@ sudo supervisorctl status
 
 ### 4. Access Application
 
-Open browser to: `https://affitarget-2.preview.emergentagent.com`
+Open browser to: `https://runapp-6.preview.emergentagent.com`
 
 ## Test Accounts
 
