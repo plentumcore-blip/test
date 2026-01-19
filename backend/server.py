@@ -666,29 +666,6 @@ async def get_me(user: dict = Depends(get_current_user)):
     return user_data
 
 # Influencer Profile & Platforms
-@api_router.put("/influencer/profile")
-async def update_influencer_profile(
-    profile_data: Dict[str, Any],
-    user: dict = Depends(require_role([UserRole.INFLUENCER]))
-):
-    influencer = await db.influencers.find_one({"user_id": user["id"]})
-    if not influencer:
-        raise HTTPException(status_code=404, detail="Influencer profile not found")
-    
-    update_data = {
-        "name": profile_data.get("name", influencer["name"]),
-        "bio": profile_data.get("bio"),
-        "avatar_url": profile_data.get("avatar_url"),
-        "updated_at": datetime.now(timezone.utc).isoformat()
-    }
-    
-    await db.influencers.update_one(
-        {"user_id": user["id"]},
-        {"$set": update_data}
-    )
-    
-    return {"message": "Profile updated"}
-
 @api_router.post("/influencer/platforms")
 async def add_influencer_platform(
     platform_data: Dict[str, Any],
