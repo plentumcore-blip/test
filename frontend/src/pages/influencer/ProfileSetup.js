@@ -206,8 +206,21 @@ export default function InfluencerProfileSetup() {
     <div className="min-h-screen bg-[#F8FAFC]">
       <header className="bg-white border-b border-gray-200">
         <div className="max-w-5xl mx-auto px-6 py-4">
-          <h1 className="text-3xl font-bold text-[#0B1220]">Complete Your Profile</h1>
-          <p className="text-gray-600">Add your social media accounts to start applying to campaigns</p>
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div>
+              <h1 className="text-3xl font-bold text-[#0B1220]">Complete Your Profile</h1>
+              <p className="text-gray-600">Add your social media accounts to start applying to campaigns</p>
+            </div>
+            {profile.public_profile_slug && (
+              <button
+                onClick={() => window.open(`/influencer-profile/${profile.public_profile_slug}`, '_blank')}
+                className="btn-primary flex items-center gap-2 whitespace-nowrap"
+              >
+                <Eye className="w-5 h-5" />
+                View Public Profile
+              </button>
+            )}
+          </div>
         </div>
       </header>
 
