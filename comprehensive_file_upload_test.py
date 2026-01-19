@@ -358,8 +358,9 @@ class ComprehensiveFileUploadTester:
         screenshot_urls = []
         
         # Upload multiple screenshots
+        colors = ['red', 'green', 'blue']
         for i in range(3):
-            screenshot_bytes = self.create_test_image(f'screenshot_{i}', (300, 200), 'PNG')
+            screenshot_bytes = self.create_test_image(colors[i], (300, 200), 'PNG')
             screenshot_url = self.upload_file(screenshot_bytes, f'purchase_screenshot_{i}.png', 'image/png')
             if screenshot_url:
                 screenshot_urls.append(screenshot_url)
