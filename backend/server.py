@@ -747,6 +747,77 @@ async def delete_influencer_platform(
     
     return {"message": "Platform deleted"}
 
+@api_router.put("/influencer/profile")
+async def update_influencer_profile(
+    profile_data: Dict[str, Any],
+    user: dict = Depends(require_role([UserRole.INFLUENCER]))
+):
+    """Update influencer profile including portfolio media"""
+    influencer = await db.influencers.find_one({"user_id": user["id"]})
+    if not influencer:
+        raise HTTPException(status_code=404, detail="Influencer profile not found")
+    
+    update_data = {"updated_at": datetime.now(timezone.utc).isoformat()}
+    
+    # Update basic fields
+    if "name" in profile_data:
+        update_data["name"] = profile_data["name"]
+    if "bio" in profile_data:
+        update_data["bio"] = profile_data["bio"]
+    if "avatar_url" in profile_data:
+        update_data["avatar_url"] = profile_data["avatar_url"]
+    
+    # Update portfolio media
+    if "portfolio_images" in profile_data:
+        update_data["portfolio_images"] = profile_data["portfolio_images"]
+    if "portfolio_videos" in profile_data:
+        update_data["portfolio_videos"] = profile_data["portfolio_videos"]
+    
+    # Generate or update public profile slug
+    if "name" in profile_data and not influencer.get("public_profile_slug"):
+        import re
+        slug = re.sub(r'[^a-z0-9]+', '-', profile_data["name"].lower()).strip('-')
+        # Ensure uniqueness
+        existing = await db.influencers.find_one({"public_profile_slug": slug})
+        if existing and existing["id"] != influencer["id"]:
+            slug = f"{slug}-{influencer['id'][:8]}"
+        update_data["public_profile_slug"] = slug
+    
+    await db.influencers.update_one(
+        {"id": influencer["id"]},
+        {"$set": update_data}
+    )
+    
+    await log_audit(user["id"], "update", "influencer_profile", influencer["id"])
+    
+    return {"message": "Profile updated", "slug": update_data.get("public_profile_slug", influencer.get("public_profile_slug"))}
+
+# Public profile endpoint (no authentication required)
+@app.get("/api/v1/public/influencers/{slug}")
+async def get_public_influencer_profile(slug: str):
+    """Get public influencer profile by slug"""
+    influencer = await db.influencers.find_one({"public_profile_slug": slug}, {"_id": 0})
+    if not influencer:
+        raise HTTPException(status_code=404, detail="Influencer profile not found")
+    
+    # Get social platforms
+    platforms = await db.influencer_platforms.find(
+        {"influencer_id": influencer["id"]}, 
+        {"_id": 0}
+    ).to_list(100)
+    
+    # Return public data only
+    return {
+        "id": influencer["id"],
+        "name": influencer.get("name", ""),
+        "bio": influencer.get("bio", ""),
+        "avatar_url": influencer.get("avatar_url"),
+        "portfolio_images": influencer.get("portfolio_images", []),
+        "portfolio_videos": influencer.get("portfolio_videos", []),
+        "platforms": platforms,
+        "public_profile_slug": influencer.get("public_profile_slug")
+    }
+
 # Campaigns
 @api_router.post("/campaigns")
 async def create_campaign(campaign_data: Dict[str, Any], user: dict = Depends(require_role([UserRole.BRAND]))):
