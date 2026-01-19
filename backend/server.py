@@ -1043,9 +1043,16 @@ async def list_applications(
 ):
     applications = await db.applications.find({"campaign_id": campaign_id}, {"_id": 0}).to_list(1000)
     
-    # Enrich with influencer data
+    # Enrich with influencer data and social platforms
     for app in applications:
         influencer = await db.influencers.find_one({"id": app["influencer_id"]}, {"_id": 0})
+        if influencer:
+            # Get social platforms for this influencer
+            platforms = await db.influencer_platforms.find(
+                {"influencer_id": influencer["id"]}, 
+                {"_id": 0}
+            ).to_list(100)
+            influencer["platforms"] = platforms
         app["influencer"] = influencer
     
     return {"data": applications}
