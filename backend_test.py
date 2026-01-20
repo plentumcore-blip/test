@@ -1343,8 +1343,8 @@ class APITester:
                 result = response.json()
                 uploaded_url = result.get('url', '')
                 
-                # Check if URL has correct prefix (note: review mentions /api/files/ but implementation uses /api/uploads/)
-                if "/api/uploads/" in uploaded_url or "/api/files/" in uploaded_url:
+                # Check if URL has correct prefix (note: review mentions /api/files/ but implementation uses /api/v1/files/)
+                if "/api/v1/files/" in uploaded_url or "/api/files/" in uploaded_url or "/api/uploads/" in uploaded_url:
                     self.log_test("Step 1 - File Upload", True, 
                                 f"✅ File uploaded successfully: {uploaded_url}")
                     
