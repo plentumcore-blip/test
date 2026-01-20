@@ -177,7 +177,7 @@ export default function BrandPayouts() {
               <h3 className="text-xl font-bold text-[#0B1220] mb-2">No payouts found</h3>
               <p className="text-gray-600">
                 {statusFilter === 'pending' 
-                  ? 'No pending payments. Payouts are created automatically when purchase proofs and reviews are approved.'
+                  ? 'No pending payments. Payouts are created when: purchase proof is approved (reimbursement), content is posted (commission), or review is submitted (review bonus).'
                   : 'No payouts match your filter criteria.'}
               </p>
             </div>
