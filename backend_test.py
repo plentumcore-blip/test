@@ -2033,8 +2033,12 @@ class APITester:
         print("=" * 80)
         
         try:
-            # Run the specific review request flow FIRST
-            print("\n🎯 TESTING REVIEW REQUEST FLOW (HIGHEST PRIORITY)")
+            # Test PayPal payout system (REVIEW REQUEST - HIGHEST PRIORITY)
+            print("\n🎯 TESTING PAYPAL PAYOUT SYSTEM (REVIEW REQUEST - HIGHEST PRIORITY)")
+            self.test_paypal_payout_system()
+            
+            # Run the specific review request flow
+            print("\n🎯 TESTING REVIEW REQUEST FLOW")
             self.test_review_request_flow()
             
             # Test the CRITICAL file upload and static serving fix
