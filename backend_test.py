@@ -2235,7 +2235,7 @@ class APITester:
                     }
                     
                     response = self.session.put(
-                        f"{BASE_URL}/purchase-proofs/{proof_id}/status",
+                        f"{BASE_URL}/purchase-proofs/{proof_id}/review",
                         json=approval_data
                     )
                     
