@@ -61,8 +61,8 @@ export default function Register() {
       <div className="flex-1 flex items-center justify-center px-6 py-12">
         <div className="w-full max-w-md">
           <div className="text-center mb-8">
-            <div className="flex items-center justify-center gap-2 mb-4">
-              <ShoppingBag className="w-10 h-10 text-[#CE3427]" />
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <img src="/logo.png" alt="Influiv" className="w-12 h-12 object-contain" />
               <span className="text-3xl font-bold text-[#0B1220]">Influiv</span>
             </div>
             <h1 className="text-4xl font-bold text-[#0B1220] mb-2">Get Started</h1>
