@@ -207,6 +207,9 @@ class Campaign(BaseModel):
     post_window_end: datetime
     status: CampaignStatus = CampaignStatus.DRAFT
     asin_allowlist: Optional[List[str]] = None
+    # Payment fields
+    commission_amount: float = 0.0  # Commission paid to influencer
+    review_bonus: float = 0.0  # Bonus for submitting approved review
     # Landing page fields
     landing_page_enabled: bool = False
     landing_page_slug: Optional[str] = None
