@@ -1476,10 +1476,38 @@ async def submit_post(
     
     await log_audit(user["id"], "create", "post_submission", post_submission["id"])
     
-    # Send notification email to brand
+    # Get campaign and brand info for commission payout
     campaign = await db.campaigns.find_one({"id": assignment["campaign_id"]})
+    brand = await db.brands.find_one({"id": campaign["brand_id"]}) if campaign else None
+    
+    # Create commission payout when post is submitted
+    if campaign and brand:
+        commission_amount = campaign.get("commission_amount", 0)
+        if commission_amount > 0:
+            # Check if commission payout already exists
+            existing_commission = await db.payouts.find_one({
+                "assignment_id": assignment_id,
+                "payout_type": "commission"
+            })
+            
+            if not existing_commission:
+                commission_payout = Payout(
+                    assignment_id=assignment_id,
+                    influencer_id=influencer["id"],
+                    brand_id=brand["id"],
+                    campaign_id=campaign["id"],
+                    payout_type="commission",
+                    amount=commission_amount,
+                    paypal_email=influencer.get("paypal_email"),
+                    notes=f"Commission for posting content - {campaign['title']}"
+                )
+                payout_doc = commission_payout.model_dump()
+                payout_doc['created_at'] = payout_doc['created_at'].isoformat()
+                payout_doc['updated_at'] = payout_doc['updated_at'].isoformat()
+                await db.payouts.insert_one(payout_doc)
+    
+    # Send notification email to brand
     if campaign:
-        brand = await db.brands.find_one({"id": campaign["brand_id"]})
         brand_user = await db.users.find_one({"id": brand["user_id"]}) if brand else None
         
         if brand_user:
