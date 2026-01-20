@@ -241,8 +241,7 @@ class PurchaseProof(BaseModel):
     assignment_id: str
     order_id: str
     order_date: datetime
-    asin: Optional[str] = None
-    total: Optional[float] = None
+    price: float  # Mandatory price field
     screenshot_urls: List[str] = []
     status: PurchaseProofStatus = PurchaseProofStatus.PENDING
     review_notes: Optional[str] = None
