@@ -260,14 +260,14 @@ const MarketingLandingPage = () => {
           <div className="flex flex-col md:flex-row gap-6 justify-center mb-12">
             <button
               onClick={() => setActiveTab('brands')}
-              className={`px-8 py-3 rounded-full text-lg font-semibold transition-all ${activeTab === 'brands' ? 'bg-slate-900 text-white shadow-lg' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'}`}
+              className={`px-8 py-3 rounded-full text-lg font-semibold transition-all ${activeTab === 'brands' ? 'bg-[#CE3427] text-white shadow-lg' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'}`}
               data-testid="tab-brands"
             >
               For Brands
             </button>
             <button
               onClick={() => setActiveTab('creators')}
-              className={`px-8 py-3 rounded-full text-lg font-semibold transition-all ${activeTab === 'creators' ? 'bg-slate-900 text-white shadow-lg' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'}`}
+              className={`px-8 py-3 rounded-full text-lg font-semibold transition-all ${activeTab === 'creators' ? 'bg-[#CE3427] text-white shadow-lg' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'}`}
               data-testid="tab-creators"
             >
               For Creators
