@@ -176,6 +176,7 @@ class Influencer(BaseModel):
     portfolio_images: List[str] = []  # URLs to portfolio images
     portfolio_videos: List[str] = []  # URLs to portfolio videos
     public_profile_slug: Optional[str] = None  # URL-friendly slug for public profile
+    paypal_email: Optional[str] = None  # PayPal email for payouts
     status: InfluencerStatus = InfluencerStatus.PENDING
     profile_completed: bool = False
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
