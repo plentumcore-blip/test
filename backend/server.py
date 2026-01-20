@@ -273,11 +273,12 @@ class Payout(BaseModel):
     influencer_id: str
     brand_id: str
     campaign_id: str
+    payout_type: str = "reimbursement"  # reimbursement, commission, review_bonus
     amount: float
     currency: str = "USD"
     status: PayoutStatus = PayoutStatus.PENDING
-    payment_method: Optional[str] = None  # PayPal, Bank Transfer, etc.
-    payment_details: Optional[str] = None  # Email, account number (encrypted)
+    payment_method: str = "paypal"  # PayPal is default
+    paypal_email: Optional[str] = None  # Influencer's PayPal email
     notes: Optional[str] = None
     paid_at: Optional[datetime] = None
     paid_by: Optional[str] = None
