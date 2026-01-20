@@ -29,6 +29,7 @@ import InfluencerProfileSetup from './pages/influencer/ProfileSetup';
 import InfluencerPaymentSettings from './pages/influencer/PaymentSettings';
 import AdminReports from './pages/admin/Reports';
 import AdminLandingContent from './pages/admin/LandingContent';
+import AdminCampaigns from './pages/admin/Campaigns';
 import CampaignLandingPage from './pages/CampaignLandingPage';
 import InfluencerPublicProfile from './pages/InfluencerPublicProfile';
 
