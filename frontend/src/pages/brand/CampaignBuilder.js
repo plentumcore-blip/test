@@ -277,6 +277,74 @@ export default function CampaignBuilder() {
 
           {currentStep === 3 && (
             <div className="space-y-6">
+              <h2 className="text-2xl font-bold text-[#0B1220]">Influencer Payments</h2>
+              
+              <div className="bg-[#E8F1FF] p-4 rounded-2xl">
+                <p className="text-sm text-[#0B1220]">
+                  <strong>Payment Structure:</strong> When an influencer completes their assignment, they will receive:
+                </p>
+                <ul className="text-sm text-[#0B1220] mt-2 list-disc list-inside space-y-1">
+                  <li><strong>Reimbursement:</strong> The actual purchase price they paid (based on their receipt)</li>
+                  <li><strong>Commission:</strong> Fixed amount for completing the campaign</li>
+                  <li><strong>Review Bonus:</strong> Additional bonus for submitting an approved Amazon review</li>
+                </ul>
+              </div>
+
+              <div className="grid grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-semibold text-[#0B1220] mb-2">Commission Amount ($)</label>
+                  <div className="relative">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
+                    <input
+                      data-testid="commission-input"
+                      type="number"
+                      step="0.01"
+                      min="0"
+                      value={formData.commission_amount}
+                      onChange={(e) => setFormData({ ...formData, commission_amount: e.target.value })}
+                      className="input pl-7"
+                      placeholder="10.00"
+                    />
+                  </div>
+                  <p className="text-xs text-gray-600 mt-1">Paid when the assignment is completed</p>
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-[#0B1220] mb-2">Review Bonus ($)</label>
+                  <div className="relative">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
+                    <input
+                      data-testid="review-bonus-input"
+                      type="number"
+                      step="0.01"
+                      min="0"
+                      value={formData.review_bonus}
+                      onChange={(e) => setFormData({ ...formData, review_bonus: e.target.value })}
+                      className="input pl-7"
+                      placeholder="5.00"
+                    />
+                  </div>
+                  <p className="text-xs text-gray-600 mt-1">Extra bonus for submitting an Amazon review</p>
+                </div>
+              </div>
+
+              <div className="bg-green-50 p-4 rounded-2xl border border-green-200">
+                <p className="text-sm text-green-800">
+                  <strong>Example:</strong> If an influencer buys a product for $29.99 with your settings:
+                </p>
+                <ul className="text-sm text-green-700 mt-2 space-y-1">
+                  <li>• Reimbursement: $29.99</li>
+                  <li>• Commission: ${formData.commission_amount || '0.00'}</li>
+                  <li>• Review Bonus: ${formData.review_bonus || '0.00'}</li>
+                  <li className="font-semibold pt-1 border-t border-green-300 mt-2">
+                    Total to influencer: ${(29.99 + parseFloat(formData.commission_amount || 0) + parseFloat(formData.review_bonus || 0)).toFixed(2)}
+                  </li>
+                </ul>
+              </div>
+            </div>
+          )}
+
+          {currentStep === 4 && (
+            <div className="space-y-6">
               <h2 className="text-2xl font-bold text-[#0B1220]">Review & Publish</h2>
               
               <div className="space-y-4">
@@ -302,6 +370,13 @@ export default function CampaignBuilder() {
                   <p className="text-sm text-gray-600 mt-2">
                     <strong>Post:</strong> {new Date(formData.post_window_start).toLocaleString()} - {new Date(formData.post_window_end).toLocaleString()}
                   </p>
+                </div>
+
+                <div className="bg-gray-50 p-4 rounded-2xl">
+                  <h3 className="font-bold text-[#0B1220] mb-2">Influencer Payments</h3>
+                  <p className="text-sm text-gray-600"><strong>Commission:</strong> ${formData.commission_amount || '0.00'}</p>
+                  <p className="text-sm text-gray-600 mt-1"><strong>Review Bonus:</strong> ${formData.review_bonus || '0.00'}</p>
+                  <p className="text-xs text-gray-500 mt-2">+ Product reimbursement based on receipt</p>
                 </div>
               </div>
             </div>
