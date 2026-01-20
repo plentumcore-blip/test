@@ -18,15 +18,15 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .gradient-primary {
-  background: linear-gradient(135deg, #1F66FF 0%, #0E2C7E 100%);
+  background: linear-gradient(135deg, #CE3427 0%, #8B1F16 100%);
 }
 
 .gradient-light {
-  background: linear-gradient(135deg, #E8F1FF 0%, #FFFFFF 100%);
+  background: linear-gradient(135deg, #F5E6E4 0%, #FFFFFF 100%);
 }
 
 .btn-primary {
-  background: #1F66FF;
+  background: #CE3427;
   color: #FFFFFF;
   padding: 0.75rem 1.5rem;
   border-radius: 16px;
@@ -34,18 +34,18 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(31, 102, 255, 0.2);
+  box-shadow: 0 4px 12px rgba(206, 52, 39, 0.2);
 }
 
 .btn-primary:hover {
-  background: #0E2C7E;
-  box-shadow: 0 6px 20px rgba(31, 102, 255, 0.3);
+  background: #A32B20;
+  box-shadow: 0 6px 20px rgba(206, 52, 39, 0.3);
   transform: translateY(-2px);
 }
 
 .btn-secondary {
-  background: #E8F1FF;
-  color: #1F66FF;
+  background: #F5E6E4;
+  color: #CE3427;
   padding: 0.75rem 1.5rem;
   border-radius: 16px;
   border: none;
