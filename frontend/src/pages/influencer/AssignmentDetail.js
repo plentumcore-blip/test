@@ -15,8 +15,7 @@ export default function AssignmentDetail() {
   const [purchaseData, setPurchaseData] = useState({
     order_id: '',
     order_date: '',
-    asin: '',
-    total: '',
+    price: '',
     screenshot_url: ''
   });
   const [showPostForm, setShowPostForm] = useState(false);
