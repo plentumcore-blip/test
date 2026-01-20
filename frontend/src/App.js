@@ -117,6 +117,14 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/admin/campaigns"
+            element={
+              <ProtectedRoute allowedRoles={['admin']}>
+                <AdminCampaigns />
+              </ProtectedRoute>
+            }
+          />
 
           {/* Brand Routes */}
           <Route
