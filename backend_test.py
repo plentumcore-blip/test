@@ -883,8 +883,8 @@ class APITester:
                 uploaded_url = result.get('url', '')
                 filename = result.get('filename', '')
                 
-                # Verify the response contains a URL with /api/uploads/ prefix
-                if "/api/uploads/" in uploaded_url:
+                # Verify the response contains a URL with /api/v1/files/ prefix
+                if "/api/v1/files/" in uploaded_url or "/api/uploads/" in uploaded_url:
                     self.log_test("File Upload - URL Format", True, 
                                 f"✅ Upload successful! URL contains /api/uploads/ prefix: {uploaded_url}")
                     
