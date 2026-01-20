@@ -133,10 +133,8 @@ const MarketingLandingPage = () => {
       <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-100 transition-all duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-20 items-center">
-            <div className="flex items-center gap-2">
-              <div className="w-9 h-9 bg-slate-900 rounded-lg flex items-center justify-center shadow-md">
-                <span className="text-white font-bold text-xl">A</span>
-              </div>
+            <div className="flex items-center gap-3">
+              <img src="/logo.png" alt="Influiv" className="w-10 h-10 object-contain" />
               <span className="text-2xl font-bold text-slate-900 tracking-tight">Influiv</span>
             </div>
 
@@ -155,7 +153,7 @@ const MarketingLandingPage = () => {
               </button>
               <button 
                 onClick={() => navigate('/register')}
-                className="bg-slate-900 text-white px-5 py-2.5 rounded-lg text-sm font-semibold hover:bg-slate-800 transition-all shadow-lg shadow-slate-200"
+                className="bg-[#CE3427] text-white px-5 py-2.5 rounded-lg text-sm font-semibold hover:bg-[#A32B20] transition-all shadow-lg shadow-red-200"
                 data-testid="nav-get-started-btn"
               >
                 Get Started
@@ -181,14 +179,14 @@ const MarketingLandingPage = () => {
               <a href="#results" className="text-slate-600 font-medium">Success Stories</a>
               <button 
                 onClick={() => navigate('/login')} 
-                className="text-red-600 font-semibold text-left"
+                className="text-[#CE3427] font-semibold text-left"
                 data-testid="mobile-login-btn"
               >
                 Log In
               </button>
               <button 
                 onClick={() => navigate('/register')}
-                className="bg-slate-900 text-white px-5 py-3 rounded-lg font-semibold w-full"
+                className="bg-[#CE3427] text-white px-5 py-3 rounded-lg font-semibold w-full"
                 data-testid="mobile-get-started-btn"
               >
                 Get Started
