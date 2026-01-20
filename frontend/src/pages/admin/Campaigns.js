@@ -1,12 +1,16 @@
 import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import { Search, Trash2, Eye, Edit, AlertTriangle, ChevronDown, Filter, Building, Calendar, Users, ClipboardList } from 'lucide-react';
 import { toast } from 'sonner';
+import { useAuth } from '../../contexts/AuthContext';
 import AdminSidebar from '../../components/AdminSidebar';
 
 const API_BASE = `${process.env.REACT_APP_BACKEND_URL}/api/v1`;
 
 export default function AdminCampaigns() {
+  const navigate = useNavigate();
+  const { logout } = useAuth();
   const [campaigns, setCampaigns] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
