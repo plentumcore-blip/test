@@ -2245,6 +2245,51 @@ async def update_payout_status(
     
     return {"message": "Payout status updated"}
 
+
+# Influencer Payout Summary endpoint
+@api_router.get("/influencer/payout-summary")
+async def get_influencer_payout_summary(user: dict = Depends(require_role([UserRole.INFLUENCER]))):
+    """Get payout summary for influencer dashboard"""
+    influencer = await db.influencers.find_one({"user_id": user["id"]})
+    if not influencer:
+        raise HTTPException(status_code=404, detail="Influencer profile not found")
+    
+    # Get pending payouts
+    pending_payouts = await db.payouts.find({
+        "influencer_id": influencer["id"],
+        "status": "pending"
+    }, {"_id": 0}).to_list(100)
+    
+    # Calculate totals
+    total_pending = sum(p.get("amount", 0) for p in pending_payouts)
+    
+    # Get paid payouts total
+    paid_result = await db.payouts.aggregate([
+        {"$match": {"influencer_id": influencer["id"], "status": "paid"}},
+        {"$group": {"_id": None, "total": {"$sum": "$amount"}}}
+    ]).to_list(1)
+    total_paid = paid_result[0]["total"] if paid_result else 0
+    
+    # Get breakdown by type
+    pending_reimbursements = sum(p.get("amount", 0) for p in pending_payouts if p.get("payout_type") == "reimbursement")
+    pending_commissions = sum(p.get("amount", 0) for p in pending_payouts if p.get("payout_type") in ["commission", "review_bonus"])
+    
+    # Enrich pending payouts with campaign info
+    for payout in pending_payouts:
+        campaign = await db.campaigns.find_one({"id": payout["campaign_id"]}, {"_id": 0, "title": 1})
+        payout["campaign"] = campaign
+    
+    return {
+        "paypal_email": influencer.get("paypal_email"),
+        "total_pending": total_pending,
+        "total_paid": total_paid,
+        "pending_reimbursements": pending_reimbursements,
+        "pending_commissions": pending_commissions,
+        "pending_payouts": pending_payouts,
+        "payout_count": len(pending_payouts)
+    }
+
+
 # Campaign Landing Pages
 @api_router.put("/campaigns/{campaign_id}/landing-page")
 async def update_campaign_landing_page(
