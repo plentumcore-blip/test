@@ -797,6 +797,8 @@ async def update_influencer_profile(
         update_data["bio"] = profile_data["bio"]
     if "avatar_url" in profile_data:
         update_data["avatar_url"] = profile_data["avatar_url"]
+    if "paypal_email" in profile_data:
+        update_data["paypal_email"] = profile_data["paypal_email"]
     
     # Update portfolio media
     if "portfolio_images" in profile_data:
