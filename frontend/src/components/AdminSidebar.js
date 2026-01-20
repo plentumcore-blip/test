@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Home, ShoppingBag, Users, FileCheck, Settings, LogOut, DollarSign, LayoutGrid, BarChart3, Globe, Menu, X } from 'lucide-react';
+import { Home, ShoppingBag, Users, FileCheck, Settings, LogOut, DollarSign, LayoutGrid, BarChart3, Globe, Menu, X, ClipboardList } from 'lucide-react';
 
 const AdminSidebar = ({ onLogout }) => {
   const navigate = useNavigate();
@@ -10,6 +10,7 @@ const AdminSidebar = ({ onLogout }) => {
   const menuItems = [
     { icon: LayoutGrid, label: 'Dashboard', path: '/admin/dashboard' },
     { icon: Users, label: 'Users', path: '/admin/users' },
+    { icon: ClipboardList, label: 'Campaigns', path: '/admin/campaigns' },
     { icon: FileCheck, label: 'Verification Queue', path: '/admin/verification' },
     { icon: BarChart3, label: 'Reports', path: '/admin/reports' },
     { icon: Globe, label: 'Landing Page', path: '/admin/landing-content' },
