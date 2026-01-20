@@ -1628,6 +1628,404 @@ class APITester:
         print("🎯 REVIEW REQUEST FLOW TESTING COMPLETED")
         print("=" * 60)
 
+    def test_paypal_payout_system(self):
+        """Test PayPal payout system as requested in review"""
+        print("\n=== Testing PayPal Payout System (REVIEW REQUEST) ===")
+        
+        # Step 1: Create Campaign with Payment Fields
+        print("\n--- Step 1: Create Campaign with Payment Fields ---")
+        
+        # Login as brand (brand@example.com / Brand@123)
+        brand = self.login_user("brand@example.com", "Brand@123")
+        if not brand:
+            self.log_test("PayPal Payout - Brand Login", False, "Could not login as brand")
+            return
+        
+        # Create campaign with commission and bonus amounts
+        campaign_data = {
+            "title": "Test Payout Campaign",
+            "description": "Testing payout system",
+            "amazon_attribution_url": "https://amazon.com/test-product",
+            "commission_amount": 15.00,
+            "review_bonus": 5.00,
+            "purchase_window_start": "2024-01-01T00:00:00Z",
+            "purchase_window_end": "2024-12-31T23:59:59Z",
+            "post_window_start": "2024-01-01T00:00:00Z",
+            "post_window_end": "2024-12-31T23:59:59Z"
+        }
+        
+        try:
+            response = self.session.post(f"{BASE_URL}/campaigns", json=campaign_data)
+            if response.status_code == 200:
+                campaign_result = response.json()
+                test_campaign_id = campaign_result.get('id')
+                self.log_test("Create Campaign with Payment Fields", True, 
+                            f"✅ Campaign created with commission_amount: 15.00, review_bonus: 5.00")
+            else:
+                self.log_test("Create Campaign with Payment Fields", False, 
+                            f"❌ Failed to create campaign: {response.status_code}", 
+                            {"response": response.text})
+                return
+        except Exception as e:
+            self.log_test("Create Campaign with Payment Fields", False, f"❌ Error: {str(e)}")
+            return
+        
+        # Step 2: Influencer Profile with PayPal Email
+        print("\n--- Step 2: Influencer Profile with PayPal Email ---")
+        
+        # Login as influencer (creator@example.com / Creator@123)
+        influencer = self.login_user("creator@example.com", "Creator@123")
+        if not influencer:
+            self.log_test("PayPal Payout - Influencer Login", False, "Could not login as influencer")
+            return
+        
+        # Update profile with PayPal email using PUT /api/v1/influencer/profile
+        profile_data = {
+            "name": "Test Creator",
+            "bio": "Testing PayPal payout system",
+            "paypal_email": "creator.paypal@example.com"
+        }
+        
+        try:
+            response = self.session.put(f"{BASE_URL}/influencer/profile", json=profile_data)
+            if response.status_code == 200:
+                self.log_test("Update Profile with PayPal Email", True, 
+                            "✅ Profile updated with PayPal email: creator.paypal@example.com")
+                
+                # Verify the paypal_email is saved
+                me_response = self.session.get(f"{BASE_URL}/auth/me")
+                if me_response.status_code == 200:
+                    user_data = me_response.json()
+                    profile = user_data.get('profile', {})
+                    saved_paypal_email = profile.get('paypal_email')
+                    
+                    if saved_paypal_email == "creator.paypal@example.com":
+                        self.log_test("Verify PayPal Email Saved", True, 
+                                    f"✅ PayPal email correctly saved: {saved_paypal_email}")
+                    else:
+                        self.log_test("Verify PayPal Email Saved", False, 
+                                    f"❌ PayPal email not saved correctly: {saved_paypal_email}")
+                else:
+                    self.log_test("Verify PayPal Email Saved", False, 
+                                f"❌ Could not verify profile: {me_response.status_code}")
+            else:
+                self.log_test("Update Profile with PayPal Email", False, 
+                            f"❌ Failed to update profile: {response.status_code}", 
+                            {"response": response.text})
+                return
+        except Exception as e:
+            self.log_test("Update Profile with PayPal Email", False, f"❌ Error: {str(e)}")
+            return
+        
+        # Step 3: Test Payout Creation on Purchase Proof Approval
+        print("\n--- Step 3: Test Payout Creation on Purchase Proof Approval ---")
+        
+        # Create assignment flow: influencer applies → brand accepts
+        assignment_id = None
+        
+        try:
+            # Apply to the test campaign
+            application_data = {
+                "campaign_id": test_campaign_id,
+                "answers": {"why_interested": "Testing payout system"}
+            }
+            
+            response = self.session.post(f"{BASE_URL}/applications", json=application_data)
+            if response.status_code == 200:
+                application_id = response.json().get('id')
+                self.log_test("Apply to Test Campaign", True, f"✅ Applied to campaign: {application_id}")
+            elif response.status_code == 400 and "already applied" in response.text:
+                self.log_test("Apply to Test Campaign", True, "✅ Already applied to campaign")
+                # Get existing application
+                brand = self.login_user("brand@example.com", "Brand@123")
+                apps_response = self.session.get(f"{BASE_URL}/campaigns/{test_campaign_id}/applications")
+                if apps_response.status_code == 200:
+                    applications = apps_response.json().get('data', [])
+                    if applications:
+                        application_id = applications[0]['id']
+                    else:
+                        self.log_test("Get Existing Application", False, "No applications found")
+                        return
+                else:
+                    self.log_test("Get Existing Application", False, f"Failed to get applications: {apps_response.status_code}")
+                    return
+            else:
+                self.log_test("Apply to Test Campaign", False, 
+                            f"❌ Failed to apply: {response.status_code}", 
+                            {"response": response.text})
+                return
+            
+            # Login as brand and accept application
+            brand = self.login_user("brand@example.com", "Brand@123")
+            if not brand:
+                self.log_test("Brand Accept Application", False, "Could not login as brand")
+                return
+            
+            response = self.session.put(
+                f"{BASE_URL}/applications/{application_id}/status",
+                json={"status": "accepted", "notes": "Test acceptance for payout testing"}
+            )
+            
+            if response.status_code == 200:
+                self.log_test("Brand Accept Application", True, "✅ Application accepted, assignment created")
+                
+                # Get the created assignment
+                assignments_response = self.session.get(f"{BASE_URL}/assignments")
+                if assignments_response.status_code == 200:
+                    assignments = assignments_response.json().get('data', [])
+                    # Find assignment for our test campaign
+                    for assignment in assignments:
+                        if assignment.get('campaign_id') == test_campaign_id:
+                            assignment_id = assignment['id']
+                            break
+                    
+                    if assignment_id:
+                        self.log_test("Get Created Assignment", True, f"✅ Assignment found: {assignment_id}")
+                    else:
+                        self.log_test("Get Created Assignment", False, "❌ Assignment not found")
+                        return
+                else:
+                    self.log_test("Get Created Assignment", False, f"Failed to get assignments: {assignments_response.status_code}")
+                    return
+            else:
+                self.log_test("Brand Accept Application", False, 
+                            f"❌ Failed to accept application: {response.status_code}")
+                return
+                
+        except Exception as e:
+            self.log_test("Create Assignment Flow", False, f"❌ Error: {str(e)}")
+            return
+        
+        # Submit purchase proof with price: 29.99
+        influencer = self.login_user("creator@example.com", "Creator@123")
+        if not influencer:
+            self.log_test("Submit Purchase Proof", False, "Could not login as influencer")
+            return
+        
+        try:
+            purchase_proof_data = {
+                "order_id": "123-PAYOUT-TEST-456",
+                "order_date": "2024-01-15",
+                "price": 29.99,
+                "screenshot_urls": ["https://example.com/purchase-screenshot.jpg"]
+            }
+            
+            response = self.session.post(
+                f"{BASE_URL}/assignments/{assignment_id}/purchase-proof",
+                json=purchase_proof_data
+            )
+            
+            if response.status_code == 200:
+                self.log_test("Submit Purchase Proof", True, 
+                            "✅ Purchase proof submitted with price: 29.99")
+            elif response.status_code == 400 and "already submitted" in response.text:
+                self.log_test("Submit Purchase Proof", True, 
+                            "✅ Purchase proof already submitted")
+            else:
+                self.log_test("Submit Purchase Proof", False, 
+                            f"❌ Failed to submit purchase proof: {response.status_code}", 
+                            {"response": response.text})
+                return
+                
+        except Exception as e:
+            self.log_test("Submit Purchase Proof", False, f"❌ Error: {str(e)}")
+            return
+        
+        # As brand, approve the purchase proof
+        brand = self.login_user("brand@example.com", "Brand@123")
+        if not brand:
+            self.log_test("Approve Purchase Proof", False, "Could not login as brand")
+            return
+        
+        try:
+            # Get the purchase proof to approve
+            proof_response = self.session.get(f"{BASE_URL}/assignments/{assignment_id}/purchase-proof")
+            if proof_response.status_code == 200:
+                proof_data = proof_response.json()
+                proof_id = proof_data.get('id')
+                
+                if proof_id:
+                    # Approve the purchase proof
+                    approval_data = {
+                        "status": "approved",
+                        "notes": "Approved for payout testing"
+                    }
+                    
+                    response = self.session.put(
+                        f"{BASE_URL}/purchase-proofs/{proof_id}/review",
+                        json=approval_data
+                    )
+                    
+                    if response.status_code == 200:
+                        self.log_test("Approve Purchase Proof", True, 
+                                    "✅ Purchase proof approved")
+                        
+                        # Verify a "reimbursement" type payout is created with amount 29.99
+                        payouts_response = self.session.get(f"{BASE_URL}/payouts")
+                        if payouts_response.status_code == 200:
+                            payouts_data = payouts_response.json()
+                            payouts = payouts_data.get('data', [])
+                            
+                            # Look for reimbursement payout with amount 29.99
+                            reimbursement_payout = None
+                            for payout in payouts:
+                                if (payout.get('payout_type') == 'reimbursement' and 
+                                    payout.get('amount') == 29.99 and
+                                    payout.get('assignment_id') == assignment_id):
+                                    reimbursement_payout = payout
+                                    break
+                            
+                            if reimbursement_payout:
+                                self.log_test("Verify Reimbursement Payout Created", True, 
+                                            f"✅ Reimbursement payout created with amount: {reimbursement_payout['amount']}")
+                                self.test_payout_id = reimbursement_payout['id']  # Store for later tests
+                            else:
+                                self.log_test("Verify Reimbursement Payout Created", False, 
+                                            "❌ Reimbursement payout not found")
+                        else:
+                            self.log_test("Verify Reimbursement Payout Created", False, 
+                                        f"❌ Failed to get payouts: {payouts_response.status_code}")
+                    else:
+                        self.log_test("Approve Purchase Proof", False, 
+                                    f"❌ Failed to approve purchase proof: {response.status_code}")
+                else:
+                    self.log_test("Approve Purchase Proof", False, "❌ Purchase proof ID not found")
+            else:
+                self.log_test("Approve Purchase Proof", False, 
+                            f"❌ Failed to get purchase proof: {proof_response.status_code}")
+                
+        except Exception as e:
+            self.log_test("Approve Purchase Proof", False, f"❌ Error: {str(e)}")
+        
+        # Step 4: Test Payout Summary Endpoint
+        print("\n--- Step 4: Test Payout Summary Endpoint ---")
+        
+        # Login as influencer
+        influencer = self.login_user("creator@example.com", "Creator@123")
+        if not influencer:
+            self.log_test("Payout Summary - Influencer Login", False, "Could not login as influencer")
+            return
+        
+        try:
+            response = self.session.get(f"{BASE_URL}/influencer/payout-summary")
+            
+            if response.status_code == 200:
+                summary_data = response.json()
+                
+                # Verify it returns required fields
+                required_fields = ['total_pending', 'pending_reimbursements', 'pending_commissions', 'paypal_email']
+                missing_fields = [field for field in required_fields if field not in summary_data]
+                
+                if not missing_fields:
+                    self.log_test("Payout Summary Endpoint", True, 
+                                f"✅ Payout summary returned all required fields: {list(summary_data.keys())}")
+                    
+                    # Log the values
+                    self.log_test("Payout Summary Values", True, 
+                                f"✅ total_pending: {summary_data.get('total_pending')}, "
+                                f"pending_reimbursements: {summary_data.get('pending_reimbursements')}, "
+                                f"pending_commissions: {summary_data.get('pending_commissions')}, "
+                                f"paypal_email: {summary_data.get('paypal_email')}")
+                else:
+                    self.log_test("Payout Summary Endpoint", False, 
+                                f"❌ Missing required fields: {missing_fields}")
+            else:
+                self.log_test("Payout Summary Endpoint", False, 
+                            f"❌ Failed to get payout summary: {response.status_code}", 
+                            {"response": response.text})
+                
+        except Exception as e:
+            self.log_test("Payout Summary Endpoint", False, f"❌ Error: {str(e)}")
+        
+        # Step 5: Test Brand Payouts List
+        print("\n--- Step 5: Test Brand Payouts List ---")
+        
+        # Login as brand
+        brand = self.login_user("brand@example.com", "Brand@123")
+        if not brand:
+            self.log_test("Brand Payouts List - Brand Login", False, "Could not login as brand")
+            return
+        
+        try:
+            response = self.session.get(f"{BASE_URL}/payouts")
+            
+            if response.status_code == 200:
+                payouts_data = response.json()
+                payouts = payouts_data.get('data', [])
+                
+                if payouts:
+                    # Verify payouts include influencer info and payout_type
+                    first_payout = payouts[0]
+                    
+                    has_influencer_info = 'influencer_id' in first_payout
+                    has_payout_type = 'payout_type' in first_payout
+                    
+                    if has_influencer_info and has_payout_type:
+                        self.log_test("Brand Payouts List", True, 
+                                    f"✅ Brand payouts list returned {len(payouts)} payouts with influencer info and payout_type")
+                    else:
+                        missing_info = []
+                        if not has_influencer_info:
+                            missing_info.append("influencer_id")
+                        if not has_payout_type:
+                            missing_info.append("payout_type")
+                        
+                        self.log_test("Brand Payouts List", False, 
+                                    f"❌ Payouts missing required info: {missing_info}")
+                else:
+                    self.log_test("Brand Payouts List", True, 
+                                "✅ Brand payouts list returned empty array (no payouts yet)")
+            else:
+                self.log_test("Brand Payouts List", False, 
+                            f"❌ Failed to get brand payouts: {response.status_code}", 
+                            {"response": response.text})
+                
+        except Exception as e:
+            self.log_test("Brand Payouts List", False, f"❌ Error: {str(e)}")
+        
+        # Step 6: Test Mark as Paid
+        print("\n--- Step 6: Test Mark as Paid ---")
+        
+        if hasattr(self, 'test_payout_id'):
+            try:
+                # Mark payout as paid
+                status_data = {"status": "paid"}
+                
+                response = self.session.put(
+                    f"{BASE_URL}/payouts/{self.test_payout_id}/status",
+                    json=status_data
+                )
+                
+                if response.status_code == 200:
+                    self.log_test("Mark Payout as Paid", True, 
+                                "✅ Payout status updated to 'paid'")
+                    
+                    # Verify payout status is updated
+                    verify_response = self.session.get(f"{BASE_URL}/payouts")
+                    if verify_response.status_code == 200:
+                        payouts = verify_response.json().get('data', [])
+                        updated_payout = next((p for p in payouts if p['id'] == self.test_payout_id), None)
+                        
+                        if updated_payout and updated_payout.get('status') == 'paid':
+                            self.log_test("Verify Payout Status Update", True, 
+                                        "✅ Payout status correctly updated to 'paid'")
+                        else:
+                            self.log_test("Verify Payout Status Update", False, 
+                                        f"❌ Payout status not updated correctly: {updated_payout.get('status') if updated_payout else 'Not found'}")
+                    else:
+                        self.log_test("Verify Payout Status Update", False, 
+                                    f"❌ Could not verify payout status: {verify_response.status_code}")
+                else:
+                    self.log_test("Mark Payout as Paid", False, 
+                                f"❌ Failed to update payout status: {response.status_code}", 
+                                {"response": response.text})
+                    
+            except Exception as e:
+                self.log_test("Mark Payout as Paid", False, f"❌ Error: {str(e)}")
+        else:
+            self.log_test("Mark Payout as Paid", False, 
+                        "❌ No test payout ID available (previous steps may have failed)")
+
     def run_all_tests(self):
         """Run all tests"""
         print("🚀 Starting Backend API Tests for AffiTarget Review Request")
