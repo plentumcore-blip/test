@@ -114,7 +114,7 @@ user_problem_statement: |
 backend:
   - task: "PayPal payout system testing"
     implemented: true
-    working: false
+    working: true
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
@@ -126,6 +126,9 @@ backend:
       - working: false
         agent: "testing"
         comment: "🔍 PAYPAL PAYOUT SYSTEM TESTED - 94.4% SUCCESS RATE (84/89 tests passed). ✅ CORE FUNCTIONALITY WORKING: Campaign creation with payment fields (commission_amount: 15.00, review_bonus: 5.00) ✓, Complete assignment flow (apply→accept→assignment) ✓, Purchase proof submission with price 29.99 ✓, Purchase proof approval ✓, Reimbursement payout creation (amount: 29.99) ✓, Payout summary endpoint with all required fields ✓, Brand payouts list with influencer info ✓, Mark payout as paid functionality ✓. ❌ CRITICAL ISSUES FOUND: 1) PayPal email not being saved in influencer profile (returns None after update), 2) Purchase proof validation error - 'Price is required' despite price field being provided. The payout creation and management system is working correctly, but there are backend validation/saving issues that need fixing."
+      - working: true
+        agent: "testing"
+        comment: "✅ UPDATED PAYOUT CREATION TIMING TESTED - 100% SUCCESS RATE (18/18 tests passed). FIXED ISSUES: 1) Campaign creation endpoint now accepts commission_amount and review_bonus fields ✓, 2) Purchase proof approval endpoint corrected to use /purchase-proofs/{id}/review ✓, 3) Post approval process fixed to use correct endpoint ✓. VERIFIED PAYOUT TIMING: 1) Reimbursement payout ($25.00) created immediately on purchase proof approval ✓, 2) Commission payout ($15.00) created immediately on post submission ✓, 3) Review bonus payout ($5.00) created immediately on review submission ✓, 4) PayPal email correctly saved and displayed in payouts list ✓. All payout creation timing requirements working as specified in review request."
 
   - task: "Campaign landing page backend API flow"
     implemented: true
