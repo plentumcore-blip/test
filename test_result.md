@@ -112,6 +112,21 @@ user_problem_statement: |
      - Influencer analytics (earnings, assignments, applications, payment status)
 
 backend:
+  - task: "PayPal payout system testing"
+    implemented: true
+    working: false
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "user"
+        comment: "User requested testing of PayPal payout system: 1) Create campaign with payment fields, 2) Update influencer profile with PayPal email, 3) Test payout creation on purchase proof approval, 4) Test payout summary endpoint, 5) Test brand payouts list, 6) Test mark as paid functionality"
+      - working: false
+        agent: "testing"
+        comment: "🔍 PAYPAL PAYOUT SYSTEM TESTED - 94.4% SUCCESS RATE (84/89 tests passed). ✅ CORE FUNCTIONALITY WORKING: Campaign creation with payment fields (commission_amount: 15.00, review_bonus: 5.00) ✓, Complete assignment flow (apply→accept→assignment) ✓, Purchase proof submission with price 29.99 ✓, Purchase proof approval ✓, Reimbursement payout creation (amount: 29.99) ✓, Payout summary endpoint with all required fields ✓, Brand payouts list with influencer info ✓, Mark payout as paid functionality ✓. ❌ CRITICAL ISSUES FOUND: 1) PayPal email not being saved in influencer profile (returns None after update), 2) Purchase proof validation error - 'Price is required' despite price field being provided. The payout creation and management system is working correctly, but there are backend validation/saving issues that need fixing."
+
   - task: "Campaign landing page backend API flow"
     implemented: true
     working: true
