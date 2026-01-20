@@ -1691,34 +1691,8 @@ async def review_product_review(
     influencer_user = await db.users.find_one({"id": influencer["user_id"]}) if influencer else None
     brand = await db.brands.find_one({"id": campaign["brand_id"]}) if campaign else None
     
-    # Create commission + review bonus payout when approved
-    if status == "approved" and influencer and campaign and brand:
-        commission_amount = campaign.get("commission_amount", 0)
-        review_bonus = campaign.get("review_bonus", 0)
-        total_bonus = commission_amount + review_bonus
-        
-        if total_bonus > 0:
-            # Check if commission payout already exists
-            existing_commission = await db.payouts.find_one({
-                "assignment_id": assignment["id"],
-                "payout_type": {"$in": ["commission", "review_bonus"]}
-            })
-            
-            if not existing_commission:
-                commission_payout = Payout(
-                    assignment_id=assignment["id"],
-                    influencer_id=influencer["id"],
-                    brand_id=brand["id"],
-                    campaign_id=campaign["id"],
-                    payout_type="commission",
-                    amount=total_bonus,
-                    paypal_email=influencer.get("paypal_email"),
-                    notes=f"Commission (${commission_amount}) + Review Bonus (${review_bonus}) for {campaign['title']}"
-                )
-                payout_doc = commission_payout.model_dump()
-                payout_doc['created_at'] = payout_doc['created_at'].isoformat()
-                payout_doc['updated_at'] = payout_doc['updated_at'].isoformat()
-                await db.payouts.insert_one(payout_doc)
+    # Note: Review bonus payout is created when review is submitted (not on approval)
+    # This allows brands to see pending payouts and pay influencers
     
     # Send email notification to influencer
     if influencer_user and campaign:
