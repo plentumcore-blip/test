@@ -22,10 +22,6 @@ export default function AdminCampaigns() {
   });
   const [saving, setSaving] = useState(false);
 
-  useEffect(() => {
-    fetchCampaigns();
-  }, [statusFilter]);
-
   const fetchCampaigns = async () => {
     try {
       const params = new URLSearchParams();
@@ -41,6 +37,11 @@ export default function AdminCampaigns() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchCampaigns();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [statusFilter]);
 
   const handleDelete = async (campaign, forceDelete = false) => {
     setDeleting(true);
