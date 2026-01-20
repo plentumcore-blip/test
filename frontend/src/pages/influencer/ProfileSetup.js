@@ -257,6 +257,27 @@ export default function InfluencerProfileSetup() {
               />
             </div>
 
+            {/* PayPal Email for Payments */}
+            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-6 border border-blue-200">
+              <label className="block text-sm font-semibold text-[#0B1220] mb-2 flex items-center gap-2">
+                <svg className="w-5 h-5 text-[#0070BA]" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944 3.72a.77.77 0 0 1 .76-.645h6.464c2.115 0 3.792.57 4.864 1.65.997 1.004 1.397 2.435 1.183 4.25-.463 3.93-2.857 5.926-7.108 5.926h-1.22a.77.77 0 0 0-.76.645l-1.05 5.79z"/>
+                </svg>
+                PayPal Email (for Payments)
+              </label>
+              <input
+                type="email"
+                data-testid="paypal-email-input"
+                value={profile.paypal_email}
+                onChange={(e) => setProfile({ ...profile, paypal_email: e.target.value })}
+                className="input"
+                placeholder="your-paypal@email.com"
+              />
+              <p className="text-xs text-gray-600 mt-2">
+                Brands will use this email to send your payments via PayPal. Make sure it's the same email linked to your PayPal account.
+              </p>
+            </div>
+
             <div>
               <label className="block text-sm font-semibold text-[#0B1220] mb-2">Profile Avatar</label>
               <div className="flex flex-col sm:flex-row items-center gap-4">
