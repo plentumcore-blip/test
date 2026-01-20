@@ -1527,7 +1527,8 @@ async def submit_product_review(
         "review_text": review_data["review_text"],
         "rating": review_data.get("rating", 5),
         "screenshot_url": review_data["screenshot_url"],
-        "platform": review_data.get("platform", "other"),
+        "amazon_review_url": review_data.get("amazon_review_url"),  # URL to the Amazon review
+        "platform": "amazon",  # Always Amazon review
         "status": "pending",
         "created_at": datetime.now(timezone.utc).isoformat(),
         "updated_at": datetime.now(timezone.utc).isoformat()
