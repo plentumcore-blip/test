@@ -225,10 +225,10 @@ export default function BrandPayouts() {
                     {/* Actions */}
                     {payout.status === 'pending' && (
                       <div className="flex flex-col gap-3">
-                        {payout.paypal_email ? (
+                        {(payout.influencer?.paypal_email || payout.paypal_email) ? (
                           <>
                             <a
-                              href={`https://paypal.me/${payout.paypal_email.split('@')[0]}/${payout.amount}`}
+                              href={`https://paypal.me/${(payout.influencer?.paypal_email || payout.paypal_email).split('@')[0]}/${payout.amount}`}
                               target="_blank"
                               rel="noopener noreferrer"
                               className="flex items-center justify-center gap-2 px-6 py-3 bg-[#0070BA] text-white rounded-xl font-semibold hover:bg-[#003087] transition-colors"
@@ -240,14 +240,14 @@ export default function BrandPayouts() {
                               <ExternalLink className="w-4 h-4" />
                             </a>
                             <p className="text-xs text-gray-500 text-center">
-                              PayPal: {payout.paypal_email}
+                              PayPal: {payout.influencer?.paypal_email || payout.paypal_email}
                             </p>
                           </>
                         ) : (
                           <div className="flex items-center gap-2 px-4 py-3 bg-yellow-50 border border-yellow-200 rounded-xl">
                             <AlertCircle className="w-5 h-5 text-yellow-600" />
                             <span className="text-sm text-yellow-700">
-                              Influencer hasn't set PayPal email
+                              Influencer hasn&apos;t set PayPal email
                             </span>
                           </div>
                         )}
