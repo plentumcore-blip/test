@@ -308,30 +308,23 @@ export default function AssignmentDetail() {
                         />
                       </div>
 
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <label className="block text-sm font-semibold text-[#0B1220] mb-2">ASIN (Optional)</label>
+                      <div>
+                        <label className="block text-sm font-semibold text-[#0B1220] mb-2">Price *</label>
+                        <div className="relative">
+                          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
                           <input
-                            data-testid="asin-input"
-                            type="text"
-                            value={purchaseData.asin}
-                            onChange={(e) => setPurchaseData({ ...purchaseData, asin: e.target.value })}
-                            className="input"
-                            placeholder="B08N5WRWNW"
-                          />
-                        </div>
-                        <div>
-                          <label className="block text-sm font-semibold text-[#0B1220] mb-2">Total (Optional)</label>
-                          <input
-                            data-testid="total-input"
+                            data-testid="price-input"
                             type="number"
                             step="0.01"
-                            value={purchaseData.total}
-                            onChange={(e) => setPurchaseData({ ...purchaseData, total: e.target.value })}
-                            className="input"
+                            min="0.01"
+                            value={purchaseData.price}
+                            onChange={(e) => setPurchaseData({ ...purchaseData, price: e.target.value })}
+                            className="input pl-7"
                             placeholder="49.99"
+                            required
                           />
                         </div>
+                        <p className="text-xs text-gray-500 mt-1">Enter the total price paid for the product</p>
                       </div>
 
                       <div>
