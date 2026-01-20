@@ -2651,8 +2651,8 @@ async def upload_file(
         # Fallback to environment variable
         base_url = os.environ.get('REACT_APP_BACKEND_URL', 'http://localhost:8001')
     
-    # Construct full URL using the /api/files/ endpoint
-    file_url = f"{base_url}/api/files/{unique_filename}"
+    # Construct full URL using the /api/v1/files/ endpoint
+    file_url = f"{base_url}/api/v1/files/{unique_filename}"
     
     # Log audit
     try:
