@@ -17,6 +17,23 @@ code {
         source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
+/* Global button styles */
+.btn-primary {
+    @apply px-6 py-3 bg-[#CE3427] text-white rounded-xl font-semibold hover:bg-[#A32B20] transition-colors;
+}
+
+.btn-secondary {
+    @apply px-6 py-3 border-2 border-[#CE3427] text-[#CE3427] rounded-xl font-semibold hover:bg-[#F5E6E4] transition-colors;
+}
+
+.input {
+    @apply w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#CE3427] focus:border-transparent transition-all;
+}
+
+.card {
+    @apply bg-white rounded-2xl shadow-sm border border-gray-100 p-6;
+}
+
 @layer base {
     :root {
         --background: 0 0% 100%;
