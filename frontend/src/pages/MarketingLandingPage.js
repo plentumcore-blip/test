@@ -589,30 +589,30 @@ const MarketingLandingPage = () => {
       </section>
 
       {/* CTA Footer */}
-      <section className="bg-slate-900 py-32 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-red-600 rounded-full blur-[100px] opacity-20"></div>
-        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-red-600 rounded-full blur-[100px] opacity-20"></div>
+      <section className="bg-[#CE3427] py-32 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-white rounded-full blur-[100px] opacity-10"></div>
+        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-white rounded-full blur-[100px] opacity-10"></div>
 
         <div className="max-w-4xl mx-auto px-4 text-center relative z-10">
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 tracking-tight">Ready to streamline your seeding?</h2>
-          <p className="text-xl text-slate-400 mb-10 max-w-2xl mx-auto">Join the platform powering the next generation of e-commerce brands and creators.</p>
+          <p className="text-xl text-red-100 mb-10 max-w-2xl mx-auto">Join the platform powering the next generation of e-commerce brands and creators.</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button 
               onClick={() => navigate('/register')}
-              className="bg-white text-slate-900 px-10 py-4 rounded-xl font-bold text-lg hover:bg-slate-100 transition-all shadow-xl"
+              className="bg-white text-[#CE3427] px-10 py-4 rounded-xl font-bold text-lg hover:bg-red-50 transition-all shadow-xl"
               data-testid="cta-get-started-btn"
             >
               Get Started Free
             </button>
             <button 
               onClick={() => navigate('/login')}
-              className="bg-slate-800 border border-slate-700 text-white px-10 py-4 rounded-xl font-bold text-lg hover:bg-slate-700 transition-all"
+              className="bg-red-700 border border-red-600 text-white px-10 py-4 rounded-xl font-bold text-lg hover:bg-red-800 transition-all"
               data-testid="cta-login-btn"
             >
               Schedule Demo
             </button>
           </div>
-          <p className="mt-8 text-sm text-slate-500">No credit card required for trial • Cancel anytime</p>
+          <p className="mt-8 text-sm text-red-200">No credit card required for trial • Cancel anytime</p>
         </div>
       </section>
 
@@ -621,10 +621,8 @@ const MarketingLandingPage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-5 gap-12 mb-16">
             <div className="col-span-2">
-              <div className="flex items-center gap-2 mb-6">
-                <div className="w-8 h-8 bg-slate-900 rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold text-sm">A</span>
-                </div>
+              <div className="flex items-center gap-3 mb-6">
+                <img src="/logo.png" alt="Influiv" className="w-8 h-8 object-contain" />
                 <span className="text-xl font-bold text-slate-900">Influiv</span>
               </div>
               <p className="text-slate-500 leading-relaxed mb-6 max-w-sm">
