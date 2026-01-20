@@ -6,7 +6,7 @@ import { toast } from 'sonner';
 
 const API_BASE = `${process.env.REACT_APP_BACKEND_URL}/api/v1`;
 
-const steps = ['Brief', 'Amazon URL', 'Windows', 'Review'];
+const steps = ['Brief', 'Amazon URL', 'Windows', 'Payment', 'Review'];
 
 export default function CampaignBuilder() {
   const [currentStep, setCurrentStep] = useState(0);
@@ -18,7 +18,9 @@ export default function CampaignBuilder() {
     purchase_window_end: '',
     post_window_start: '',
     post_window_end: '',
-    asin_allowlist: ''
+    asin_allowlist: '',
+    commission_amount: '',
+    review_bonus: ''
   });
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
