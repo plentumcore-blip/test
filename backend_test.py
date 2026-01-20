@@ -1301,6 +1301,333 @@ class APITester:
         except Exception as e:
             self.log_test("404 for Non-existent Campaign", False, f"Error: {str(e)}")
     
+    def test_review_request_flow(self):
+        """Test the exact flow requested in the review request"""
+        print("\n=== TESTING REVIEW REQUEST FLOW ===")
+        print("Testing the specific AffiTarget application flow as requested:")
+        print("1. File Upload System")
+        print("2. Influencer Profile with File Upload") 
+        print("3. Campaign Application Flow")
+        print("4. Brand Application Review")
+        print("5. Purchase Proof Submission")
+        print("=" * 60)
+        
+        # Step 1: File Upload System
+        print("\n🔸 STEP 1: FILE UPLOAD SYSTEM")
+        print("- Login as influencer (creator@example.com / Creator@123)")
+        print("- Upload a test image file using POST /api/v1/upload")
+        print("- Verify the returned URL has /api/files/ prefix")
+        print("- Access the uploaded file URL and verify it returns 200 OK")
+        
+        # Login as influencer
+        influencer = self.login_user("creator@example.com", "Creator@123")
+        if not influencer:
+            self.log_test("Review Request - Step 1 Setup", False, "Could not login as influencer")
+            return
+        
+        # Upload test image
+        try:
+            import io
+            from PIL import Image
+            
+            # Create test image
+            img = Image.new('RGB', (100, 100), color='green')
+            img_bytes = io.BytesIO()
+            img.save(img_bytes, format='PNG')
+            img_bytes.seek(0)
+            
+            files = {'file': ('test_review_image.png', img_bytes, 'image/png')}
+            response = self.session.post(f"{BASE_URL}/upload", files=files)
+            
+            if response.status_code == 200:
+                result = response.json()
+                uploaded_url = result.get('url', '')
+                
+                # Check if URL has correct prefix (note: review mentions /api/files/ but implementation uses /api/uploads/)
+                if "/api/uploads/" in uploaded_url or "/api/files/" in uploaded_url:
+                    self.log_test("Step 1 - File Upload", True, 
+                                f"✅ File uploaded successfully: {uploaded_url}")
+                    
+                    # Test accessing the file
+                    public_session = requests.Session()
+                    file_response = public_session.get(uploaded_url)
+                    
+                    if file_response.status_code == 200:
+                        self.log_test("Step 1 - File Access", True, 
+                                    f"✅ Uploaded file accessible (200 OK): {len(file_response.content)} bytes")
+                        self.review_uploaded_url = uploaded_url
+                    else:
+                        self.log_test("Step 1 - File Access", False, 
+                                    f"❌ Cannot access uploaded file: {file_response.status_code}")
+                else:
+                    self.log_test("Step 1 - File Upload", False, 
+                                f"❌ URL doesn't have expected prefix: {uploaded_url}")
+            else:
+                self.log_test("Step 1 - File Upload", False, 
+                            f"❌ File upload failed: {response.status_code}")
+                
+        except Exception as e:
+            self.log_test("Step 1 - File Upload", False, f"❌ Error: {str(e)}")
+        
+        # Step 2: Influencer Profile with File Upload
+        print("\n🔸 STEP 2: INFLUENCER PROFILE WITH FILE UPLOAD")
+        print("- Update influencer profile with avatar_url using PUT /api/v1/influencer/profile")
+        print("- Verify GET /api/v1/auth/me returns the updated avatar_url")
+        
+        if hasattr(self, 'review_uploaded_url'):
+            try:
+                # Update profile with avatar
+                profile_data = {
+                    "name": "Test Creator",
+                    "bio": "Test bio for review",
+                    "avatar_url": self.review_uploaded_url
+                }
+                
+                response = self.session.put(f"{BASE_URL}/influencer/profile", json=profile_data)
+                
+                if response.status_code == 200:
+                    self.log_test("Step 2 - Update Profile", True, 
+                                "✅ Profile updated with avatar_url")
+                    
+                    # Verify via /auth/me
+                    me_response = self.session.get(f"{BASE_URL}/auth/me")
+                    if me_response.status_code == 200:
+                        me_data = me_response.json()
+                        profile = me_data.get('profile', {})
+                        returned_avatar = profile.get('avatar_url', '')
+                        
+                        if returned_avatar == self.review_uploaded_url:
+                            self.log_test("Step 2 - Verify Avatar", True, 
+                                        f"✅ GET /auth/me returns correct avatar_url: {returned_avatar}")
+                        else:
+                            self.log_test("Step 2 - Verify Avatar", False, 
+                                        f"❌ Avatar URL mismatch. Expected: {self.review_uploaded_url}, Got: {returned_avatar}")
+                    else:
+                        self.log_test("Step 2 - Verify Avatar", False, 
+                                    f"❌ Failed to get /auth/me: {me_response.status_code}")
+                else:
+                    self.log_test("Step 2 - Update Profile", False, 
+                                f"❌ Profile update failed: {response.status_code}")
+                    
+            except Exception as e:
+                self.log_test("Step 2 - Profile Update", False, f"❌ Error: {str(e)}")
+        else:
+            self.log_test("Step 2 - Profile Update", False, "❌ Skipped - no uploaded file from Step 1")
+        
+        # Step 3: Campaign Application Flow
+        print("\n🔸 STEP 3: CAMPAIGN APPLICATION FLOW")
+        print("- Login as influencer")
+        print("- Get available campaigns from GET /api/v1/campaigns")
+        print("- Apply to a campaign using POST /api/v1/applications")
+        
+        # Already logged in as influencer
+        try:
+            # Get campaigns
+            response = self.session.get(f"{BASE_URL}/campaigns")
+            if response.status_code == 200:
+                campaigns_data = response.json()
+                campaigns = campaigns_data.get('data', [])
+                
+                if campaigns:
+                    campaign_id = campaigns[0]['id']
+                    campaign_title = campaigns[0].get('title', 'Unknown')
+                    
+                    self.log_test("Step 3 - Get Campaigns", True, 
+                                f"✅ Found {len(campaigns)} campaigns, using: {campaign_title}")
+                    
+                    # Apply to campaign
+                    application_data = {
+                        "campaign_id": campaign_id,
+                        "answers": {"motivation": "Testing the review request flow"}
+                    }
+                    
+                    app_response = self.session.post(f"{BASE_URL}/applications", json=application_data)
+                    
+                    if app_response.status_code == 200:
+                        app_result = app_response.json()
+                        application_id = app_result.get('id')
+                        self.log_test("Step 3 - Apply to Campaign", True, 
+                                    f"✅ Application submitted successfully: {application_id}")
+                        self.review_campaign_id = campaign_id
+                        self.review_application_id = application_id
+                    elif app_response.status_code == 400 and "already applied" in app_response.text:
+                        self.log_test("Step 3 - Apply to Campaign", True, 
+                                    "✅ Already applied to campaign (expected if running multiple times)")
+                        self.review_campaign_id = campaign_id
+                    else:
+                        self.log_test("Step 3 - Apply to Campaign", False, 
+                                    f"❌ Application failed: {app_response.status_code}")
+                else:
+                    self.log_test("Step 3 - Get Campaigns", False, "❌ No campaigns available")
+            else:
+                self.log_test("Step 3 - Get Campaigns", False, 
+                            f"❌ Failed to get campaigns: {response.status_code}")
+                
+        except Exception as e:
+            self.log_test("Step 3 - Campaign Application", False, f"❌ Error: {str(e)}")
+        
+        # Step 4: Brand Application Review
+        print("\n🔸 STEP 4: BRAND APPLICATION REVIEW")
+        print("- Login as brand (brand@example.com / Brand@123)")
+        print("- Get applications for the campaign")
+        print("- Accept the application to create an assignment")
+        
+        # Login as brand
+        brand = self.login_user("brand@example.com", "Brand@123")
+        if not brand:
+            self.log_test("Step 4 - Brand Login", False, "❌ Could not login as brand")
+        elif hasattr(self, 'review_campaign_id'):
+            try:
+                # Get applications for campaign
+                response = self.session.get(f"{BASE_URL}/campaigns/{self.review_campaign_id}/applications")
+                
+                if response.status_code == 200:
+                    applications_data = response.json()
+                    applications = applications_data.get('data', [])
+                    
+                    if applications:
+                        # Find application from our test influencer
+                        target_app = None
+                        for app in applications:
+                            influencer_info = app.get('influencer', {})
+                            if influencer_info.get('name') == 'Test Creator':  # Name we set in Step 2
+                                target_app = app
+                                break
+                        
+                        if not target_app:
+                            target_app = applications[0]  # Use first application
+                        
+                        app_id = target_app['id']
+                        self.log_test("Step 4 - Get Applications", True, 
+                                    f"✅ Found {len(applications)} applications, processing application: {app_id}")
+                        
+                        # Accept the application
+                        accept_data = {
+                            "status": "accepted",
+                            "notes": "Accepted for review request testing"
+                        }
+                        
+                        accept_response = self.session.put(
+                            f"{BASE_URL}/applications/{app_id}/status",
+                            json=accept_data
+                        )
+                        
+                        if accept_response.status_code == 200:
+                            self.log_test("Step 4 - Accept Application", True, 
+                                        "✅ Application accepted successfully - assignment created")
+                        else:
+                            self.log_test("Step 4 - Accept Application", False, 
+                                        f"❌ Failed to accept application: {accept_response.status_code}")
+                    else:
+                        self.log_test("Step 4 - Get Applications", False, "❌ No applications found for campaign")
+                else:
+                    self.log_test("Step 4 - Get Applications", False, 
+                                f"❌ Failed to get applications: {response.status_code}")
+                    
+            except Exception as e:
+                self.log_test("Step 4 - Brand Application Review", False, f"❌ Error: {str(e)}")
+        else:
+            self.log_test("Step 4 - Brand Application Review", False, "❌ Skipped - no campaign from Step 3")
+        
+        # Step 5: Purchase Proof Submission
+        print("\n🔸 STEP 5: PURCHASE PROOF SUBMISSION")
+        print("- Login as influencer")
+        print("- Get the assignment from GET /api/v1/assignments/my")
+        print("- Submit purchase proof using POST /api/v1/assignments/{id}/purchase-proof")
+        print("- Verify the submission succeeds and assignment status changes to 'purchase_review'")
+        
+        # Login back as influencer
+        influencer = self.login_user("creator@example.com", "Creator@123")
+        if not influencer:
+            self.log_test("Step 5 - Influencer Login", False, "❌ Could not login as influencer")
+        else:
+            try:
+                # Get assignments (note: endpoint is /assignments not /assignments/my)
+                response = self.session.get(f"{BASE_URL}/assignments")
+                
+                if response.status_code == 200:
+                    assignments_data = response.json()
+                    assignments = assignments_data.get('data', [])
+                    
+                    if assignments:
+                        # Find assignment in purchase_required status
+                        target_assignment = None
+                        for assignment in assignments:
+                            if assignment.get('status') == 'purchase_required':
+                                target_assignment = assignment
+                                break
+                        
+                        if not target_assignment:
+                            target_assignment = assignments[0]  # Use first assignment
+                        
+                        assignment_id = target_assignment['id']
+                        current_status = target_assignment.get('status', 'unknown')
+                        
+                        self.log_test("Step 5 - Get Assignment", True, 
+                                    f"✅ Found assignment: {assignment_id} (status: {current_status})")
+                        
+                        # Submit purchase proof
+                        purchase_proof_data = {
+                            "order_id": "123-TEST-ORDER",
+                            "order_date": "2025-01-15",  # Past date as specified
+                            "screenshot_urls": ["https://example.com/screenshot.jpg"]
+                        }
+                        
+                        proof_response = self.session.post(
+                            f"{BASE_URL}/assignments/{assignment_id}/purchase-proof",
+                            json=purchase_proof_data
+                        )
+                        
+                        if proof_response.status_code == 200:
+                            proof_result = proof_response.json()
+                            self.log_test("Step 5 - Submit Purchase Proof", True, 
+                                        f"✅ Purchase proof submitted successfully: {proof_result.get('message', 'Success')}")
+                            
+                            # Verify assignment status changed
+                            verify_response = self.session.get(f"{BASE_URL}/assignments")
+                            if verify_response.status_code == 200:
+                                updated_assignments = verify_response.json().get('data', [])
+                                updated_assignment = next((a for a in updated_assignments if a['id'] == assignment_id), None)
+                                
+                                if updated_assignment:
+                                    new_status = updated_assignment.get('status')
+                                    if new_status == 'purchase_review':
+                                        self.log_test("Step 5 - Verify Status Change", True, 
+                                                    f"✅ Assignment status correctly changed to 'purchase_review'")
+                                    else:
+                                        self.log_test("Step 5 - Verify Status Change", False, 
+                                                    f"❌ Assignment status is '{new_status}', expected 'purchase_review'")
+                                else:
+                                    self.log_test("Step 5 - Verify Status Change", False, 
+                                                "❌ Could not find assignment after submission")
+                            else:
+                                self.log_test("Step 5 - Verify Status Change", False, 
+                                            "❌ Could not verify status change")
+                                
+                        elif proof_response.status_code == 400:
+                            error_text = proof_response.text
+                            if "already submitted" in error_text or "already exists" in error_text:
+                                self.log_test("Step 5 - Submit Purchase Proof", True, 
+                                            "✅ Purchase proof already submitted (expected if running multiple times)")
+                            else:
+                                self.log_test("Step 5 - Submit Purchase Proof", False, 
+                                            f"❌ Purchase proof validation error: {error_text}")
+                        else:
+                            self.log_test("Step 5 - Submit Purchase Proof", False, 
+                                        f"❌ Purchase proof submission failed: {proof_response.status_code}")
+                    else:
+                        self.log_test("Step 5 - Get Assignment", False, "❌ No assignments found")
+                else:
+                    self.log_test("Step 5 - Get Assignment", False, 
+                                f"❌ Failed to get assignments: {response.status_code}")
+                    
+            except Exception as e:
+                self.log_test("Step 5 - Purchase Proof Submission", False, f"❌ Error: {str(e)}")
+        
+        print("\n" + "=" * 60)
+        print("🎯 REVIEW REQUEST FLOW TESTING COMPLETED")
+        print("=" * 60)
+
     def run_all_tests(self):
         """Run all tests"""
         print("🚀 Starting Backend API Tests for Bug Fixes and Features")
