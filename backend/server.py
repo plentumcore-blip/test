@@ -881,7 +881,9 @@ async def create_campaign(campaign_data: Dict[str, Any], user: dict = Depends(re
         purchase_window_end=purchase_end,
         post_window_start=post_start,
         post_window_end=post_end,
-        asin_allowlist=campaign_data.get("asin_allowlist")
+        asin_allowlist=campaign_data.get("asin_allowlist"),
+        commission_amount=campaign_data.get("commission_amount", 0.0),
+        review_bonus=campaign_data.get("review_bonus", 0.0)
     )
     
     doc = campaign.model_dump()
