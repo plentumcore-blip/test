@@ -111,6 +111,29 @@ export default function CampaignDetail() {
           </div>
         )}
 
+        {/* View Campaign Landing Page */}
+        {campaign.landing_page_enabled && campaign.landing_page_slug && (
+          <div className="card mb-6 bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
+            <h2 className="text-2xl font-bold text-[#0B1220] mb-4 flex items-center gap-2">
+              <Globe className="w-6 h-6 text-[#1F66FF]" />
+              Campaign Landing Page
+            </h2>
+            <p className="text-gray-600 mb-4">
+              View the full campaign details, testimonials, and more on the landing page.
+            </p>
+            <a
+              href={`/campaigns/${campaign.landing_page_slug}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-primary inline-flex items-center gap-2"
+            >
+              <Globe className="w-5 h-5" />
+              View Landing Page
+              <ExternalLink className="w-4 h-4" />
+            </a>
+          </div>
+        )}
+
         {/* Campaign Windows */}
         <div className="card mb-6">
           <h2 className="text-2xl font-bold text-[#0B1220] mb-4 flex items-center gap-2">
