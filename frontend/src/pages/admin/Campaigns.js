@@ -38,9 +38,9 @@ export default function AdminCampaigns() {
     }
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     fetchCampaigns();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [statusFilter]);
 
   const handleDelete = async (campaign, forceDelete = false) => {
