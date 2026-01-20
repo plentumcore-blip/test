@@ -2163,21 +2163,37 @@ async def list_payouts(
     if status:
         query["status"] = status
     
-    payouts = await db.payouts.find(query, {"_id": 0}).skip(skip).limit(page_size).to_list(page_size)
+    payouts = await db.payouts.find(query, {"_id": 0}).sort("created_at", -1).skip(skip).limit(page_size).to_list(page_size)
     total = await db.payouts.count_documents(query)
     
-    # Enrich with assignment and campaign data
+    # Calculate totals for summary
+    total_pending = await db.payouts.aggregate([
+        {"$match": {**query, "status": "pending"}},
+        {"$group": {"_id": None, "total": {"$sum": "$amount"}}}
+    ]).to_list(1)
+    total_paid = await db.payouts.aggregate([
+        {"$match": {**query, "status": "paid"}},
+        {"$group": {"_id": None, "total": {"$sum": "$amount"}}}
+    ]).to_list(1)
+    
+    # Enrich with assignment, campaign, and influencer data
     for payout in payouts:
         assignment = await db.assignments.find_one({"id": payout["assignment_id"]}, {"_id": 0})
         campaign = await db.campaigns.find_one({"id": payout["campaign_id"]}, {"_id": 0, "title": 1})
+        influencer = await db.influencers.find_one({"id": payout["influencer_id"]}, {"_id": 0})
         payout["assignment"] = assignment
         payout["campaign"] = campaign
+        payout["influencer"] = influencer
     
     return {
         "data": payouts,
         "page": page,
         "page_size": page_size,
-        "total": total
+        "total": total,
+        "summary": {
+            "total_pending": total_pending[0]["total"] if total_pending else 0,
+            "total_paid": total_paid[0]["total"] if total_paid else 0
+        }
     }
 
 @api_router.get("/payouts/{payout_id}")
