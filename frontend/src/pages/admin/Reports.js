@@ -84,7 +84,7 @@ const AdminReports = () => {
             <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-gray-600 text-sm font-medium">Total Influencers</span>
-                <UserCheck className="w-5 h-5 text-purple-600" />
+                <UserCheck className="w-5 h-5 text-red-600" />
               </div>
               <div className="text-3xl font-bold text-[#0B1220]">{reports.summary.total_influencers}</div>
             </div>

@@ -113,7 +113,7 @@ export default function CampaignDetail() {
 
         {/* View Campaign Landing Page */}
         {campaign.landing_page_enabled && campaign.landing_page_slug && (
-          <div className="card mb-6 bg-gradient-to-r from-red-50 to-indigo-50 border-red-200">
+          <div className="card mb-6 bg-gradient-to-r from-red-50 to-red-50 border-red-200">
             <h2 className="text-2xl font-bold text-[#0B1220] mb-4 flex items-center gap-2">
               <Globe className="w-6 h-6 text-[#CE3427]" />
               Campaign Landing Page

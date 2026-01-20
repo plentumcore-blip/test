@@ -83,7 +83,7 @@ export default function BrandPayouts() {
     const styles = {
       reimbursement: 'bg-red-100 text-red-700',
       commission: 'bg-green-100 text-green-700',
-      review_bonus: 'bg-purple-100 text-purple-700'
+      review_bonus: 'bg-red-100 text-red-700'
     };
     return styles[type] || 'bg-gray-100 text-gray-700';
   };

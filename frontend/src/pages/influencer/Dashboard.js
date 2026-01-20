@@ -78,7 +78,7 @@ export default function InfluencerDashboard() {
         <div className="p-6">
           {/* Profile Quick Access Card */}
           {profile && (
-            <div className="bg-white rounded-2xl shadow-sm border-2 border-[#CE3427] p-6 mb-6 bg-gradient-to-r from-red-50 to-purple-50">
+            <div className="bg-white rounded-2xl shadow-sm border-2 border-[#CE3427] p-6 mb-6 bg-gradient-to-r from-red-50 to-red-50">
               <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div className="flex items-center gap-4">
                   {profile.avatar_url ? (

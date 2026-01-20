@@ -258,7 +258,7 @@ export default function InfluencerProfileSetup() {
             </div>
 
             {/* PayPal Email for Payments */}
-            <div className="bg-gradient-to-r from-red-50 to-indigo-50 rounded-2xl p-6 border border-red-200">
+            <div className="bg-gradient-to-r from-red-50 to-red-50 rounded-2xl p-6 border border-red-200">
               <label className="block text-sm font-semibold text-[#0B1220] mb-2 flex items-center gap-2">
                 <svg className="w-5 h-5 text-[#0070BA]" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944 3.72a.77.77 0 0 1 .76-.645h6.464c2.115 0 3.792.57 4.864 1.65.997 1.004 1.397 2.435 1.183 4.25-.463 3.93-2.857 5.926-7.108 5.926h-1.22a.77.77 0 0 0-.76.645l-1.05 5.79z"/>
@@ -544,7 +544,7 @@ export default function InfluencerProfileSetup() {
 
         {/* View Public Profile */}
         {profile.public_profile_slug && (
-          <div className="card mb-6 bg-gradient-to-r from-red-50 to-purple-50 border-2 border-[#CE3427]">
+          <div className="card mb-6 bg-gradient-to-r from-red-50 to-red-50 border-2 border-[#CE3427]">
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
               <div>
                 <h3 className="text-xl font-bold text-[#0B1220] mb-2">Your Public Profile is Live!</h3>

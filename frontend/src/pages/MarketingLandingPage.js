@@ -181,7 +181,7 @@ const MarketingLandingPage = () => {
               <a href="#results" className="text-slate-600 font-medium">Success Stories</a>
               <button 
                 onClick={() => navigate('/login')} 
-                className="text-indigo-600 font-semibold text-left"
+                className="text-red-600 font-semibold text-left"
                 data-testid="mobile-login-btn"
               >
                 Log In
@@ -202,7 +202,7 @@ const MarketingLandingPage = () => {
       <section className="relative pt-24 pb-32 overflow-hidden">
         {/* Abstract Background Shapes */}
         <div className="absolute top-0 right-0 -mr-20 -mt-20 w-[600px] h-[600px] bg-slate-50 rounded-full blur-3xl opacity-50 -z-10"></div>
-        <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-[500px] h-[500px] bg-indigo-50 rounded-full blur-3xl opacity-50 -z-10"></div>
+        <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-[500px] h-[500px] bg-red-50 rounded-full blur-3xl opacity-50 -z-10"></div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="inline-flex items-center gap-2 bg-slate-50 border border-slate-200 text-slate-600 px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wide mb-8">
@@ -212,7 +212,7 @@ const MarketingLandingPage = () => {
 
           <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-slate-900 mb-6 leading-[1.1]">
             Scale Your Brand with <br />
-            <span className="text-indigo-600">Authentic Creator Commerce</span>
+            <span className="text-red-600">Authentic Creator Commerce</span>
           </h1>
 
           <p className="text-xl text-slate-600 mb-10 max-w-2xl mx-auto leading-relaxed">
@@ -281,7 +281,7 @@ const MarketingLandingPage = () => {
               <div className="grid md:grid-cols-2 gap-12 items-center">
                 <div className="order-2 md:order-1 space-y-8">
                   <div className="flex gap-4">
-                    <div className="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center text-indigo-600 shrink-0">
+                    <div className="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center text-red-600 shrink-0">
                       <TrendingUp size={24} />
                     </div>
                     <div>
@@ -290,7 +290,7 @@ const MarketingLandingPage = () => {
                     </div>
                   </div>
                   <div className="flex gap-4">
-                    <div className="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center text-indigo-600 shrink-0">
+                    <div className="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center text-red-600 shrink-0">
                       <Video size={24} />
                     </div>
                     <div>
@@ -299,7 +299,7 @@ const MarketingLandingPage = () => {
                     </div>
                   </div>
                   <div className="flex gap-4">
-                    <div className="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center text-indigo-600 shrink-0">
+                    <div className="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center text-red-600 shrink-0">
                       <ShieldCheck size={24} />
                     </div>
                     <div>
@@ -322,7 +322,7 @@ const MarketingLandingPage = () => {
               <div className="grid md:grid-cols-2 gap-12 items-center">
                 <div className="order-2 md:order-1 space-y-8">
                   <div className="flex gap-4">
-                    <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center text-purple-600 shrink-0">
+                    <div className="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center text-red-600 shrink-0">
                       <Package size={24} />
                     </div>
                     <div>
@@ -331,7 +331,7 @@ const MarketingLandingPage = () => {
                     </div>
                   </div>
                   <div className="flex gap-4">
-                    <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center text-purple-600 shrink-0">
+                    <div className="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center text-red-600 shrink-0">
                       <Zap size={24} />
                     </div>
                     <div>
@@ -340,7 +340,7 @@ const MarketingLandingPage = () => {
                     </div>
                   </div>
                   <div className="flex gap-4">
-                    <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center text-purple-600 shrink-0">
+                    <div className="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center text-red-600 shrink-0">
                       <Users size={24} />
                     </div>
                     <div>
@@ -379,20 +379,20 @@ const MarketingLandingPage = () => {
           {/* Feature 1 */}
           <div className="grid md:grid-cols-2 gap-16 items-center mb-24">
             <div>
-              <div className="text-indigo-600 font-bold tracking-wide uppercase mb-3">Precision Matching</div>
+              <div className="text-red-600 font-bold tracking-wide uppercase mb-3">Precision Matching</div>
               <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6">Find the perfect creators for your niche.</h2>
               <p className="text-lg text-slate-600 mb-8 leading-relaxed">
                 Use advanced filters to connect with creators who match your brand's specific audience. Target by platform, engagement rate, location, and follower demographics.
               </p>
               <ul className="space-y-4">
                 <li className="flex items-center gap-3 text-slate-700 font-medium">
-                  <CheckCircle2 className="text-indigo-600" size={20} /> Verified Purchase History
+                  <CheckCircle2 className="text-red-600" size={20} /> Verified Purchase History
                 </li>
                 <li className="flex items-center gap-3 text-slate-700 font-medium">
-                  <CheckCircle2 className="text-indigo-600" size={20} /> Audience Authenticity Score
+                  <CheckCircle2 className="text-red-600" size={20} /> Audience Authenticity Score
                 </li>
                 <li className="flex items-center gap-3 text-slate-700 font-medium">
-                  <CheckCircle2 className="text-indigo-600" size={20} /> Performance-Based Ranking
+                  <CheckCircle2 className="text-red-600" size={20} /> Performance-Based Ranking
                 </li>
               </ul>
             </div>
@@ -437,20 +437,20 @@ const MarketingLandingPage = () => {
               </div>
             </div>
             <div className="order-1 md:order-2">
-              <div className="text-indigo-600 font-bold tracking-wide uppercase mb-3">Asset Ownership</div>
+              <div className="text-red-600 font-bold tracking-wide uppercase mb-3">Asset Ownership</div>
               <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6">Build a content engine. Own the assets.</h2>
               <p className="text-lg text-slate-600 mb-8 leading-relaxed">
                 User-Generated Content performs 35% better than studio creative in paid ads. With Influiv, you automatically secure full licensing rights to every video and image created during your campaigns.
               </p>
               <ul className="space-y-4">
                 <li className="flex items-center gap-3 text-slate-700 font-medium">
-                  <CheckCircle2 className="text-indigo-600" size={20} /> Perpetual Usage Rights
+                  <CheckCircle2 className="text-red-600" size={20} /> Perpetual Usage Rights
                 </li>
                 <li className="flex items-center gap-3 text-slate-700 font-medium">
-                  <CheckCircle2 className="text-indigo-600" size={20} /> High-Resolution Downloads
+                  <CheckCircle2 className="text-red-600" size={20} /> High-Resolution Downloads
                 </li>
                 <li className="flex items-center gap-3 text-slate-700 font-medium">
-                  <CheckCircle2 className="text-indigo-600" size={20} /> Whitelisting Ready
+                  <CheckCircle2 className="text-red-600" size={20} /> Whitelisting Ready
                 </li>
               </ul>
             </div>
@@ -490,7 +490,7 @@ const MarketingLandingPage = () => {
                   <div className="absolute bottom-0 left-0 p-4 z-20 w-full">
                     {video.creator && (
                       <div className="flex items-center gap-2 mb-2">
-                        <div className="w-6 h-6 rounded-full bg-indigo-500"></div>
+                        <div className="w-6 h-6 rounded-full bg-red-500"></div>
                         <span className="text-xs font-bold text-white">{video.creator}</span>
                       </div>
                     )}
@@ -510,7 +510,7 @@ const MarketingLandingPage = () => {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-10"></div>
                   <div className="absolute bottom-0 left-0 p-4 z-20 w-full">
                     <div className="flex items-center gap-2 mb-2">
-                      <div className="w-6 h-6 rounded-full bg-indigo-500"></div>
+                      <div className="w-6 h-6 rounded-full bg-red-500"></div>
                       <span className="text-xs font-bold text-white">@creator_{item}</span>
                     </div>
                     <p className="text-xs text-slate-300 line-clamp-2">Loving this new product from Influiv! #ad #ugc</p>
@@ -536,7 +536,7 @@ const MarketingLandingPage = () => {
           <div className="bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-100">
             <div className="grid grid-cols-3 bg-slate-50 p-6 border-b border-slate-100 text-sm font-bold text-slate-500 uppercase tracking-wider">
               <div className="col-span-1">Feature</div>
-              <div className="col-span-1 text-center text-indigo-600">Influiv</div>
+              <div className="col-span-1 text-center text-red-600">Influiv</div>
               <div className="col-span-1 text-center">Agencies / Manual</div>
             </div>
 
@@ -549,10 +549,10 @@ const MarketingLandingPage = () => {
             ].map((row, i) => (
               <div key={i} className="grid grid-cols-3 p-6 border-b border-slate-50 hover:bg-slate-50 transition-colors">
                 <div className="col-span-1 font-semibold text-slate-900 flex items-center gap-2">
-                  {i === 0 && <Award size={18} className="text-indigo-500" />}
+                  {i === 0 && <Award size={18} className="text-red-500" />}
                   {row.label}
                 </div>
-                <div className="col-span-1 text-center font-bold text-indigo-600 flex justify-center items-center gap-2">
+                <div className="col-span-1 text-center font-bold text-red-600 flex justify-center items-center gap-2">
                   <CheckCircle2 size={18} /> {row.us}
                 </div>
                 <div className="col-span-1 text-center text-slate-400">
@@ -570,14 +570,14 @@ const MarketingLandingPage = () => {
           <h2 className="text-3xl font-bold text-center text-slate-900 mb-12">Frequently Asked Questions</h2>
           <div className="space-y-4">
             {faqs.map((faq, index) => (
-              <div key={index} className="border border-slate-200 rounded-xl overflow-hidden bg-white hover:border-indigo-200 transition-colors">
+              <div key={index} className="border border-slate-200 rounded-xl overflow-hidden bg-white hover:border-red-200 transition-colors">
                 <button
                   onClick={() => toggleFaq(index)}
                   className="w-full flex justify-between items-center p-6 text-left"
                   data-testid={`faq-${index}`}
                 >
                   <span className="font-semibold text-slate-900 text-lg">{faq.question}</span>
-                  {openFaqIndex === index ? <ChevronUp className="text-indigo-600" /> : <ChevronDown className="text-slate-400" />}
+                  {openFaqIndex === index ? <ChevronUp className="text-red-600" /> : <ChevronDown className="text-slate-400" />}
                 </button>
                 {openFaqIndex === index && (
                   <div className="p-6 pt-0 text-slate-600 leading-relaxed border-t border-slate-50 bg-slate-50/50">
@@ -592,8 +592,8 @@ const MarketingLandingPage = () => {
 
       {/* CTA Footer */}
       <section className="bg-slate-900 py-32 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-600 rounded-full blur-[100px] opacity-20"></div>
-        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-purple-600 rounded-full blur-[100px] opacity-20"></div>
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-red-600 rounded-full blur-[100px] opacity-20"></div>
+        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-red-600 rounded-full blur-[100px] opacity-20"></div>
 
         <div className="max-w-4xl mx-auto px-4 text-center relative z-10">
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 tracking-tight">Ready to streamline your seeding?</h2>
@@ -640,26 +640,26 @@ const MarketingLandingPage = () => {
             <div>
               <h4 className="font-bold text-slate-900 mb-6">Platform</h4>
               <ul className="space-y-4 text-sm text-slate-600">
-                <li><button onClick={() => navigate('/register')} className="hover:text-indigo-600">For Brands</button></li>
-                <li><button onClick={() => navigate('/register')} className="hover:text-indigo-600">For Creators</button></li>
-                <li><a href="#results" className="hover:text-indigo-600">Case Studies</a></li>
+                <li><button onClick={() => navigate('/register')} className="hover:text-red-600">For Brands</button></li>
+                <li><button onClick={() => navigate('/register')} className="hover:text-red-600">For Creators</button></li>
+                <li><a href="#results" className="hover:text-red-600">Case Studies</a></li>
               </ul>
             </div>
             <div>
               <h4 className="font-bold text-slate-900 mb-6">Company</h4>
               <ul className="space-y-4 text-sm text-slate-600">
-                <li><a href="#" className="hover:text-indigo-600">About Us</a></li>
-                <li><a href="#" className="hover:text-indigo-600">Careers</a></li>
-                <li><a href="#" className="hover:text-indigo-600">Blog</a></li>
-                <li><a href="#" className="hover:text-indigo-600">Contact</a></li>
+                <li><a href="#" className="hover:text-red-600">About Us</a></li>
+                <li><a href="#" className="hover:text-red-600">Careers</a></li>
+                <li><a href="#" className="hover:text-red-600">Blog</a></li>
+                <li><a href="#" className="hover:text-red-600">Contact</a></li>
               </ul>
             </div>
             <div>
               <h4 className="font-bold text-slate-900 mb-6">Legal</h4>
               <ul className="space-y-4 text-sm text-slate-600">
-                <li><a href="#" className="hover:text-indigo-600">Privacy Policy</a></li>
-                <li><a href="#" className="hover:text-indigo-600">Terms of Service</a></li>
-                <li><a href="#" className="hover:text-indigo-600">Creator Guidelines</a></li>
+                <li><a href="#" className="hover:text-red-600">Privacy Policy</a></li>
+                <li><a href="#" className="hover:text-red-600">Terms of Service</a></li>
+                <li><a href="#" className="hover:text-red-600">Creator Guidelines</a></li>
               </ul>
             </div>
           </div>
