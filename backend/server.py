@@ -1012,6 +1012,7 @@ async def update_campaign_dates(
 @api_router.delete("/campaigns/{campaign_id}")
 async def delete_campaign(
     campaign_id: str,
+    force: bool = Query(False, description="Force delete (admin only) - deletes even with active assignments"),
     user: dict = Depends(require_role([UserRole.BRAND, UserRole.ADMIN]))
 ):
     """Delete a campaign and all associated data"""
@@ -1024,27 +1025,90 @@ async def delete_campaign(
         brand = await db.brands.find_one({"user_id": user["id"]})
         if campaign["brand_id"] != brand["id"]:
             raise HTTPException(status_code=403, detail="Not authorized to delete this campaign")
+        # Brands cannot force delete
+        if force:
+            raise HTTPException(status_code=403, detail="Only admins can force delete campaigns")
     
-    # Check if campaign has active assignments
-    active_assignments = await db.assignments.find_one({
-        "campaign_id": campaign_id,
-        "status": {"$nin": ["completed", "cancelled"]}
-    })
+    # Check if campaign has active assignments (unless force delete by admin)
+    if not force:
+        active_assignments = await db.assignments.find_one({
+            "campaign_id": campaign_id,
+            "status": {"$nin": ["completed", "cancelled"]}
+        })
+        
+        if active_assignments:
+            raise HTTPException(
+                status_code=400, 
+                detail="Cannot delete campaign with active assignments. Please complete or cancel all assignments first."
+            )
     
-    if active_assignments:
-        raise HTTPException(
-            status_code=400, 
-            detail="Cannot delete campaign with active assignments. Please complete or cancel all assignments first."
-        )
+    # Delete all associated data
+    # Get all assignments for this campaign to delete their purchase proofs
+    assignment_ids = await db.assignments.find({"campaign_id": campaign_id}).distinct("id")
+    if assignment_ids:
+        await db.purchase_proofs.delete_many({"assignment_id": {"$in": assignment_ids}})
+        await db.click_logs.delete_many({"assignment_id": {"$in": assignment_ids}})
     
-    # Delete associated data
+    await db.payouts.delete_many({"campaign_id": campaign_id})
     await db.applications.delete_many({"campaign_id": campaign_id})
     await db.assignments.delete_many({"campaign_id": campaign_id})
     await db.campaigns.delete_one({"id": campaign_id})
     
-    await log_audit(user["id"], "delete", "campaign", campaign_id)
+    await log_audit(user["id"], "delete", "campaign", campaign_id, {"force": force})
     
-    return {"message": "Campaign deleted successfully"}
+    return {"message": "Campaign and all associated data deleted successfully"}
+
+
+# Admin endpoint to get all campaigns with brand info
+@api_router.get("/admin/campaigns")
+async def admin_list_campaigns(
+    page: int = Query(1, ge=1),
+    page_size: int = Query(50, ge=1, le=100),
+    status: Optional[str] = None,
+    brand_id: Optional[str] = None,
+    user: dict = Depends(require_role([UserRole.ADMIN]))
+):
+    """Admin endpoint to list all campaigns with brand info"""
+    skip = (page - 1) * page_size
+    query = {}
+    
+    if status:
+        query["status"] = status
+    if brand_id:
+        query["brand_id"] = brand_id
+    
+    campaigns = await db.campaigns.find(query, {"_id": 0}).sort("created_at", -1).skip(skip).limit(page_size).to_list(page_size)
+    total = await db.campaigns.count_documents(query)
+    
+    # Enrich campaigns with brand info and statistics
+    enriched_campaigns = []
+    for campaign in campaigns:
+        brand = await db.brands.find_one({"id": campaign["brand_id"]}, {"_id": 0})
+        
+        # Get statistics
+        applications_count = await db.applications.count_documents({"campaign_id": campaign["id"]})
+        assignments_count = await db.assignments.count_documents({"campaign_id": campaign["id"]})
+        active_assignments_count = await db.assignments.count_documents({
+            "campaign_id": campaign["id"],
+            "status": {"$nin": ["completed", "cancelled"]}
+        })
+        
+        enriched_campaigns.append({
+            **campaign,
+            "brand": brand,
+            "statistics": {
+                "applications_count": applications_count,
+                "assignments_count": assignments_count,
+                "active_assignments_count": active_assignments_count
+            }
+        })
+    
+    return {
+        "data": enriched_campaigns,
+        "page": page,
+        "page_size": page_size,
+        "total": total
+    }
 
 # Applications
 @api_router.post("/applications")
