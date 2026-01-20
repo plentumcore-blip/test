@@ -86,7 +86,9 @@ export default function CampaignBuilder() {
     try {
       const payload = {
         ...formData,
-        asin_allowlist: formData.asin_allowlist ? formData.asin_allowlist.split(',').map(s => s.trim()) : null
+        asin_allowlist: formData.asin_allowlist ? formData.asin_allowlist.split(',').map(s => s.trim()) : null,
+        commission_amount: parseFloat(formData.commission_amount) || 0,
+        review_bonus: parseFloat(formData.review_bonus) || 0
       };
       
       const response = await axios.post(`${API_BASE}/campaigns`, payload, {
