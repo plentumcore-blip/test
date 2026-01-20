@@ -457,17 +457,17 @@ const MarketingLandingPage = () => {
       </section>
 
       {/* Content Gallery Section */}
-      <section id="creators" className="py-24 bg-slate-900 text-white overflow-hidden">
+      <section id="creators" className="py-24 bg-[#CE3427] text-white overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">Quality Content that Converts</h2>
-          <p className="text-slate-400 text-lg">From unboxings to tutorials, get diverse creative for your funnel.</p>
+          <p className="text-red-100 text-lg">From unboxings to tutorials, get diverse creative for your funnel.</p>
         </div>
 
         <div className="relative w-full">
           <div className="flex gap-6 overflow-hidden px-4 justify-center flex-wrap">
             {landingContent.portfolioVideos && landingContent.portfolioVideos.length > 0 ? (
               landingContent.portfolioVideos.map((video, index) => (
-                <div key={index} className="w-64 aspect-[9/16] bg-slate-800 rounded-2xl border border-slate-700 relative group overflow-hidden hover:scale-105 transition-transform duration-300">
+                <div key={index} className="w-64 aspect-[9/16] bg-red-800 rounded-2xl border border-red-600 relative group overflow-hidden hover:scale-105 transition-transform duration-300">
                   {video.videoUrl.includes('youtube.com') || video.videoUrl.includes('vimeo.com') ? (
                     <iframe
                       src={video.videoUrl}
