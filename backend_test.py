@@ -2496,6 +2496,10 @@ class APITester:
         print("=" * 80)
         
         try:
+            # Test the updated payout creation timing (REVIEW REQUEST - HIGHEST PRIORITY)
+            print("\n🎯 TESTING UPDATED PAYOUT CREATION TIMING (REVIEW REQUEST - HIGHEST PRIORITY)")
+            self.test_payout_creation_timing()
+            
             # Test PayPal payout system (REVIEW REQUEST - HIGHEST PRIORITY)
             print("\n🎯 TESTING PAYPAL PAYOUT SYSTEM (REVIEW REQUEST - HIGHEST PRIORITY)")
             self.test_paypal_payout_system()
