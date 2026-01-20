@@ -1747,6 +1747,7 @@ async def review_purchase_proof(
     influencer = await db.influencers.find_one({"id": assignment["influencer_id"]}) if assignment else None
     influencer_user = await db.users.find_one({"id": influencer["user_id"]}) if influencer else None
     campaign = await db.campaigns.find_one({"id": assignment["campaign_id"]}) if assignment else None
+    brand = await db.brands.find_one({"id": campaign["brand_id"]}) if campaign else None
     
     # Update assignment if approved
     if review_data["status"] == PurchaseProofStatus.APPROVED.value:
@@ -1754,6 +1755,32 @@ async def review_purchase_proof(
             {"id": proof["assignment_id"]},
             {"$set": {"status": AssignmentStatus.PURCHASE_APPROVED.value, "updated_at": datetime.now(timezone.utc).isoformat()}}
         )
+        
+        # Create reimbursement payout for the purchase price
+        if assignment and influencer and campaign and brand:
+            purchase_amount = proof.get("price", 0)
+            if purchase_amount > 0:
+                # Check if reimbursement payout already exists for this assignment
+                existing_reimbursement = await db.payouts.find_one({
+                    "assignment_id": assignment["id"],
+                    "payout_type": "reimbursement"
+                })
+                
+                if not existing_reimbursement:
+                    reimbursement_payout = Payout(
+                        assignment_id=assignment["id"],
+                        influencer_id=influencer["id"],
+                        brand_id=brand["id"],
+                        campaign_id=campaign["id"],
+                        payout_type="reimbursement",
+                        amount=purchase_amount,
+                        paypal_email=influencer.get("paypal_email"),
+                        notes=f"Product purchase reimbursement for {campaign['title']}"
+                    )
+                    payout_doc = reimbursement_payout.model_dump()
+                    payout_doc['created_at'] = payout_doc['created_at'].isoformat()
+                    payout_doc['updated_at'] = payout_doc['updated_at'].isoformat()
+                    await db.payouts.insert_one(payout_doc)
         
         # Send approval email to influencer
         if influencer_user and campaign:
