@@ -82,6 +82,10 @@ export default function AssignmentDetail() {
       toast.error('Order date is required');
       return;
     }
+    if (!purchaseData.price || parseFloat(purchaseData.price) <= 0) {
+      toast.error('Price is required and must be greater than 0');
+      return;
+    }
     if (!purchaseData.screenshot_url) {
       toast.error('Please upload a screenshot of your order');
       return;
@@ -93,6 +97,7 @@ export default function AssignmentDetail() {
       // Convert screenshot_url to screenshot_urls array for backend
       const payload = {
         ...purchaseData,
+        price: parseFloat(purchaseData.price),
         screenshot_urls: purchaseData.screenshot_url ? [purchaseData.screenshot_url] : []
       };
       delete payload.screenshot_url;
@@ -108,8 +113,7 @@ export default function AssignmentDetail() {
       setPurchaseData({
         order_id: '',
         order_date: '',
-        asin: '',
-        total: '',
+        price: '',
         screenshot_url: ''
       });
     } catch (error) {
