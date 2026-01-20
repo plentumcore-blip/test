@@ -454,8 +454,10 @@ metadata:
 
 test_plan:
   current_focus:
-    - "AffiTarget review request testing completed"
-  stuck_tasks: []
+    - "PayPal payout system backend issues requiring fixes"
+  stuck_tasks:
+    - "PayPal email not being saved in influencer profile"
+    - "Purchase proof price validation error"
   test_all: false
   test_priority: "high_first"
 
