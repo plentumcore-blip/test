@@ -1339,7 +1339,7 @@ async def submit_purchase_proof(
         raise HTTPException(status_code=400, detail="Order ID is required")
     if not proof_data.get("order_date"):
         raise HTTPException(status_code=400, detail="Order date is required")
-    if not proof_data.get("price"):
+    if "price" not in proof_data or proof_data.get("price") is None:
         raise HTTPException(status_code=400, detail="Price is required")
     if not proof_data.get("screenshot_urls") or len(proof_data.get("screenshot_urls", [])) == 0:
         raise HTTPException(status_code=400, detail="At least one screenshot is required")
