@@ -397,7 +397,7 @@ export default function AdminCampaigns() {
           <div className="bg-white rounded-2xl max-w-lg w-full p-6">
             <h3 className="text-xl font-bold text-[#0B1220] mb-4">Edit Campaign Dates</h3>
             <p className="text-gray-600 mb-6">
-              Update dates for <strong>"{editModal.campaign?.title}"</strong>
+              Update dates for <strong>&ldquo;{editModal.campaign?.title}&rdquo;</strong>
             </p>
             
             <div className="space-y-4">
