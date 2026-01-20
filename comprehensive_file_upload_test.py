@@ -27,7 +27,7 @@ import io
 from PIL import Image
 
 # Configuration
-BASE_URL = "https://affbridge.preview.emergentagent.com/api/v1"
+BASE_URL = "https://brandfluence-6.preview.emergentagent.com/api/v1"
 TIMEOUT = 30
 
 class ComprehensiveFileUploadTester:

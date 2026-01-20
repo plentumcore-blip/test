@@ -24,7 +24,7 @@ import io
 from PIL import Image
 
 # Configuration
-BASE_URL = "https://affbridge.preview.emergentagent.com/api/v1"
+BASE_URL = "https://brandfluence-6.preview.emergentagent.com/api/v1"
 TIMEOUT = 30
 
 class APITester:
@@ -661,7 +661,7 @@ class APITester:
                             redirect_path = redirect_url
                         
                         # Test the redirect endpoint
-                        base_domain = "https://affbridge.preview.emergentagent.com"
+                        base_domain = "https://brandfluence-6.preview.emergentagent.com"
                         full_redirect_url = f"{base_domain}{redirect_path}"
                         
                         redirect_response = public_session.get(full_redirect_url, allow_redirects=False)
@@ -961,7 +961,7 @@ class APITester:
         
         try:
             # Test the existing file mentioned in the review request
-            existing_file_url = "https://affbridge.preview.emergentagent.com/api/uploads/06e5e39b-0189-4655-9226-b44c845487cb.png"
+            existing_file_url = "https://brandfluence-6.preview.emergentagent.com/api/uploads/06e5e39b-0189-4655-9226-b44c845487cb.png"
             
             public_session = requests.Session()
             public_session.timeout = TIMEOUT
@@ -988,7 +988,7 @@ class APITester:
         if hasattr(self, 'uploaded_filename'):
             try:
                 # Test the old /uploads path (should return 404)
-                old_path_url = f"https://affbridge.preview.emergentagent.com/uploads/{self.uploaded_filename}"
+                old_path_url = f"https://brandfluence-6.preview.emergentagent.com/uploads/{self.uploaded_filename}"
                 
                 public_session = requests.Session()
                 public_session.timeout = TIMEOUT

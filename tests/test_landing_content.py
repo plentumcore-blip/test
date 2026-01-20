@@ -6,7 +6,7 @@ import pytest
 import requests
 import os
 
-BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://affbridge.preview.emergentagent.com')
+BASE_URL = os.environ.get('REACT_APP_BACKEND_URL', 'https://brandfluence-6.preview.emergentagent.com')
 
 class TestPublicLandingContent:
     """Tests for public landing content endpoint (no auth required)"""

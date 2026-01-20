@@ -32,7 +32,7 @@ import io
 from PIL import Image
 
 # Configuration
-BASE_URL = "https://affbridge.preview.emergentagent.com/api/v1"
+BASE_URL = "https://brandfluence-6.preview.emergentagent.com/api/v1"
 TIMEOUT = 30
 
 class FileUploadTester:
@@ -685,8 +685,8 @@ class FileUploadTester:
         print("\n--- Test 5.2: Test Known File URLs ---")
         
         known_files = [
-            "https://affbridge.preview.emergentagent.com/api/uploads/06e5e39b-0189-4655-9226-b44c845487cb.png",
-            "https://affbridge.preview.emergentagent.com/api/uploads/2274ea0a-5ef4-4871-932c-14e586a035c7.png"
+            "https://brandfluence-6.preview.emergentagent.com/api/uploads/06e5e39b-0189-4655-9226-b44c845487cb.png",
+            "https://brandfluence-6.preview.emergentagent.com/api/uploads/2274ea0a-5ef4-4871-932c-14e586a035c7.png"
         ]
         
         for file_url in known_files:
@@ -715,7 +715,7 @@ class FileUploadTester:
         
         for file_url in self.uploaded_files:
             # Check URL format
-            if file_url.startswith("https://affbridge.preview.emergentagent.com/api/uploads/"):
+            if file_url.startswith("https://brandfluence-6.preview.emergentagent.com/api/uploads/"):
                 self.log_test("File URL Format", True, 
                             f"✅ Correct URL format: {file_url}")
             else:
