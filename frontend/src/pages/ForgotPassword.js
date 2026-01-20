@@ -34,12 +34,12 @@ export default function ForgotPassword() {
   };
 
   return (
-    <div className="min-h-screen flex" style={{ background: 'linear-gradient(135deg, #E8F1FF 0%, #FFFFFF 100%)' }}>
+    <div className="min-h-screen flex" style={{ background: 'linear-gradient(135deg, #F5E6E4 0%, #FFFFFF 100%)' }}>
       <div className="flex-1 flex items-center justify-center px-6 py-12">
         <div className="w-full max-w-md">
           <div className="text-center mb-8">
             <div className="flex items-center justify-center gap-2 mb-4">
-              <ShoppingBag className="w-10 h-10 text-[#1F66FF]" />
+              <ShoppingBag className="w-10 h-10 text-[#CE3427]" />
               <span className="text-3xl font-bold text-[#0B1220]">Influiv</span>
             </div>
             <h1 className="text-4xl font-bold text-[#0B1220] mb-2">Forgot Password?</h1>
@@ -79,7 +79,7 @@ export default function ForgotPassword() {
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#1F66FF] focus:border-transparent"
+                      className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#CE3427] focus:border-transparent"
                       placeholder="you@example.com"
                       required
                     />
@@ -91,7 +91,7 @@ export default function ForgotPassword() {
                   type="submit"
                   disabled={loading}
                   className="w-full py-3 rounded-xl text-white font-semibold transition-all disabled:opacity-50"
-                  style={{ background: 'linear-gradient(135deg, #1F66FF 0%, #0E2C7E 100%)' }}
+                  style={{ background: 'linear-gradient(135deg, #CE3427 0%, #0E2C7E 100%)' }}
                 >
                   {loading ? 'Sending...' : 'Send Reset Link'}
                 </button>
@@ -99,7 +99,7 @@ export default function ForgotPassword() {
                 <div className="text-center">
                   <Link
                     to="/login"
-                    className="text-[#1F66FF] font-semibold hover:underline inline-flex items-center gap-2"
+                    className="text-[#CE3427] font-semibold hover:underline inline-flex items-center gap-2"
                     data-testid="back-to-login-link"
                   >
                     <ArrowLeft className="w-4 h-4" />

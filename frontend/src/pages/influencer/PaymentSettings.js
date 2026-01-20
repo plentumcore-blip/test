@@ -135,7 +135,7 @@ const PaymentSettings = () => {
           {/* Header */}
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-[#0B1220] flex items-center gap-3">
-              <CreditCard className="w-8 h-8 text-[#1F66FF]" />
+              <CreditCard className="w-8 h-8 text-[#CE3427]" />
               Payment Settings
             </h1>
             <p className="text-gray-600 mt-2">
@@ -175,7 +175,7 @@ const PaymentSettings = () => {
                     value={formData.account_holder_name}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1F66FF]"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#CE3427]"
                     placeholder="John Doe"
                   />
                 </div>
@@ -190,7 +190,7 @@ const PaymentSettings = () => {
                     value={formData.bank_name}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1F66FF]"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#CE3427]"
                     placeholder="Chase Bank"
                   />
                 </div>
@@ -205,7 +205,7 @@ const PaymentSettings = () => {
                     value={formData.account_number}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1F66FF]"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#CE3427]"
                     placeholder="1234567890"
                   />
                 </div>
@@ -220,7 +220,7 @@ const PaymentSettings = () => {
                     value={formData.routing_number}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1F66FF]"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#CE3427]"
                     placeholder="021000021"
                   />
                 </div>
@@ -234,7 +234,7 @@ const PaymentSettings = () => {
                     name="swift_code"
                     value={formData.swift_code}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1F66FF]"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#CE3427]"
                     placeholder="CHASUS33"
                   />
                 </div>
@@ -248,7 +248,7 @@ const PaymentSettings = () => {
                     name="iban"
                     value={formData.iban}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1F66FF]"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#CE3427]"
                     placeholder="GB29NWBK60161331926819"
                   />
                 </div>
@@ -263,7 +263,7 @@ const PaymentSettings = () => {
                   name="paypal_email"
                   value={formData.paypal_email}
                   onChange={handleChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1F66FF]"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#CE3427]"
                   placeholder="your-email@example.com"
                 />
               </div>
@@ -272,7 +272,7 @@ const PaymentSettings = () => {
                 <button
                   type="submit"
                   disabled={saving}
-                  className="flex items-center gap-2 px-6 py-3 bg-[#1F66FF] text-white rounded-xl hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex items-center gap-2 px-6 py-3 bg-[#CE3427] text-white rounded-xl hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <Save className="w-5 h-5" />
                   {saving ? 'Saving...' : (hasPaymentDetails ? 'Update Payment Details' : 'Save Payment Details')}

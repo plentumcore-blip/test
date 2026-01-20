@@ -10,11 +10,11 @@ const Section = ({ id, children, className = '' }) => (
 );
 
 const Pill = ({ children }) => (
-  <span className="inline-flex items-center rounded-full bg-[#E8F1FF] text-[#0E2C7E] px-3 py-1 text-xs font-medium">{children}</span>
+  <span className="inline-flex items-center rounded-full bg-[#F5E6E4] text-[#0E2C7E] px-3 py-1 text-xs font-medium">{children}</span>
 );
 
 const Card = ({ children, className = '' }) => (
-  <div className={`rounded-2xl bg-white shadow-sm ring-1 ring-[#E8F1FF] ${className}`}>{children}</div>
+  <div className={`rounded-2xl bg-white shadow-sm ring-1 ring-[#F5E6E4] ${className}`}>{children}</div>
 );
 
 export default function CampaignLandingPage() {
@@ -55,7 +55,7 @@ export default function CampaignLandingPage() {
           <p className="text-[#0B1220]/80 mb-6">This campaign may not exist or is not yet published.</p>
           <button
             onClick={() => navigate('/')}
-            className="px-6 py-3 bg-[#1F66FF] text-white rounded-xl hover:bg-[#0E2C7E] transition-colors"
+            className="px-6 py-3 bg-[#CE3427] text-white rounded-xl hover:bg-[#0E2C7E] transition-colors"
           >
             Go to Home
           </button>
@@ -74,20 +74,20 @@ export default function CampaignLandingPage() {
   return (
     <div className="min-h-screen bg-white text-[#0B1220]">
       {/* Nav */}
-      <nav className="sticky top-0 z-40 backdrop-blur bg-white/75 border-b border-[#E8F1FF]">
+      <nav className="sticky top-0 z-40 backdrop-blur bg-white/75 border-b border-[#F5E6E4]">
         <Section className="flex h-16 items-center justify-between gap-6">
           <div className="flex items-center gap-3">
-            <div className="h-9 w-9 rounded-xl bg-[#1F66FF] grid place-items-center text-white font-bold">
+            <div className="h-9 w-9 rounded-xl bg-[#CE3427] grid place-items-center text-white font-bold">
               {brandName.charAt(0)}
             </div>
             <div className="font-semibold">{brandName} · Campaign</div>
           </div>
           <div className="hidden md:flex items-center gap-6 text-sm">
-            <a href="#overview" className="hover:text-[#1F66FF]">Overview</a>
-            <a href="#perks" className="hover:text-[#1F66FF]">Perks</a>
-            <a href="#deliverables" className="hover:text-[#1F66FF]">Deliverables</a>
-            <a href="#timeline" className="hover:text-[#1F66FF]">Timeline</a>
-            <a href="#faqs" className="hover:text-[#1F66FF]">FAQs</a>
+            <a href="#overview" className="hover:text-[#CE3427]">Overview</a>
+            <a href="#perks" className="hover:text-[#CE3427]">Perks</a>
+            <a href="#deliverables" className="hover:text-[#CE3427]">Deliverables</a>
+            <a href="#timeline" className="hover:text-[#CE3427]">Timeline</a>
+            <a href="#faqs" className="hover:text-[#CE3427]">FAQs</a>
           </div>
           <button
             onClick={() => !isPurchaseWindowPassed && navigate('/register')}
@@ -95,7 +95,7 @@ export default function CampaignLandingPage() {
             className={`inline-flex items-center rounded-xl px-4 py-2 font-medium shadow-sm ${
               isPurchaseWindowPassed 
                 ? 'bg-gray-300 text-gray-500 cursor-not-allowed' 
-                : 'bg-[#1F66FF] text-white hover:bg-[#0E2C7E]'
+                : 'bg-[#CE3427] text-white hover:bg-[#0E2C7E]'
             }`}
             title={isPurchaseWindowPassed ? 'Purchase window has ended' : 'Apply to this campaign'}
           >
@@ -106,7 +106,7 @@ export default function CampaignLandingPage() {
 
       {/* Hero */}
       <div className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-[#E8F1FF] to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#F5E6E4] to-transparent" />
         <Section id="overview" className="relative grid gap-10 lg:grid-cols-2 items-center py-16">
           <div className="space-y-6">
             <Pill>Amazon Attribution Creator Campaign</Pill>
@@ -118,15 +118,15 @@ export default function CampaignLandingPage() {
             </p>
             <ul className="space-y-3 text-sm">
               <li className="flex gap-2">
-                <span className="mt-1 h-2 w-2 rounded-full bg-[#1F66FF]" />
+                <span className="mt-1 h-2 w-2 rounded-full bg-[#CE3427]" />
                 Purchase via our Amazon link (tracked redirect).
               </li>
               <li className="flex gap-2">
-                <span className="mt-1 h-2 w-2 rounded-full bg-[#1F66FF]" />
+                <span className="mt-1 h-2 w-2 rounded-full bg-[#CE3427]" />
                 Submit order screenshots to unlock posting.
               </li>
               <li className="flex gap-2">
-                <span className="mt-1 h-2 w-2 rounded-full bg-[#1F66FF]" />
+                <span className="mt-1 h-2 w-2 rounded-full bg-[#CE3427]" />
                 Manual reviews, no bots. Clear deadlines & reminders.
               </li>
             </ul>
@@ -137,7 +137,7 @@ export default function CampaignLandingPage() {
                 className={`inline-flex items-center rounded-xl px-5 py-3 font-semibold shadow-sm ${
                   isPurchaseWindowPassed 
                     ? 'bg-gray-300 text-gray-500 cursor-not-allowed' 
-                    : 'bg-[#1F66FF] text-white hover:bg-[#0E2C7E]'
+                    : 'bg-[#CE3427] text-white hover:bg-[#0E2C7E]'
                 }`}
                 title={isPurchaseWindowPassed ? 'Purchase window has ended' : 'Apply to this campaign'}
               >
@@ -145,7 +145,7 @@ export default function CampaignLandingPage() {
               </button>
               <a
                 href="#timeline"
-                className="inline-flex items-center rounded-xl bg-white px-5 py-3 font-semibold ring-1 ring-[#E8F1FF] hover:ring-[#1F66FF]"
+                className="inline-flex items-center rounded-xl bg-white px-5 py-3 font-semibold ring-1 ring-[#F5E6E4] hover:ring-[#CE3427]"
               >
                 See Timeline
               </a>
@@ -220,7 +220,7 @@ export default function CampaignLandingPage() {
           ).map((s, index) => (
             <Card key={index} className="p-6">
               <div className="flex items-center gap-3">
-                <div className="h-9 w-9 rounded-xl bg-[#1F66FF] text-white grid place-items-center font-bold">
+                <div className="h-9 w-9 rounded-xl bg-[#CE3427] text-white grid place-items-center font-bold">
                   {s.step}
                 </div>
                 <h3 className="font-semibold">{s.title}</h3>
@@ -301,7 +301,7 @@ export default function CampaignLandingPage() {
       )}
 
       {/* Sticky Apply bar */}
-      <div className="sticky bottom-0 z-30 border-t border-[#E8F1FF] bg-white/95 backdrop-blur">
+      <div className="sticky bottom-0 z-30 border-t border-[#F5E6E4] bg-white/95 backdrop-blur">
         <Section className="flex flex-wrap items-center justify-between gap-4 py-3">
           <div className="text-sm">
             <span className="font-semibold text-[#0E2C7E]">
@@ -315,7 +315,7 @@ export default function CampaignLandingPage() {
             className={`inline-flex items-center rounded-xl px-5 py-2.5 font-semibold shadow-sm ${
               isPurchaseWindowPassed 
                 ? 'bg-gray-300 text-gray-500 cursor-not-allowed' 
-                : 'bg-[#1F66FF] text-white hover:bg-[#0E2C7E]'
+                : 'bg-[#CE3427] text-white hover:bg-[#0E2C7E]'
             }`}
             title={isPurchaseWindowPassed ? 'Purchase window has ended' : 'Apply to this campaign'}
           >
@@ -325,14 +325,14 @@ export default function CampaignLandingPage() {
       </div>
 
       {/* Footer */}
-      <footer className="mt-12 border-t border-[#E8F1FF]">
+      <footer className="mt-12 border-t border-[#F5E6E4]">
         <Section className="py-8 text-xs text-[#0B1220]/70">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
             <div>© {new Date().getFullYear()} {brandName}. All rights reserved.</div>
             <div className="flex gap-4">
-              <a href="#" className="hover:text-[#1F66FF]">Terms</a>
-              <a href="#" className="hover:text-[#1F66FF]">Privacy</a>
-              <a href="#" className="hover:text-[#1F66FF]">Contact</a>
+              <a href="#" className="hover:text-[#CE3427]">Terms</a>
+              <a href="#" className="hover:text-[#CE3427]">Privacy</a>
+              <a href="#" className="hover:text-[#CE3427]">Contact</a>
             </div>
           </div>
         </Section>

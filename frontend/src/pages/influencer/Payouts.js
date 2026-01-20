@@ -83,8 +83,8 @@ export default function InfluencerPayouts() {
 
             <div className="card hover:shadow-xl transition-shadow" data-testid="stat-paid-payouts">
               <div className="flex items-start justify-between mb-4">
-                <div className="w-12 h-12 bg-[#E8F1FF] rounded-xl flex items-center justify-center">
-                  <CheckCircle className="w-6 h-6 text-[#1F66FF]" />
+                <div className="w-12 h-12 bg-[#F5E6E4] rounded-xl flex items-center justify-center">
+                  <CheckCircle className="w-6 h-6 text-[#CE3427]" />
                 </div>
               </div>
               <p className="text-gray-600 text-sm font-semibold mb-1">Paid Payouts</p>
@@ -103,7 +103,7 @@ export default function InfluencerPayouts() {
           </div>
 
           {/* Payment Structure Info */}
-          <div className="card mb-8 bg-[#E8F1FF] border-2 border-[#1F66FF]">
+          <div className="card mb-8 bg-[#F5E6E4] border-2 border-[#CE3427]">
             <h3 className="text-xl font-bold text-[#0B1220] mb-4">💰 How You Get Paid</h3>
             <div className="grid md:grid-cols-3 gap-6">
               <div className="bg-white p-4 rounded-xl">
@@ -119,7 +119,7 @@ export default function InfluencerPayouts() {
 
               <div className="bg-white p-4 rounded-xl">
                 <div className="flex items-center gap-3 mb-2">
-                  <TrendingUp className="w-8 h-8 text-[#1F66FF]" />
+                  <TrendingUp className="w-8 h-8 text-[#CE3427]" />
                   <div>
                     <p className="font-bold text-[#0B1220]">Content Fee</p>
                     <p className="text-sm text-gray-600">$10.00 per post</p>
@@ -211,7 +211,7 @@ export default function InfluencerPayouts() {
                         </div>
                         <div>
                           <p className="text-gray-600">Content Fee</p>
-                          <p className="font-bold text-[#1F66FF]">$10.00</p>
+                          <p className="font-bold text-[#CE3427]">$10.00</p>
                         </div>
                         <div>
                           <p className="text-gray-600">Addon Posts</p>

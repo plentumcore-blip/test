@@ -175,10 +175,10 @@ export default function BrandAssignments() {
   const getStatusBadge = (status) => {
     const statusConfig = {
       purchase_required: { bg: 'bg-yellow-100', text: 'text-yellow-800', label: 'Purchase Required' },
-      purchase_review: { bg: 'bg-blue-100', text: 'text-blue-800', label: 'Purchase Review' },
+      purchase_review: { bg: 'bg-red-100', text: 'text-blue-800', label: 'Purchase Review' },
       purchase_approved: { bg: 'bg-green-100', text: 'text-green-800', label: 'Purchase Approved' },
       posting: { bg: 'bg-purple-100', text: 'text-purple-800', label: 'Creating Content' },
-      post_review: { bg: 'bg-blue-100', text: 'text-blue-800', label: 'Post Review' },
+      post_review: { bg: 'bg-red-100', text: 'text-blue-800', label: 'Post Review' },
       completed: { bg: 'bg-green-100', text: 'text-green-800', label: 'Completed' }
     };
     
@@ -244,7 +244,7 @@ export default function BrandAssignments() {
                         </div>
                         <button
                           onClick={() => handleReviewProof(assignment)}
-                          className="flex items-center gap-2 px-4 py-2 bg-[#1F66FF] text-white rounded-xl hover:bg-blue-700 transition-colors"
+                          className="flex items-center gap-2 px-4 py-2 bg-[#CE3427] text-white rounded-xl hover:bg-red-700 transition-colors"
                         >
                           <Eye className="w-4 h-4" />
                           Review Proof
@@ -267,14 +267,14 @@ export default function BrandAssignments() {
                             href={assignment.postSubmission.post_url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-sm text-[#1F66FF] hover:underline flex items-center gap-1 mt-1"
+                            className="text-sm text-[#CE3427] hover:underline flex items-center gap-1 mt-1"
                           >
                             View Post <ExternalLink className="w-3 h-3" />
                           </a>
                         </div>
                         <button
                           onClick={() => handleReviewPost(assignment)}
-                          className="flex items-center gap-2 px-4 py-2 bg-[#1F66FF] text-white rounded-xl hover:bg-blue-700 transition-colors"
+                          className="flex items-center gap-2 px-4 py-2 bg-[#CE3427] text-white rounded-xl hover:bg-red-700 transition-colors"
                         >
                           <Eye className="w-4 h-4" />
                           Review Post
@@ -302,7 +302,7 @@ export default function BrandAssignments() {
 
                   {assignment.status === 'posting' && (
                     <div className="border-t border-gray-200 pt-4 mt-4">
-                      <p className="text-sm text-blue-600">
+                      <p className="text-sm text-red-600">
                         📝 Influencer is creating content
                       </p>
                     </div>
@@ -316,7 +316,7 @@ export default function BrandAssignments() {
                       
                       {/* Product Review Section */}
                       {assignment.productReview && assignment.review_status === 'review' && (
-                        <div className="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
+                        <div className="mt-4 p-4 bg-red-50 rounded-lg border border-red-200">
                           <div className="flex items-center justify-between">
                             <div>
                               <h4 className="font-semibold text-gray-900 mb-2">⭐ Product Review Submitted (+$5)</h4>
@@ -329,7 +329,7 @@ export default function BrandAssignments() {
                             </div>
                             <button
                               onClick={() => handleReviewProductReview(assignment)}
-                              className="flex items-center gap-2 px-4 py-2 bg-[#1F66FF] text-white rounded-xl hover:bg-blue-700 transition-colors"
+                              className="flex items-center gap-2 px-4 py-2 bg-[#CE3427] text-white rounded-xl hover:bg-red-700 transition-colors"
                             >
                               <Eye className="w-4 h-4" />
                               Review
@@ -413,7 +413,7 @@ export default function BrandAssignments() {
                 <textarea
                   value={reviewNotes}
                   onChange={(e) => setReviewNotes(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1F66FF]"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#CE3427]"
                   rows={4}
                   placeholder="Add notes about this review..."
                 />
@@ -475,7 +475,7 @@ export default function BrandAssignments() {
                   href={selectedPost.post_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 text-[#1F66FF]"
+                  className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 text-[#CE3427]"
                 >
                   <ExternalLink className="w-4 h-4" />
                   {selectedPost.post_url}
@@ -512,7 +512,7 @@ export default function BrandAssignments() {
                 <textarea
                   value={reviewNotes}
                   onChange={(e) => setReviewNotes(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1F66FF]"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#CE3427]"
                   rows={4}
                   placeholder="Add notes about this review..."
                 />
@@ -583,7 +583,7 @@ export default function BrandAssignments() {
                   href={selectedReview.screenshot_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 text-[#1F66FF]"
+                  className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 text-[#CE3427]"
                 >
                   <ExternalLink className="w-4 h-4" />
                   View Screenshot
@@ -596,7 +596,7 @@ export default function BrandAssignments() {
                 <textarea
                   value={reviewNotes}
                   onChange={(e) => setReviewNotes(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1F66FF]"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#CE3427]"
                   rows={4}
                   placeholder="Add notes about this review..."
                 />

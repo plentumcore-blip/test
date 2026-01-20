@@ -26,7 +26,7 @@ const BrandSidebar = ({ onLogout }) => {
       <div className="lg:hidden fixed top-0 left-0 right-0 bg-white border-b border-gray-200 z-40">
         <div className="flex items-center justify-between p-4">
           <div className="flex items-center gap-2">
-            <ShoppingBag className="w-6 h-6 text-[#1F66FF]" />
+            <ShoppingBag className="w-6 h-6 text-[#CE3427]" />
             <span className="text-xl font-bold text-[#0B1220]">Influiv</span>
           </div>
           <button
@@ -57,7 +57,7 @@ const BrandSidebar = ({ onLogout }) => {
         {/* Logo - Desktop Only */}
         <div className="hidden lg:block p-6 border-b border-gray-200">
           <div className="flex items-center gap-2">
-            <ShoppingBag className="w-8 h-8 text-[#1F66FF]" />
+            <ShoppingBag className="w-8 h-8 text-[#CE3427]" />
             <span className="text-2xl font-bold text-[#0B1220]">Influiv</span>
           </div>
           <p className="text-sm text-gray-600 mt-1">Brand Portal</p>
@@ -75,7 +75,7 @@ const BrandSidebar = ({ onLogout }) => {
                   onClick={() => handleNavigation(item.path)}
                   className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all ${
                     isActive
-                      ? 'bg-[#1F66FF] text-white shadow-lg shadow-blue-500/30'
+                      ? 'bg-[#CE3427] text-white shadow-lg shadow-blue-500/30'
                       : 'text-gray-700 hover:bg-gray-100'
                   }`}
                 >

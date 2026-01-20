@@ -63,7 +63,7 @@ const AdminReports = () => {
           {/* Header */}
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-[#0B1220] flex items-center gap-3">
-              <BarChart3 className="w-8 h-8 text-[#1F66FF]" />
+              <BarChart3 className="w-8 h-8 text-[#CE3427]" />
               Platform Reports
             </h1>
             <p className="text-gray-600 mt-2">
@@ -76,7 +76,7 @@ const AdminReports = () => {
             <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-gray-600 text-sm font-medium">Total Brands</span>
-                <Building2 className="w-5 h-5 text-blue-600" />
+                <Building2 className="w-5 h-5 text-red-600" />
               </div>
               <div className="text-3xl font-bold text-[#0B1220]">{reports.summary.total_brands}</div>
             </div>
@@ -113,7 +113,7 @@ const AdminReports = () => {
           {/* Brand Reports */}
           <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 mb-8">
             <h2 className="text-xl font-semibold text-[#0B1220] mb-6 flex items-center gap-2">
-              <Building2 className="w-6 h-6 text-[#1F66FF]" />
+              <Building2 className="w-6 h-6 text-[#CE3427]" />
               Brand Analytics
             </h2>
             
@@ -175,7 +175,7 @@ const AdminReports = () => {
           {/* Influencer Reports */}
           <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
             <h2 className="text-xl font-semibold text-[#0B1220] mb-6 flex items-center gap-2">
-              <UserCheck className="w-6 h-6 text-[#1F66FF]" />
+              <UserCheck className="w-6 h-6 text-[#CE3427]" />
               Influencer Analytics
             </h2>
             

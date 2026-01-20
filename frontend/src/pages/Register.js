@@ -57,12 +57,12 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen flex" style={{ background: 'linear-gradient(135deg, #E8F1FF 0%, #FFFFFF 100%)' }}>
+    <div className="min-h-screen flex" style={{ background: 'linear-gradient(135deg, #F5E6E4 0%, #FFFFFF 100%)' }}>
       <div className="flex-1 flex items-center justify-center px-6 py-12">
         <div className="w-full max-w-md">
           <div className="text-center mb-8">
             <div className="flex items-center justify-center gap-2 mb-4">
-              <ShoppingBag className="w-10 h-10 text-[#1F66FF]" />
+              <ShoppingBag className="w-10 h-10 text-[#CE3427]" />
               <span className="text-3xl font-bold text-[#0B1220]">Influiv</span>
             </div>
             <h1 className="text-4xl font-bold text-[#0B1220] mb-2">Get Started</h1>
@@ -80,7 +80,7 @@ export default function Register() {
                     onClick={() => setRole('brand')}
                     className={`p-4 rounded-2xl border-2 font-semibold transition-all ${
                       role === 'brand'
-                        ? 'border-[#1F66FF] bg-[#E8F1FF] text-[#1F66FF]'
+                        ? 'border-[#CE3427] bg-[#F5E6E4] text-[#CE3427]'
                         : 'border-gray-200 hover:border-gray-300'
                     }`}
                   >
@@ -92,7 +92,7 @@ export default function Register() {
                     onClick={() => setRole('influencer')}
                     className={`p-4 rounded-2xl border-2 font-semibold transition-all ${
                       role === 'influencer'
-                        ? 'border-[#1F66FF] bg-[#E8F1FF] text-[#1F66FF]'
+                        ? 'border-[#CE3427] bg-[#F5E6E4] text-[#CE3427]'
                         : 'border-gray-200 hover:border-gray-300'
                     }`}
                   >
@@ -110,7 +110,7 @@ export default function Register() {
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#1F66FF] focus:border-transparent"
+                    className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#CE3427] focus:border-transparent"
                     placeholder="you@example.com"
                     required
                   />
@@ -155,7 +155,7 @@ export default function Register() {
             <div className="mt-6 text-center">
               <p className="text-gray-600">
                 Already have an account?{' '}
-                <Link to="/login" className="text-[#1F66FF] font-semibold hover:underline">
+                <Link to="/login" className="text-[#CE3427] font-semibold hover:underline">
                   Sign in
                 </Link>
               </p>
@@ -165,7 +165,7 @@ export default function Register() {
       </div>
 
       {/* Right side illustration */}
-      <div className="hidden lg:flex flex-1 items-center justify-center" style={{ background: 'linear-gradient(135deg, #1F66FF 0%, #0E2C7E 100%)' }}>
+      <div className="hidden lg:flex flex-1 items-center justify-center" style={{ background: 'linear-gradient(135deg, #CE3427 0%, #0E2C7E 100%)' }}>
         <div className="text-center text-white p-12">
           <h2 className="text-5xl font-bold mb-6">Join Influiv</h2>
           <p className="text-2xl text-white/90 mb-8">

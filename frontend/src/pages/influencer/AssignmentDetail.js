@@ -200,7 +200,7 @@ export default function AssignmentDetail() {
           <button
             data-testid="back-to-assignments-btn"
             onClick={() => navigate('/influencer/assignments')}
-            className="flex items-center gap-2 text-gray-600 hover:text-[#1F66FF] font-semibold mb-2"
+            className="flex items-center gap-2 text-gray-600 hover:text-[#CE3427] font-semibold mb-2"
           >
             <ArrowLeft className="w-5 h-5" />
             Back to Assignments
@@ -236,7 +236,7 @@ export default function AssignmentDetail() {
         {assignment.status === 'purchase_required' && (
           <div className="card mb-6" data-testid="purchase-step">
             <div className="flex items-start gap-4">
-              <div className="w-12 h-12 bg-[#1F66FF] rounded-full flex items-center justify-center flex-shrink-0">
+              <div className="w-12 h-12 bg-[#CE3427] rounded-full flex items-center justify-center flex-shrink-0">
                 <span className="text-white font-bold text-lg">1</span>
               </div>
               <div className="flex-1">
@@ -524,9 +524,9 @@ export default function AssignmentDetail() {
 
             {/* Product Review Section */}
             {assignment.review_status !== 'approved' && assignment.review_status !== 'review' && (
-              <div className="card bg-blue-50 border border-blue-200">
+              <div className="card bg-red-50 border border-red-200">
                 <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-[#1F66FF] rounded-full flex items-center justify-center flex-shrink-0">
+                  <div className="w-12 h-12 bg-[#CE3427] rounded-full flex items-center justify-center flex-shrink-0">
                     <DollarSign className="w-6 h-6 text-white" />
                   </div>
                   <div className="flex-1">

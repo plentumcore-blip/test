@@ -81,7 +81,7 @@ export default function BrandPayouts() {
 
   const getPayoutTypeBadge = (type) => {
     const styles = {
-      reimbursement: 'bg-blue-100 text-blue-700',
+      reimbursement: 'bg-red-100 text-red-700',
       commission: 'bg-green-100 text-green-700',
       review_bonus: 'bg-purple-100 text-purple-700'
     };
@@ -136,8 +136,8 @@ export default function BrandPayouts() {
             </div>
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
               <div className="flex items-center gap-4">
-                <div className="p-3 bg-blue-100 rounded-xl">
-                  <User className="w-6 h-6 text-blue-600" />
+                <div className="p-3 bg-red-100 rounded-xl">
+                  <User className="w-6 h-6 text-red-600" />
                 </div>
                 <div>
                   <p className="text-sm text-gray-600">Pending Count</p>
@@ -155,7 +155,7 @@ export default function BrandPayouts() {
                 <select
                   value={statusFilter}
                   onChange={(e) => setStatusFilter(e.target.value)}
-                  className="pl-4 pr-10 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#1F66FF] focus:border-transparent appearance-none bg-white min-w-[150px]"
+                  className="pl-4 pr-10 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#CE3427] focus:border-transparent appearance-none bg-white min-w-[150px]"
                 >
                   <option value="">All Status</option>
                   <option value="pending">Pending</option>

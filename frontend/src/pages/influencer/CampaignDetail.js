@@ -71,7 +71,7 @@ export default function CampaignDetail() {
         <div className="max-w-4xl mx-auto px-6 py-4">
           <button
             onClick={() => navigate('/influencer/campaigns')}
-            className="flex items-center gap-2 text-gray-600 hover:text-[#1F66FF] font-semibold mb-2"
+            className="flex items-center gap-2 text-gray-600 hover:text-[#CE3427] font-semibold mb-2"
           >
             <ArrowLeft className="w-5 h-5" />
             Back to Browse Campaigns
@@ -96,14 +96,14 @@ export default function CampaignDetail() {
         {campaign.amazon_attribution_url && (
           <div className="card mb-6">
             <h2 className="text-2xl font-bold text-[#0B1220] mb-4 flex items-center gap-2">
-              <ShoppingBag className="w-6 h-6 text-[#1F66FF]" />
+              <ShoppingBag className="w-6 h-6 text-[#CE3427]" />
               Product Link
             </h2>
             <a
               href={campaign.amazon_attribution_url}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[#1F66FF] hover:underline flex items-center gap-2 text-lg"
+              className="text-[#CE3427] hover:underline flex items-center gap-2 text-lg"
             >
               View Product on Amazon
               <ExternalLink className="w-5 h-5" />
@@ -113,9 +113,9 @@ export default function CampaignDetail() {
 
         {/* View Campaign Landing Page */}
         {campaign.landing_page_enabled && campaign.landing_page_slug && (
-          <div className="card mb-6 bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
+          <div className="card mb-6 bg-gradient-to-r from-red-50 to-indigo-50 border-red-200">
             <h2 className="text-2xl font-bold text-[#0B1220] mb-4 flex items-center gap-2">
-              <Globe className="w-6 h-6 text-[#1F66FF]" />
+              <Globe className="w-6 h-6 text-[#CE3427]" />
               Campaign Landing Page
             </h2>
             <p className="text-gray-600 mb-4">
@@ -137,7 +137,7 @@ export default function CampaignDetail() {
         {/* Campaign Windows */}
         <div className="card mb-6">
           <h2 className="text-2xl font-bold text-[#0B1220] mb-4 flex items-center gap-2">
-            <Calendar className="w-6 h-6 text-[#1F66FF]" />
+            <Calendar className="w-6 h-6 text-[#CE3427]" />
             Important Dates
           </h2>
           <div className="space-y-4">
@@ -146,7 +146,7 @@ export default function CampaignDetail() {
               <p className="text-gray-600">
                 You must purchase the product between:
               </p>
-              <p className={`text-lg font-semibold mt-1 ${isPurchaseWindowPassed ? 'text-red-600' : 'text-[#1F66FF]'}`}>
+              <p className={`text-lg font-semibold mt-1 ${isPurchaseWindowPassed ? 'text-red-600' : 'text-[#CE3427]'}`}>
                 {new Date(campaign.purchase_window_start).toLocaleDateString('en-US', { 
                   year: 'numeric', 
                   month: 'long', 
@@ -171,7 +171,7 @@ export default function CampaignDetail() {
               <p className="text-gray-600">
                 You must publish your content between:
               </p>
-              <p className="text-lg font-semibold text-[#1F66FF] mt-1">
+              <p className="text-lg font-semibold text-[#CE3427] mt-1">
                 {new Date(campaign.post_window_start).toLocaleDateString('en-US', { 
                   year: 'numeric', 
                   month: 'long', 
@@ -191,32 +191,32 @@ export default function CampaignDetail() {
         {/* How It Works */}
         <div className="card mb-6">
           <h2 className="text-2xl font-bold text-[#0B1220] mb-4 flex items-center gap-2">
-            <CheckCircle className="w-6 h-6 text-[#1F66FF]" />
+            <CheckCircle className="w-6 h-6 text-[#CE3427]" />
             How It Works
           </h2>
           <ol className="space-y-3 text-gray-700">
             <li className="flex gap-3">
-              <span className="flex-shrink-0 w-6 h-6 bg-[#1F66FF] text-white rounded-full flex items-center justify-center text-sm font-bold">1</span>
+              <span className="flex-shrink-0 w-6 h-6 bg-[#CE3427] text-white rounded-full flex items-center justify-center text-sm font-bold">1</span>
               <span>Apply to this campaign by clicking "Apply Now" below</span>
             </li>
             <li className="flex gap-3">
-              <span className="flex-shrink-0 w-6 h-6 bg-[#1F66FF] text-white rounded-full flex items-center justify-center text-sm font-bold">2</span>
+              <span className="flex-shrink-0 w-6 h-6 bg-[#CE3427] text-white rounded-full flex items-center justify-center text-sm font-bold">2</span>
               <span>Wait for the brand to review and accept your application</span>
             </li>
             <li className="flex gap-3">
-              <span className="flex-shrink-0 w-6 h-6 bg-[#1F66FF] text-white rounded-full flex items-center justify-center text-sm font-bold">3</span>
+              <span className="flex-shrink-0 w-6 h-6 bg-[#CE3427] text-white rounded-full flex items-center justify-center text-sm font-bold">3</span>
               <span>Purchase the product using your unique tracking link during the purchase window</span>
             </li>
             <li className="flex gap-3">
-              <span className="flex-shrink-0 w-6 h-6 bg-[#1F66FF] text-white rounded-full flex items-center justify-center text-sm font-bold">4</span>
+              <span className="flex-shrink-0 w-6 h-6 bg-[#CE3427] text-white rounded-full flex items-center justify-center text-sm font-bold">4</span>
               <span>Submit your purchase proof for verification</span>
             </li>
             <li className="flex gap-3">
-              <span className="flex-shrink-0 w-6 h-6 bg-[#1F66FF] text-white rounded-full flex items-center justify-center text-sm font-bold">5</span>
+              <span className="flex-shrink-0 w-6 h-6 bg-[#CE3427] text-white rounded-full flex items-center justify-center text-sm font-bold">5</span>
               <span>Create and publish your content during the post window</span>
             </li>
             <li className="flex gap-3">
-              <span className="flex-shrink-0 w-6 h-6 bg-[#1F66FF] text-white rounded-full flex items-center justify-center text-sm font-bold">6</span>
+              <span className="flex-shrink-0 w-6 h-6 bg-[#CE3427] text-white rounded-full flex items-center justify-center text-sm font-bold">6</span>
               <span>Submit your content proof and get paid after approval</span>
             </li>
           </ol>

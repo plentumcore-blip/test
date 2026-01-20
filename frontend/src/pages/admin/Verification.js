@@ -65,7 +65,7 @@ export default function AdminVerification() {
             onClick={() => setQueueType('purchase')}
             className={`px-6 py-3 rounded-2xl font-semibold transition-all ${
               queueType === 'purchase'
-                ? 'bg-[#1F66FF] text-white'
+                ? 'bg-[#CE3427] text-white'
                 : 'bg-white text-gray-600 hover:bg-gray-50'
             }`}
           >
@@ -76,7 +76,7 @@ export default function AdminVerification() {
             onClick={() => setQueueType('post')}
             className={`px-6 py-3 rounded-2xl font-semibold transition-all ${
               queueType === 'post'
-                ? 'bg-[#1F66FF] text-white'
+                ? 'bg-[#CE3427] text-white'
                 : 'bg-white text-gray-600 hover:bg-gray-50'
             }`}
           >

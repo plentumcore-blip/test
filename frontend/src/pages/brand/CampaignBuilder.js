@@ -112,7 +112,7 @@ export default function CampaignBuilder() {
           <button
             data-testid="back-btn"
             onClick={() => navigate('/brand/campaigns')}
-            className="flex items-center gap-2 text-gray-600 hover:text-[#1F66FF] font-semibold mb-2"
+            className="flex items-center gap-2 text-gray-600 hover:text-[#CE3427] font-semibold mb-2"
           >
             <ArrowLeft className="w-5 h-5" />
             Back to Campaigns
@@ -129,13 +129,13 @@ export default function CampaignBuilder() {
               <div key={step} className="flex items-center" data-testid={`step-${index}`}>
                 <div className={`flex items-center justify-center w-10 h-10 rounded-full font-bold ${
                   index < currentStep ? 'bg-[#12B76A] text-white' :
-                  index === currentStep ? 'bg-[#1F66FF] text-white' :
+                  index === currentStep ? 'bg-[#CE3427] text-white' :
                   'bg-gray-200 text-gray-600'
                 }`}>
                   {index < currentStep ? <Check className="w-6 h-6" /> : index + 1}
                 </div>
                 <span className={`ml-3 font-semibold ${
-                  index === currentStep ? 'text-[#1F66FF]' : 'text-gray-600'
+                  index === currentStep ? 'text-[#CE3427]' : 'text-gray-600'
                 }`}>
                   {step}
                 </span>
@@ -187,7 +187,7 @@ export default function CampaignBuilder() {
             <div className="space-y-6">
               <h2 className="text-2xl font-bold text-[#0B1220]">Amazon Attribution URL</h2>
               
-              <div className="bg-[#E8F1FF] p-4 rounded-2xl">
+              <div className="bg-[#F5E6E4] p-4 rounded-2xl">
                 <p className="text-sm text-[#0B1220]">
                   <strong>Important:</strong> This URL will track all influencer purchases. Make sure it's a valid Amazon Attribution link.
                 </p>
@@ -281,7 +281,7 @@ export default function CampaignBuilder() {
             <div className="space-y-6">
               <h2 className="text-2xl font-bold text-[#0B1220]">Influencer Payments</h2>
               
-              <div className="bg-[#E8F1FF] p-4 rounded-2xl">
+              <div className="bg-[#F5E6E4] p-4 rounded-2xl">
                 <p className="text-sm text-[#0B1220]">
                   <strong>Payment Structure:</strong> When an influencer completes their assignment, they will receive:
                 </p>

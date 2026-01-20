@@ -100,7 +100,7 @@ export default function AdminCampaigns() {
   const getStatusBadge = (status) => {
     const styles = {
       draft: 'bg-gray-100 text-gray-700',
-      published: 'bg-blue-100 text-blue-700',
+      published: 'bg-red-100 text-red-700',
       live: 'bg-green-100 text-green-700',
       closed: 'bg-red-100 text-red-700'
     };
@@ -147,7 +147,7 @@ export default function AdminCampaigns() {
                   placeholder="Search campaigns or brands..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#1F66FF] focus:border-transparent"
+                  className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#CE3427] focus:border-transparent"
                 />
               </div>
               <div className="relative">
@@ -155,7 +155,7 @@ export default function AdminCampaigns() {
                 <select
                   value={statusFilter}
                   onChange={(e) => setStatusFilter(e.target.value)}
-                  className="pl-10 pr-8 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#1F66FF] focus:border-transparent appearance-none bg-white min-w-[150px]"
+                  className="pl-10 pr-8 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#CE3427] focus:border-transparent appearance-none bg-white min-w-[150px]"
                 >
                   <option value="">All Statuses</option>
                   <option value="draft">Draft</option>
@@ -172,8 +172,8 @@ export default function AdminCampaigns() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
               <div className="flex items-center gap-3">
-                <div className="p-2 bg-blue-100 rounded-lg">
-                  <ClipboardList className="w-5 h-5 text-blue-600" />
+                <div className="p-2 bg-red-100 rounded-lg">
+                  <ClipboardList className="w-5 h-5 text-red-600" />
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-[#0B1220]">{campaigns.length}</p>
@@ -309,14 +309,14 @@ export default function AdminCampaigns() {
                           <div className="flex items-center justify-end gap-2">
                             <button
                               onClick={() => window.open(`/brand/campaigns/${campaign.id}/applications`, '_blank')}
-                              className="p-2 text-gray-500 hover:text-[#1F66FF] hover:bg-blue-50 rounded-lg transition-colors"
+                              className="p-2 text-gray-500 hover:text-[#CE3427] hover:bg-red-50 rounded-lg transition-colors"
                               title="View Applications"
                             >
                               <Eye className="w-5 h-5" />
                             </button>
                             <button
                               onClick={() => openEditModal(campaign)}
-                              className="p-2 text-gray-500 hover:text-[#1F66FF] hover:bg-blue-50 rounded-lg transition-colors"
+                              className="p-2 text-gray-500 hover:text-[#CE3427] hover:bg-red-50 rounded-lg transition-colors"
                               title="Edit Dates"
                             >
                               <Edit className="w-5 h-5" />
@@ -419,7 +419,7 @@ export default function AdminCampaigns() {
                     type="date"
                     value={editDates.purchase_window_start}
                     onChange={(e) => setEditDates({ ...editDates, purchase_window_start: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#1F66FF] focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#CE3427] focus:border-transparent"
                   />
                 </div>
                 <div>
@@ -430,7 +430,7 @@ export default function AdminCampaigns() {
                     type="date"
                     value={editDates.purchase_window_end}
                     onChange={(e) => setEditDates({ ...editDates, purchase_window_end: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#1F66FF] focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#CE3427] focus:border-transparent"
                   />
                 </div>
               </div>
@@ -444,7 +444,7 @@ export default function AdminCampaigns() {
                     type="date"
                     value={editDates.post_window_start}
                     onChange={(e) => setEditDates({ ...editDates, post_window_start: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#1F66FF] focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#CE3427] focus:border-transparent"
                   />
                 </div>
                 <div>
@@ -455,7 +455,7 @@ export default function AdminCampaigns() {
                     type="date"
                     value={editDates.post_window_end}
                     onChange={(e) => setEditDates({ ...editDates, post_window_end: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#1F66FF] focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#CE3427] focus:border-transparent"
                   />
                 </div>
               </div>
@@ -471,7 +471,7 @@ export default function AdminCampaigns() {
               </button>
               <button
                 onClick={handleSaveDates}
-                className="flex-1 px-4 py-2 bg-[#1F66FF] text-white rounded-xl font-semibold hover:bg-[#1855CC] transition-colors disabled:opacity-50"
+                className="flex-1 px-4 py-2 bg-[#CE3427] text-white rounded-xl font-semibold hover:bg-[#A32B20] transition-colors disabled:opacity-50"
                 disabled={saving}
               >
                 {saving ? 'Saving...' : 'Save Changes'}

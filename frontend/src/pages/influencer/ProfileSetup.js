@@ -258,7 +258,7 @@ export default function InfluencerProfileSetup() {
             </div>
 
             {/* PayPal Email for Payments */}
-            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-6 border border-blue-200">
+            <div className="bg-gradient-to-r from-red-50 to-indigo-50 rounded-2xl p-6 border border-red-200">
               <label className="block text-sm font-semibold text-[#0B1220] mb-2 flex items-center gap-2">
                 <svg className="w-5 h-5 text-[#0070BA]" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944 3.72a.77.77 0 0 1 .76-.645h6.464c2.115 0 3.792.57 4.864 1.65.997 1.004 1.397 2.435 1.183 4.25-.463 3.93-2.857 5.926-7.108 5.926h-1.22a.77.77 0 0 0-.76.645l-1.05 5.79z"/>
@@ -286,7 +286,7 @@ export default function InfluencerProfileSetup() {
                     <img
                       src={getFileUrl(profile.avatar_url)}
                       alt="Avatar"
-                      className="w-24 h-24 rounded-full object-cover border-4 border-[#1F66FF]"
+                      className="w-24 h-24 rounded-full object-cover border-4 border-[#CE3427]"
                       onError={(e) => { e.target.src = ''; e.target.style.display = 'none'; }}
                     />
                     <button
@@ -417,11 +417,11 @@ export default function InfluencerProfileSetup() {
               {platforms.map((platform) => (
                 <div key={platform.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-2xl" data-testid={`platform-${platform.id}`}>
                   <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-[#E8F1FF] rounded-full flex items-center justify-center">
-                      {platform.platform === 'instagram' && <Instagram className="w-6 h-6 text-[#1F66FF]" />}
-                      {platform.platform === 'tiktok' && <Music className="w-6 h-6 text-[#1F66FF]" />}
-                      {platform.platform === 'youtube' && <User className="w-6 h-6 text-[#1F66FF]" />}
-                      {platform.platform === 'twitter' && <User className="w-6 h-6 text-[#1F66FF]" />}
+                    <div className="w-12 h-12 bg-[#F5E6E4] rounded-full flex items-center justify-center">
+                      {platform.platform === 'instagram' && <Instagram className="w-6 h-6 text-[#CE3427]" />}
+                      {platform.platform === 'tiktok' && <Music className="w-6 h-6 text-[#CE3427]" />}
+                      {platform.platform === 'youtube' && <User className="w-6 h-6 text-[#CE3427]" />}
+                      {platform.platform === 'twitter' && <User className="w-6 h-6 text-[#CE3427]" />}
                     </div>
                     <div>
                       <h3 className="font-bold text-[#0B1220] capitalize">{platform.platform}</h3>
@@ -544,7 +544,7 @@ export default function InfluencerProfileSetup() {
 
         {/* View Public Profile */}
         {profile.public_profile_slug && (
-          <div className="card mb-6 bg-gradient-to-r from-blue-50 to-purple-50 border-2 border-[#1F66FF]">
+          <div className="card mb-6 bg-gradient-to-r from-red-50 to-purple-50 border-2 border-[#CE3427]">
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
               <div>
                 <h3 className="text-xl font-bold text-[#0B1220] mb-2">Your Public Profile is Live!</h3>
@@ -577,7 +577,7 @@ export default function InfluencerProfileSetup() {
         )}
 
         {/* Complete Setup Button */}
-        <div className="mt-8 card bg-[#E8F1FF]">
+        <div className="mt-8 card bg-[#F5E6E4]">
           <div className="flex items-center justify-between">
             <div>
               <h3 className="text-xl font-bold text-[#0B1220] mb-2">Ready to Start?</h3>

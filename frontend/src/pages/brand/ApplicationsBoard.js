@@ -54,7 +54,7 @@ export default function ApplicationsBoard() {
           <button
             data-testid="back-to-campaigns-btn"
             onClick={() => navigate('/brand/campaigns')}
-            className="flex items-center gap-2 text-gray-600 hover:text-[#1F66FF] font-semibold mb-2"
+            className="flex items-center gap-2 text-gray-600 hover:text-[#CE3427] font-semibold mb-2"
           >
             <ArrowLeft className="w-5 h-5" />
             Back to Campaigns
@@ -106,7 +106,7 @@ export default function ApplicationsBoard() {
                               href={platform.profile_url}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="inline-flex items-center gap-2 px-3 py-2 bg-white border border-gray-200 rounded-lg hover:border-[#1F66FF] hover:bg-blue-50 transition-colors"
+                              className="inline-flex items-center gap-2 px-3 py-2 bg-white border border-gray-200 rounded-lg hover:border-[#CE3427] hover:bg-red-50 transition-colors"
                             >
                               {platform.platform === 'instagram' && (
                                 <svg className="w-5 h-5 text-pink-600" fill="currentColor" viewBox="0 0 24 24">
@@ -143,7 +143,7 @@ export default function ApplicationsBoard() {
                         href={`/influencer-profile/${app.influencer.public_profile_slug}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 text-[#1F66FF] hover:underline font-medium mb-4"
+                        className="inline-flex items-center gap-2 text-[#CE3427] hover:underline font-medium mb-4"
                       >
                         <User className="w-4 h-4" />
                         View Full Profile & Portfolio

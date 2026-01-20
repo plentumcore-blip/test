@@ -70,8 +70,8 @@ export default function BrandDashboard() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             <div className="card hover:shadow-xl transition-shadow" data-testid="stat-total-campaigns">
               <div className="flex items-start justify-between mb-4">
-                <div className="w-12 h-12 bg-[#E8F1FF] rounded-xl flex items-center justify-center">
-                  <ShoppingBag className="w-6 h-6 text-[#1F66FF]" />
+                <div className="w-12 h-12 bg-[#F5E6E4] rounded-xl flex items-center justify-center">
+                  <ShoppingBag className="w-6 h-6 text-[#CE3427]" />
                 </div>
               </div>
               <p className="text-gray-600 text-sm font-semibold mb-1">Total Campaigns</p>

@@ -100,9 +100,9 @@ export default function ResetPassword() {
 
   if (verifying) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #E8F1FF 0%, #FFFFFF 100%)' }}>
+      <div className="min-h-screen flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #F5E6E4 0%, #FFFFFF 100%)' }}>
         <div className="text-center">
-          <div className="w-12 h-12 border-4 border-[#1F66FF] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <div className="w-12 h-12 border-4 border-[#CE3427] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
           <p className="text-gray-600">Verifying reset link...</p>
         </div>
       </div>
@@ -111,12 +111,12 @@ export default function ResetPassword() {
 
   if (!tokenValid && !success) {
     return (
-      <div className="min-h-screen flex" style={{ background: 'linear-gradient(135deg, #E8F1FF 0%, #FFFFFF 100%)' }}>
+      <div className="min-h-screen flex" style={{ background: 'linear-gradient(135deg, #F5E6E4 0%, #FFFFFF 100%)' }}>
         <div className="flex-1 flex items-center justify-center px-6 py-12">
           <div className="w-full max-w-md">
             <div className="text-center mb-8">
               <div className="flex items-center justify-center gap-2 mb-4">
-                <ShoppingBag className="w-10 h-10 text-[#1F66FF]" />
+                <ShoppingBag className="w-10 h-10 text-[#CE3427]" />
                 <span className="text-3xl font-bold text-[#0B1220]">Influiv</span>
               </div>
             </div>
@@ -145,12 +145,12 @@ export default function ResetPassword() {
   }
 
   return (
-    <div className="min-h-screen flex" style={{ background: 'linear-gradient(135deg, #E8F1FF 0%, #FFFFFF 100%)' }}>
+    <div className="min-h-screen flex" style={{ background: 'linear-gradient(135deg, #F5E6E4 0%, #FFFFFF 100%)' }}>
       <div className="flex-1 flex items-center justify-center px-6 py-12">
         <div className="w-full max-w-md">
           <div className="text-center mb-8">
             <div className="flex items-center justify-center gap-2 mb-4">
-              <ShoppingBag className="w-10 h-10 text-[#1F66FF]" />
+              <ShoppingBag className="w-10 h-10 text-[#CE3427]" />
               <span className="text-3xl font-bold text-[#0B1220]">Influiv</span>
             </div>
             <h1 className="text-4xl font-bold text-[#0B1220] mb-2">
@@ -190,7 +190,7 @@ export default function ResetPassword() {
                       type={showPassword ? 'text' : 'password'}
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      className="w-full pl-11 pr-12 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#1F66FF] focus:border-transparent"
+                      className="w-full pl-11 pr-12 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#CE3427] focus:border-transparent"
                       placeholder="Enter new password"
                       required
                     />
@@ -223,7 +223,7 @@ export default function ResetPassword() {
                       type={showConfirmPassword ? 'text' : 'password'}
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
-                      className={`w-full pl-11 pr-12 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#1F66FF] focus:border-transparent ${
+                      className={`w-full pl-11 pr-12 py-3 border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#CE3427] focus:border-transparent ${
                         confirmPassword && password !== confirmPassword 
                           ? 'border-red-300 bg-red-50' 
                           : confirmPassword && password === confirmPassword
@@ -251,7 +251,7 @@ export default function ResetPassword() {
                   type="submit"
                   disabled={loading || !Object.values(validation).every(v => v) || password !== confirmPassword}
                   className="w-full py-3 rounded-xl text-white font-semibold transition-all disabled:opacity-50"
-                  style={{ background: 'linear-gradient(135deg, #1F66FF 0%, #0E2C7E 100%)' }}
+                  style={{ background: 'linear-gradient(135deg, #CE3427 0%, #0E2C7E 100%)' }}
                 >
                   {loading ? 'Resetting...' : 'Reset Password'}
                 </button>

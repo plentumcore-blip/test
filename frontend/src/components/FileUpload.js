@@ -239,18 +239,18 @@ const FileUpload = ({
               flex flex-col items-center justify-center w-full ${compact ? 'h-20' : 'h-32'}
               border-2 border-dashed rounded-xl cursor-pointer
               transition-colors
-              ${uploading ? 'border-blue-300 bg-blue-50 cursor-not-allowed' : 'border-gray-300 hover:border-blue-500 hover:bg-gray-50'}
+              ${uploading ? 'border-blue-300 bg-red-50 cursor-not-allowed' : 'border-gray-300 hover:border-red-500 hover:bg-gray-50'}
               ${error ? 'border-red-300 bg-red-50' : ''}
             `}
           >
             {uploading ? (
               <div className="flex flex-col items-center">
-                <Loader className={`${compact ? 'w-5 h-5' : 'w-8 h-8'} text-blue-600 animate-spin mb-2`} />
-                <p className={`${compact ? 'text-xs' : 'text-sm'} text-blue-600`}>Uploading... {progress}%</p>
+                <Loader className={`${compact ? 'w-5 h-5' : 'w-8 h-8'} text-red-600 animate-spin mb-2`} />
+                <p className={`${compact ? 'text-xs' : 'text-sm'} text-red-600`}>Uploading... {progress}%</p>
                 {!compact && (
                   <div className="w-48 h-2 bg-gray-200 rounded-full mt-2 overflow-hidden">
                     <div 
-                      className="h-full bg-blue-600 transition-all duration-300"
+                      className="h-full bg-red-600 transition-all duration-300"
                       style={{ width: `${progress}%` }}
                     />
                   </div>
@@ -283,7 +283,7 @@ const FileUpload = ({
                 href={displayUrl} 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="text-xs text-blue-600 hover:underline truncate block"
+                className="text-xs text-red-600 hover:underline truncate block"
               >
                 View file
               </a>

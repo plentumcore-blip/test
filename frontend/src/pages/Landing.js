@@ -16,19 +16,19 @@ export default function Landing() {
   }, [user, navigate]);
 
   return (
-    <div className="min-h-screen" style={{ background: 'linear-gradient(135deg, #E8F1FF 0%, #FFFFFF 50%, #E8F1FF 100%)' }}>
+    <div className="min-h-screen" style={{ background: 'linear-gradient(135deg, #F5E6E4 0%, #FFFFFF 50%, #F5E6E4 100%)' }}>
       {/* Header */}
       <header className="fixed top-0 w-full z-50 backdrop-blur-md bg-white/80 border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <ShoppingBag className="w-8 h-8 text-[#1F66FF]" />
+            <ShoppingBag className="w-8 h-8 text-[#CE3427]" />
             <span className="text-2xl font-bold text-[#0B1220]">Influiv</span>
           </div>
           <div className="flex items-center gap-4">
             <button
               data-testid="login-btn"
               onClick={() => navigate('/login')}
-              className="px-6 py-2 text-[#1F66FF] font-semibold hover:bg-[#E8F1FF] rounded-full transition-all"
+              className="px-6 py-2 text-[#CE3427] font-semibold hover:bg-[#F5E6E4] rounded-full transition-all"
             >
               Login
             </button>
@@ -49,7 +49,7 @@ export default function Landing() {
           <h1 className="text-6xl lg:text-7xl font-bold mb-6 text-[#0B1220] leading-tight">
             Amazon Influencer
             <br />
-            <span className="text-[#1F66FF]">Campaigns Made Simple</span>
+            <span className="text-[#CE3427]">Campaigns Made Simple</span>
           </h1>
           <p className="text-xl text-gray-600 mb-10 max-w-3xl mx-auto">
             Connect brands with influencers for authentic Amazon product campaigns. Track purchases, verify posts, and manage everything from one platform.
@@ -79,8 +79,8 @@ export default function Landing() {
           <h2 className="text-4xl font-bold text-center mb-16 text-[#0B1220]">Why Influiv?</h2>
           <div className="grid md:grid-cols-3 gap-8">
             <div className="card text-center hover:scale-105 transition-transform">
-              <div className="w-16 h-16 bg-[#E8F1FF] rounded-full flex items-center justify-center mx-auto mb-4">
-                <ShoppingBag className="w-8 h-8 text-[#1F66FF]" />
+              <div className="w-16 h-16 bg-[#F5E6E4] rounded-full flex items-center justify-center mx-auto mb-4">
+                <ShoppingBag className="w-8 h-8 text-[#CE3427]" />
               </div>
               <h3 className="text-2xl font-bold mb-3 text-[#0B1220]">Amazon-First</h3>
               <p className="text-gray-600">
@@ -89,8 +89,8 @@ export default function Landing() {
             </div>
 
             <div className="card text-center hover:scale-105 transition-transform">
-              <div className="w-16 h-16 bg-[#E8F1FF] rounded-full flex items-center justify-center mx-auto mb-4">
-                <Shield className="w-8 h-8 text-[#1F66FF]" />
+              <div className="w-16 h-16 bg-[#F5E6E4] rounded-full flex items-center justify-center mx-auto mb-4">
+                <Shield className="w-8 h-8 text-[#CE3427]" />
               </div>
               <h3 className="text-2xl font-bold mb-3 text-[#0B1220]">Verified Proof</h3>
               <p className="text-gray-600">
@@ -99,8 +99,8 @@ export default function Landing() {
             </div>
 
             <div className="card text-center hover:scale-105 transition-transform">
-              <div className="w-16 h-16 bg-[#E8F1FF] rounded-full flex items-center justify-center mx-auto mb-4">
-                <TrendingUp className="w-8 h-8 text-[#1F66FF]" />
+              <div className="w-16 h-16 bg-[#F5E6E4] rounded-full flex items-center justify-center mx-auto mb-4">
+                <TrendingUp className="w-8 h-8 text-[#CE3427]" />
               </div>
               <h3 className="text-2xl font-bold mb-3 text-[#0B1220]">Complete Analytics</h3>
               <p className="text-gray-600">
@@ -113,7 +113,7 @@ export default function Landing() {
 
       {/* CTA */}
       <section className="py-20 px-6">
-        <div className="max-w-4xl mx-auto text-center card" style={{ background: 'linear-gradient(135deg, #1F66FF 0%, #0E2C7E 100%)' }}>
+        <div className="max-w-4xl mx-auto text-center card" style={{ background: 'linear-gradient(135deg, #CE3427 0%, #0E2C7E 100%)' }}>
           <h2 className="text-4xl font-bold mb-6 text-white">Ready to Launch Your Campaign?</h2>
           <p className="text-xl text-white/90 mb-8">
             Join brands and influencers already running successful Amazon campaigns
@@ -121,7 +121,7 @@ export default function Landing() {
           <button
             data-testid="cta-get-started-btn"
             onClick={() => navigate('/register')}
-            className="bg-white text-[#1F66FF] px-8 py-4 rounded-full font-bold text-lg hover:bg-gray-100 transition-all"
+            className="bg-white text-[#CE3427] px-8 py-4 rounded-full font-bold text-lg hover:bg-gray-100 transition-all"
           >
             Get Started Free
           </button>

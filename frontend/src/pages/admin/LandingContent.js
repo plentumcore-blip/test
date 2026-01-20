@@ -323,7 +323,7 @@ export default function AdminLandingContent() {
                               onClick={() => updatePortfolioVideo(index, 'uploadType', 'upload')}
                               className={`p-3 border-2 rounded-lg flex flex-col items-center gap-2 transition-all ${
                                 (video.uploadType || 'upload') === 'upload'
-                                  ? 'border-[#1F66FF] bg-blue-50'
+                                  ? 'border-[#CE3427] bg-red-50'
                                   : 'border-gray-200 hover:border-gray-300'
                               }`}
                             >
@@ -336,7 +336,7 @@ export default function AdminLandingContent() {
                               onClick={() => updatePortfolioVideo(index, 'uploadType', 'youtube')}
                               className={`p-3 border-2 rounded-lg flex flex-col items-center gap-2 transition-all ${
                                 video.uploadType === 'youtube'
-                                  ? 'border-[#1F66FF] bg-blue-50'
+                                  ? 'border-[#CE3427] bg-red-50'
                                   : 'border-gray-200 hover:border-gray-300'
                               }`}
                             >
@@ -351,7 +351,7 @@ export default function AdminLandingContent() {
                               onClick={() => updatePortfolioVideo(index, 'uploadType', 'instagram')}
                               className={`p-3 border-2 rounded-lg flex flex-col items-center gap-2 transition-all ${
                                 video.uploadType === 'instagram'
-                                  ? 'border-[#1F66FF] bg-blue-50'
+                                  ? 'border-[#CE3427] bg-red-50'
                                   : 'border-gray-200 hover:border-gray-300'
                               }`}
                             >
@@ -382,7 +382,7 @@ export default function AdminLandingContent() {
                                   handleVideoUpload(index, file);
                                 }
                               }}
-                              className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-[#1F66FF] file:text-white hover:file:bg-blue-700 cursor-pointer"
+                              className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-[#CE3427] file:text-white hover:file:bg-red-700 cursor-pointer"
                             />
                             <p className="text-xs text-gray-500 mt-1">
                               MP4, MOV, AVI (Max 50MB) - Vertical format recommended (9:16)

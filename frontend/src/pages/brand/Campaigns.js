@@ -286,7 +286,7 @@ export default function BrandCampaigns() {
               {/* Purchase Window */}
               <div>
                 <h3 className="font-semibold text-[#0B1220] mb-3 flex items-center gap-2">
-                  <Calendar className="w-4 h-4 text-[#1F66FF]" />
+                  <Calendar className="w-4 h-4 text-[#CE3427]" />
                   Purchase Window
                 </h3>
                 <p className="text-sm text-gray-500 mb-3">
@@ -319,7 +319,7 @@ export default function BrandCampaigns() {
               {/* Post Window */}
               <div>
                 <h3 className="font-semibold text-[#0B1220] mb-3 flex items-center gap-2">
-                  <Calendar className="w-4 h-4 text-[#1F66FF]" />
+                  <Calendar className="w-4 h-4 text-[#CE3427]" />
                   Post Window
                 </h3>
                 <p className="text-sm text-gray-500 mb-3">
@@ -355,7 +355,7 @@ export default function BrandCampaigns() {
               </div>
 
               {/* Info Box */}
-              <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
+              <div className="bg-red-50 border border-red-200 rounded-xl p-4">
                 <p className="text-sm text-blue-800">
                   <strong>Tip:</strong> Extending campaign dates allows more influencers to participate and gives existing participants more time to complete their deliverables.
                 </p>

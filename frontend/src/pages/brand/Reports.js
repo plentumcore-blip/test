@@ -97,7 +97,7 @@ export default function BrandReports() {
               onClick={() => setFilter('all')}
               className={`px-6 py-3 rounded-xl font-semibold transition-all ${
                 filter === 'all'
-                  ? 'bg-[#1F66FF] text-white shadow-lg'
+                  ? 'bg-[#CE3427] text-white shadow-lg'
                   : 'bg-white text-gray-600 hover:bg-gray-50'
               }`}
             >
@@ -107,7 +107,7 @@ export default function BrandReports() {
               onClick={() => setFilter('completed')}
               className={`px-6 py-3 rounded-xl font-semibold transition-all ${
                 filter === 'completed'
-                  ? 'bg-[#1F66FF] text-white shadow-lg'
+                  ? 'bg-[#CE3427] text-white shadow-lg'
                   : 'bg-white text-gray-600 hover:bg-gray-50'
               }`}
             >
@@ -117,7 +117,7 @@ export default function BrandReports() {
               onClick={() => setFilter('pending')}
               className={`px-6 py-3 rounded-xl font-semibold transition-all ${
                 filter === 'pending'
-                  ? 'bg-[#1F66FF] text-white shadow-lg'
+                  ? 'bg-[#CE3427] text-white shadow-lg'
                   : 'bg-white text-gray-600 hover:bg-gray-50'
               }`}
             >
@@ -128,8 +128,8 @@ export default function BrandReports() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
             <div className="card hover:shadow-xl transition-shadow">
               <div className="flex items-start justify-between mb-4">
-                <div className="w-12 h-12 bg-[#E8F1FF] rounded-xl flex items-center justify-center">
-                  <Package className="w-6 h-6 text-[#1F66FF]" />
+                <div className="w-12 h-12 bg-[#F5E6E4] rounded-xl flex items-center justify-center">
+                  <Package className="w-6 h-6 text-[#CE3427]" />
                 </div>
               </div>
               <p className="text-gray-600 text-sm font-semibold mb-1">Total Products Sold</p>
@@ -148,12 +148,12 @@ export default function BrandReports() {
 
             <div className="card hover:shadow-xl transition-shadow">
               <div className="flex items-start justify-between mb-4">
-                <div className="w-12 h-12 bg-[#E8F1FF] rounded-xl flex items-center justify-center">
-                  <TrendingUp className="w-6 h-6 text-[#1F66FF]" />
+                <div className="w-12 h-12 bg-[#F5E6E4] rounded-xl flex items-center justify-center">
+                  <TrendingUp className="w-6 h-6 text-[#CE3427]" />
                 </div>
               </div>
               <p className="text-gray-600 text-sm font-semibold mb-1">Content Fees</p>
-              <p className="text-3xl font-bold text-[#1F66FF]">${reports?.summary?.total_content_fees?.toFixed(2) || '0.00'}</p>
+              <p className="text-3xl font-bold text-[#CE3427]">${reports?.summary?.total_content_fees?.toFixed(2) || '0.00'}</p>
               <p className="text-xs text-gray-500 mt-1">$10 per content</p>
             </div>
 
@@ -238,7 +238,7 @@ export default function BrandReports() {
                             <p className="font-semibold text-[#0B1220]">${assignment.product_cost?.toFixed(2) || '0.00'}</p>
                           </td>
                           <td className="p-4 text-right">
-                            <p className="text-[#1F66FF] font-semibold">$10.00</p>
+                            <p className="text-[#CE3427] font-semibold">$10.00</p>
                           </td>
                           <td className="p-4 text-right">
                             <p className="text-gray-600">{assignment.addon_posts || 0} × $5</p>

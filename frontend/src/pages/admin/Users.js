@@ -142,7 +142,7 @@ export default function AdminUsers() {
                           <div className="flex items-center justify-end gap-2">
                             <button
                               onClick={() => handleEditUser(user)}
-                              className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                              className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                               title="Edit user"
                             >
                               <Edit className="w-4 h-4" />
@@ -198,7 +198,7 @@ export default function AdminUsers() {
                   type="email"
                   value={editingUser.email}
                   onChange={(e) => setEditingUser({ ...editingUser, email: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1F66FF]"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#CE3427]"
                 />
               </div>
               
@@ -207,7 +207,7 @@ export default function AdminUsers() {
                 <select
                   value={editingUser.role}
                   onChange={(e) => setEditingUser({ ...editingUser, role: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1F66FF]"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#CE3427]"
                 >
                   <option value="admin">Admin</option>
                   <option value="brand">Brand</option>
@@ -228,7 +228,7 @@ export default function AdminUsers() {
               </button>
               <button
                 onClick={saveUserEdit}
-                className="flex-1 px-4 py-2 bg-[#1F66FF] text-white rounded-lg hover:bg-blue-700 transition-colors"
+                className="flex-1 px-4 py-2 bg-[#CE3427] text-white rounded-lg hover:bg-red-700 transition-colors"
               >
                 Save Changes
               </button>

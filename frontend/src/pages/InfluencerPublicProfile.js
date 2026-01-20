@@ -48,7 +48,7 @@ export default function InfluencerPublicProfile() {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 py-4">
           <button
             onClick={() => navigate(-1)}
-            className="flex items-center gap-2 text-gray-600 hover:text-[#1F66FF] font-semibold mb-2"
+            className="flex items-center gap-2 text-gray-600 hover:text-[#CE3427] font-semibold mb-2"
           >
             <ArrowLeft className="w-5 h-5" />
             Back
@@ -64,11 +64,11 @@ export default function InfluencerPublicProfile() {
               <img
                 src={getFileUrl(profile.avatar_url)}
                 alt={profile.name}
-                className="w-32 h-32 rounded-full object-cover border-4 border-[#1F66FF]"
+                className="w-32 h-32 rounded-full object-cover border-4 border-[#CE3427]"
                 onError={(e) => { e.target.style.display = 'none'; }}
               />
             ) : (
-              <div className="w-32 h-32 rounded-full bg-gray-200 flex items-center justify-center border-4 border-[#1F66FF]">
+              <div className="w-32 h-32 rounded-full bg-gray-200 flex items-center justify-center border-4 border-[#CE3427]">
                 <User className="w-16 h-16 text-gray-400" />
               </div>
             )}
@@ -89,7 +89,7 @@ export default function InfluencerPublicProfile() {
                         href={platform.profile_url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 px-4 py-2 bg-white border-2 border-gray-200 rounded-lg hover:border-[#1F66FF] hover:bg-blue-50 transition-all shadow-sm"
+                        className="inline-flex items-center gap-2 px-4 py-2 bg-white border-2 border-gray-200 rounded-lg hover:border-[#CE3427] hover:bg-red-50 transition-all shadow-sm"
                       >
                         {platform.platform === 'instagram' && (
                           <svg className="w-5 h-5 text-pink-600" fill="currentColor" viewBox="0 0 24 24">

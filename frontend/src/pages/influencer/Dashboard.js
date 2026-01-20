@@ -78,17 +78,17 @@ export default function InfluencerDashboard() {
         <div className="p-6">
           {/* Profile Quick Access Card */}
           {profile && (
-            <div className="bg-white rounded-2xl shadow-sm border-2 border-[#1F66FF] p-6 mb-6 bg-gradient-to-r from-blue-50 to-purple-50">
+            <div className="bg-white rounded-2xl shadow-sm border-2 border-[#CE3427] p-6 mb-6 bg-gradient-to-r from-red-50 to-purple-50">
               <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div className="flex items-center gap-4">
                   {profile.avatar_url ? (
                     <img
                       src={profile.avatar_url}
                       alt={profile.name}
-                      className="w-16 h-16 rounded-full object-cover border-2 border-[#1F66FF]"
+                      className="w-16 h-16 rounded-full object-cover border-2 border-[#CE3427]"
                     />
                   ) : (
-                    <div className="w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center border-2 border-[#1F66FF]">
+                    <div className="w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center border-2 border-[#CE3427]">
                       <User className="w-8 h-8 text-gray-400" />
                     </div>
                   )}
@@ -174,8 +174,8 @@ export default function InfluencerDashboard() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow" data-testid="stat-active-assignments">
               <div className="flex items-start justify-between mb-4">
-                <div className="w-12 h-12 bg-[#E8F1FF] rounded-xl flex items-center justify-center">
-                  <ShoppingBag className="w-6 h-6 text-[#1F66FF]" />
+                <div className="w-12 h-12 bg-[#F5E6E4] rounded-xl flex items-center justify-center">
+                  <ShoppingBag className="w-6 h-6 text-[#CE3427]" />
                 </div>
               </div>
               <p className="text-gray-600 text-sm font-semibold mb-1">Active Assignments</p>
@@ -242,7 +242,7 @@ export default function InfluencerDashboard() {
                     </div>
                     <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
                       assignment.status === 'completed' ? 'bg-green-100 text-green-700' :
-                      assignment.status === 'purchase_approved' ? 'bg-blue-100 text-blue-700' :
+                      assignment.status === 'purchase_approved' ? 'bg-red-100 text-red-700' :
                       'bg-orange-100 text-orange-700'
                     }`}>
                       {assignment.status === 'purchase_required' ? 'Action Required' :

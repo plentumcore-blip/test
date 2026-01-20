@@ -207,15 +207,15 @@ export default function LandingPageBuilder() {
     {
       name: 'Product Features',
       html: `<div class="grid grid-cols-1 md:grid-cols-3 gap-6 my-8">
-  <div class="p-6 bg-blue-50 rounded-xl">
+  <div class="p-6 bg-red-50 rounded-xl">
     <h3 class="font-bold text-lg mb-2">✨ Feature 1</h3>
     <p class="text-gray-600">Describe your first amazing feature here.</p>
   </div>
-  <div class="p-6 bg-blue-50 rounded-xl">
+  <div class="p-6 bg-red-50 rounded-xl">
     <h3 class="font-bold text-lg mb-2">🚀 Feature 2</h3>
     <p class="text-gray-600">Describe your second amazing feature here.</p>
   </div>
-  <div class="p-6 bg-blue-50 rounded-xl">
+  <div class="p-6 bg-red-50 rounded-xl">
     <h3 class="font-bold text-lg mb-2">💎 Feature 3</h3>
     <p class="text-gray-600">Describe your third amazing feature here.</p>
   </div>
@@ -266,7 +266,7 @@ export default function LandingPageBuilder() {
           <div>
             <button
               onClick={() => navigate('/brand/campaigns')}
-              className="flex items-center gap-2 text-gray-600 hover:text-[#1F66FF] font-semibold mb-2"
+              className="flex items-center gap-2 text-gray-600 hover:text-[#CE3427] font-semibold mb-2"
             >
               <ArrowLeft className="w-5 h-5" />
               Back to Campaigns
@@ -311,7 +311,7 @@ export default function LandingPageBuilder() {
                 onClick={() => setActiveTab(tab.id)}
                 className={`px-4 py-3 font-medium text-sm border-b-2 transition-colors ${
                   activeTab === tab.id 
-                    ? 'border-[#1F66FF] text-[#1F66FF]' 
+                    ? 'border-[#CE3427] text-[#CE3427]' 
                     : 'border-transparent text-gray-500 hover:text-gray-700'
                 }`}
               >
@@ -388,7 +388,7 @@ export default function LandingPageBuilder() {
                 <button
                   data-testid="add-testimonial-btn"
                   onClick={addTestimonial}
-                  className="text-[#1F66FF] hover:text-[#0E2C7E] font-medium text-sm flex items-center gap-1"
+                  className="text-[#CE3427] hover:text-[#0E2C7E] font-medium text-sm flex items-center gap-1"
                 >
                   <Plus className="w-4 h-4" /> Add
                 </button>
@@ -421,7 +421,7 @@ export default function LandingPageBuilder() {
             <div className="card lg:col-span-2">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-lg font-bold text-[#0B1220]">FAQs</h2>
-                <button data-testid="add-faq-btn" onClick={addFAQ} className="text-[#1F66FF] hover:text-[#0E2C7E] font-medium text-sm flex items-center gap-1">
+                <button data-testid="add-faq-btn" onClick={addFAQ} className="text-[#CE3427] hover:text-[#0E2C7E] font-medium text-sm flex items-center gap-1">
                   <Plus className="w-4 h-4" /> Add
                 </button>
               </div>
@@ -463,7 +463,7 @@ export default function LandingPageBuilder() {
                 <button
                   data-testid="add-why-join-btn"
                   onClick={addWhyJoinItem}
-                  className="text-[#1F66FF] hover:text-[#0E2C7E] font-medium text-sm flex items-center gap-1"
+                  className="text-[#CE3427] hover:text-[#0E2C7E] font-medium text-sm flex items-center gap-1"
                 >
                   <Plus className="w-4 h-4" /> Add
                 </button>
@@ -471,7 +471,7 @@ export default function LandingPageBuilder() {
               
               <div className="space-y-4">
                 {formData.landing_page_why_join.map((item, index) => (
-                  <div key={index} className="p-4 bg-gray-50 rounded-xl border-l-4 border-[#1F66FF]">
+                  <div key={index} className="p-4 bg-gray-50 rounded-xl border-l-4 border-[#CE3427]">
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex items-center gap-2">
                         <GripVertical className="w-4 h-4 text-gray-400" />
@@ -518,7 +518,7 @@ export default function LandingPageBuilder() {
                 <button
                   data-testid="add-how-it-works-btn"
                   onClick={addHowItWorksStep}
-                  className="text-[#1F66FF] hover:text-[#0E2C7E] font-medium text-sm flex items-center gap-1"
+                  className="text-[#CE3427] hover:text-[#0E2C7E] font-medium text-sm flex items-center gap-1"
                 >
                   <Plus className="w-4 h-4" /> Add Step
                 </button>
@@ -529,7 +529,7 @@ export default function LandingPageBuilder() {
                   <div key={index} className="p-4 bg-gray-50 rounded-xl">
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex items-center gap-3">
-                        <div className="h-8 w-8 rounded-lg bg-[#1F66FF] text-white grid place-items-center font-bold text-sm">
+                        <div className="h-8 w-8 rounded-lg bg-[#CE3427] text-white grid place-items-center font-bold text-sm">
                           {step.step}
                         </div>
                         <span className="text-sm font-medium text-gray-600">Step {step.step}</span>
@@ -589,7 +589,7 @@ export default function LandingPageBuilder() {
                     {formData.landing_page_how_it_works.map((step, index) => (
                       <div key={index} className="p-4 bg-white border border-gray-200 rounded-xl">
                         <div className="flex items-center gap-3">
-                          <div className="h-8 w-8 rounded-lg bg-[#1F66FF] text-white grid place-items-center font-bold text-sm">
+                          <div className="h-8 w-8 rounded-lg bg-[#CE3427] text-white grid place-items-center font-bold text-sm">
                             {step.step}
                           </div>
                           <h4 className="font-semibold text-[#0B1220]">{step.title || 'Title'}</h4>
@@ -615,7 +615,7 @@ export default function LandingPageBuilder() {
                   <button
                     onClick={() => setEditorMode('visual')}
                     className={`px-3 py-1.5 rounded-lg text-sm font-medium flex items-center gap-1.5 ${
-                      editorMode === 'visual' ? 'bg-[#1F66FF] text-white' : 'bg-gray-100 text-gray-700'
+                      editorMode === 'visual' ? 'bg-[#CE3427] text-white' : 'bg-gray-100 text-gray-700'
                     }`}
                   >
                     <FileText className="w-4 h-4" /> Visual
@@ -623,7 +623,7 @@ export default function LandingPageBuilder() {
                   <button
                     onClick={() => setEditorMode('code')}
                     className={`px-3 py-1.5 rounded-lg text-sm font-medium flex items-center gap-1.5 ${
-                      editorMode === 'code' ? 'bg-[#1F66FF] text-white' : 'bg-gray-100 text-gray-700'
+                      editorMode === 'code' ? 'bg-[#CE3427] text-white' : 'bg-gray-100 text-gray-700'
                     }`}
                   >
                     <Code className="w-4 h-4" /> HTML
@@ -648,7 +648,7 @@ export default function LandingPageBuilder() {
                   <div
                     ref={contentRef}
                     contentEditable
-                    className="min-h-[300px] p-4 border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#1F66FF] prose max-w-none"
+                    className="min-h-[300px] p-4 border rounded-xl focus:outline-none focus:ring-2 focus:ring-[#CE3427] prose max-w-none"
                     dangerouslySetInnerHTML={{ __html: formData.landing_page_content }}
                     onInput={handleContentChange}
                     onBlur={handleContentChange}
@@ -659,7 +659,7 @@ export default function LandingPageBuilder() {
                   data-testid="html-code-editor"
                   value={formData.landing_page_content}
                   onChange={(e) => setFormData({ ...formData, landing_page_content: e.target.value })}
-                  className="w-full min-h-[400px] p-4 font-mono text-sm bg-gray-900 text-green-400 rounded-xl border-0 focus:outline-none focus:ring-2 focus:ring-[#1F66FF]"
+                  className="w-full min-h-[400px] p-4 font-mono text-sm bg-gray-900 text-green-400 rounded-xl border-0 focus:outline-none focus:ring-2 focus:ring-[#CE3427]"
                   placeholder="<!-- Enter your HTML code here -->"
                   spellCheck={false}
                 />
@@ -692,13 +692,13 @@ export default function LandingPageBuilder() {
               <div className="flex items-center justify-between mb-4">
                 <h2 className="text-lg font-bold text-[#0B1220]">Live Preview</h2>
                 <div className="flex items-center gap-2">
-                  <button onClick={() => setPreviewMode('desktop')} className={`p-2 rounded-lg ${previewMode === 'desktop' ? 'bg-[#1F66FF] text-white' : 'bg-gray-100'}`}>
+                  <button onClick={() => setPreviewMode('desktop')} className={`p-2 rounded-lg ${previewMode === 'desktop' ? 'bg-[#CE3427] text-white' : 'bg-gray-100'}`}>
                     <Monitor className="w-4 h-4" />
                   </button>
-                  <button onClick={() => setPreviewMode('tablet')} className={`p-2 rounded-lg ${previewMode === 'tablet' ? 'bg-[#1F66FF] text-white' : 'bg-gray-100'}`}>
+                  <button onClick={() => setPreviewMode('tablet')} className={`p-2 rounded-lg ${previewMode === 'tablet' ? 'bg-[#CE3427] text-white' : 'bg-gray-100'}`}>
                     <Tablet className="w-4 h-4" />
                   </button>
-                  <button onClick={() => setPreviewMode('mobile')} className={`p-2 rounded-lg ${previewMode === 'mobile' ? 'bg-[#1F66FF] text-white' : 'bg-gray-100'}`}>
+                  <button onClick={() => setPreviewMode('mobile')} className={`p-2 rounded-lg ${previewMode === 'mobile' ? 'bg-[#CE3427] text-white' : 'bg-gray-100'}`}>
                     <Smartphone className="w-4 h-4" />
                   </button>
                 </div>

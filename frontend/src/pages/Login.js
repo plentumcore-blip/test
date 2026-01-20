@@ -33,12 +33,12 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex" style={{ background: 'linear-gradient(135deg, #E8F1FF 0%, #FFFFFF 100%)' }}>
+    <div className="min-h-screen flex" style={{ background: 'linear-gradient(135deg, #F5E6E4 0%, #FFFFFF 100%)' }}>
       <div className="flex-1 flex items-center justify-center px-6 py-12">
         <div className="w-full max-w-md">
           <div className="text-center mb-8">
             <div className="flex items-center justify-center gap-2 mb-4">
-              <ShoppingBag className="w-10 h-10 text-[#1F66FF]" />
+              <ShoppingBag className="w-10 h-10 text-[#CE3427]" />
               <span className="text-3xl font-bold text-[#0B1220]">Influiv</span>
             </div>
             <h1 className="text-4xl font-bold text-[#0B1220] mb-2">Welcome Back</h1>
@@ -56,7 +56,7 @@ export default function Login() {
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#1F66FF] focus:border-transparent"
+                    className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#CE3427] focus:border-transparent"
                     placeholder="you@example.com"
                     required
                   />
@@ -77,7 +77,7 @@ export default function Login() {
               <div className="flex justify-end">
                 <Link 
                   to="/forgot-password" 
-                  className="text-sm text-[#1F66FF] font-semibold hover:underline"
+                  className="text-sm text-[#CE3427] font-semibold hover:underline"
                   data-testid="forgot-password-link"
                 >
                   Forgot password?
@@ -97,7 +97,7 @@ export default function Login() {
             <div className="mt-6 text-center">
               <p className="text-gray-600">
                 Don't have an account?{' '}
-                <Link to="/register" className="text-[#1F66FF] font-semibold hover:underline">
+                <Link to="/register" className="text-[#CE3427] font-semibold hover:underline">
                   Sign up
                 </Link>
               </p>
@@ -107,7 +107,7 @@ export default function Login() {
       </div>
 
       {/* Right side illustration */}
-      <div className="hidden lg:flex flex-1 items-center justify-center" style={{ background: 'linear-gradient(135deg, #1F66FF 0%, #0E2C7E 100%)' }}>
+      <div className="hidden lg:flex flex-1 items-center justify-center" style={{ background: 'linear-gradient(135deg, #CE3427 0%, #0E2C7E 100%)' }}>
         <div className="text-center text-white p-12">
           <h2 className="text-5xl font-bold mb-6">Manage Amazon Campaigns</h2>
           <p className="text-2xl text-white/90">Track, verify, and grow your influencer partnerships</p>

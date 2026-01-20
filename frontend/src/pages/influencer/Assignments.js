@@ -43,18 +43,18 @@ export default function InfluencerAssignments() {
           <div className="flex gap-6">
             <button
               onClick={() => navigate('/influencer/dashboard')}
-              className="py-4 px-2 border-b-2 border-transparent text-gray-600 hover:text-[#1F66FF] font-semibold"
+              className="py-4 px-2 border-b-2 border-transparent text-gray-600 hover:text-[#CE3427] font-semibold"
             >
               Dashboard
             </button>
             <button
               onClick={() => navigate('/influencer/campaigns')}
-              className="py-4 px-2 border-b-2 border-transparent text-gray-600 hover:text-[#1F66FF] font-semibold"
+              className="py-4 px-2 border-b-2 border-transparent text-gray-600 hover:text-[#CE3427] font-semibold"
             >
               Browse Campaigns
             </button>
             <button
-              className="py-4 px-2 border-b-2 border-[#1F66FF] text-[#1F66FF] font-semibold"
+              className="py-4 px-2 border-b-2 border-[#CE3427] text-[#CE3427] font-semibold"
             >
               My Assignments
             </button>

@@ -30,7 +30,7 @@ const PasswordInput = ({
     if (metCount === 0) return { label: '', color: '', width: '0%' };
     if (metCount <= 2) return { label: 'Weak', color: 'bg-red-500', width: '33%' };
     if (metCount <= 3) return { label: 'Fair', color: 'bg-yellow-500', width: '50%' };
-    if (metCount <= 4) return { label: 'Good', color: 'bg-blue-500', width: '75%' };
+    if (metCount <= 4) return { label: 'Good', color: 'bg-red-500', width: '75%' };
     return { label: 'Strong', color: 'bg-green-500', width: '100%' };
   };
 
@@ -45,7 +45,7 @@ const PasswordInput = ({
           onChange={onChange}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setTimeout(() => setIsFocused(false), 200)}
-          className="w-full pl-4 pr-12 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#1F66FF] focus:border-transparent"
+          className="w-full pl-4 pr-12 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#CE3427] focus:border-transparent"
           placeholder={placeholder}
           required={required}
           autoComplete={autoComplete}
@@ -72,7 +72,7 @@ const PasswordInput = ({
             <span className={`font-semibold ${
               strength.label === 'Weak' ? 'text-red-600' :
               strength.label === 'Fair' ? 'text-yellow-600' :
-              strength.label === 'Good' ? 'text-blue-600' :
+              strength.label === 'Good' ? 'text-red-600' :
               strength.label === 'Strong' ? 'text-green-600' : ''
             }`}>
               {strength.label}
