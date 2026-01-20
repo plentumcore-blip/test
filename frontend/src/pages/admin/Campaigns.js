@@ -120,9 +120,14 @@ export default function AdminCampaigns() {
     });
   };
 
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
+
   return (
     <div className="min-h-screen bg-[#F8FAFC] flex">
-      <AdminSidebar />
+      <AdminSidebar onLogout={handleLogout} />
       
       <div className="flex-1 lg:ml-64">
         {/* Header */}
