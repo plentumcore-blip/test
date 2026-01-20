@@ -2546,7 +2546,7 @@ async def upload_file(
 ):
     """
     Upload a file and return the filename.
-    The file can be accessed via /api/files/{filename}
+    The file can be accessed via /api/v1/files/{filename}
     This approach stores only filenames, making it work across all environments.
     """
     
