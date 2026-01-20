@@ -128,6 +128,11 @@ class PayoutStatus(str, Enum):
     FAILED = "failed"
     CANCELLED = "cancelled"
 
+class PayoutType(str, Enum):
+    REIMBURSEMENT = "reimbursement"  # Purchase price reimbursement
+    COMMISSION = "commission"  # Commission for the campaign
+    REVIEW_BONUS = "review_bonus"  # Bonus for submitting review
+
 # Models
 class User(BaseModel):
     model_config = ConfigDict(extra="ignore")
