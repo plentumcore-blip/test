@@ -343,7 +343,7 @@ export default function AdminCampaigns() {
             </div>
             
             <p className="text-gray-600 mb-4">
-              Are you sure you want to delete <strong>"{deleteModal.campaign?.title}"</strong>?
+              Are you sure you want to delete <strong>&ldquo;{deleteModal.campaign?.title}&rdquo;</strong>?
             </p>
             
             {deleteModal.campaign?.statistics?.active_assignments_count > 0 && (
