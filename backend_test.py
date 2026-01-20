@@ -905,7 +905,7 @@ class APITester:
                         
                 else:
                     self.log_test("File Upload - URL Format", False, 
-                                f"❌ Upload URL does not contain /api/uploads/ prefix: {uploaded_url}")
+                                f"❌ Upload URL does not contain expected prefix: {uploaded_url}")
                     return
                     
             else:
