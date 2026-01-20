@@ -55,7 +55,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .btn-secondary:hover {
-  background: #d0e3ff;
+  background: #EBDAD8;
 }
 
 .card {
@@ -73,7 +73,7 @@ h1, h2, h3, h4, h5, h6 {
 .input {
   width: 100%;
   padding: 0.75rem 1rem;
-  border: 2px solid #E8F1FF;
+  border: 2px solid #F5E6E4;
   border-radius: 16px;
   font-size: 1rem;
   transition: all 0.3s ease;
@@ -83,8 +83,8 @@ h1, h2, h3, h4, h5, h6 {
 
 .input:focus {
   outline: none;
-  border-color: #1F66FF;
-  box-shadow: 0 0 0 3px rgba(31, 102, 255, 0.1);
+  border-color: #CE3427;
+  box-shadow: 0 0 0 3px rgba(206, 52, 39, 0.1);
 }
 
 .badge {
