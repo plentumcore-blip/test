@@ -56,8 +56,8 @@ const InfluencerSidebar = ({ onLogout }) => {
       `}>
         {/* Logo - Desktop Only */}
         <div className="hidden lg:block p-6 border-b border-gray-200">
-          <div className="flex items-center gap-2">
-            <ShoppingBag className="w-8 h-8 text-[#CE3427]" />
+          <div className="flex items-center gap-3">
+            <img src="/logo.png" alt="Influiv" className="w-10 h-10 object-contain" />
             <span className="text-2xl font-bold text-[#0B1220]">Influiv</span>
           </div>
           <p className="text-sm text-gray-600 mt-1">Influencer Portal</p>
