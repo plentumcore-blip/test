@@ -1263,8 +1263,18 @@ async def submit_purchase_proof(
         raise HTTPException(status_code=400, detail="Order ID is required")
     if not proof_data.get("order_date"):
         raise HTTPException(status_code=400, detail="Order date is required")
+    if not proof_data.get("price"):
+        raise HTTPException(status_code=400, detail="Price is required")
     if not proof_data.get("screenshot_urls") or len(proof_data.get("screenshot_urls", [])) == 0:
         raise HTTPException(status_code=400, detail="At least one screenshot is required")
+    
+    # Parse and validate price
+    try:
+        price = float(proof_data["price"])
+        if price <= 0:
+            raise HTTPException(status_code=400, detail="Price must be greater than 0")
+    except (ValueError, TypeError):
+        raise HTTPException(status_code=400, detail="Invalid price format")
     
     # Parse order date with error handling
     try:
@@ -1277,8 +1287,7 @@ async def submit_purchase_proof(
         assignment_id=assignment_id,
         order_id=proof_data["order_id"],
         order_date=order_date,
-        asin=proof_data.get("asin"),
-        total=proof_data.get("total"),
+        price=price,
         screenshot_urls=proof_data.get("screenshot_urls", [])
     )
     
