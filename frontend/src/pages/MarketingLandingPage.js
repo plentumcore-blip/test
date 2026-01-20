@@ -220,7 +220,7 @@ const MarketingLandingPage = () => {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <button 
               onClick={() => navigate('/register')}
-              className="w-full sm:w-auto bg-slate-900 text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-slate-800 transition-all shadow-xl shadow-slate-200 flex items-center justify-center gap-2"
+              className="w-full sm:w-auto bg-[#CE3427] text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-[#A32B20] transition-all shadow-xl shadow-red-200 flex items-center justify-center gap-2"
               data-testid="hero-start-campaign-btn"
             >
               Start Campaign <ArrowRight size={20} />
