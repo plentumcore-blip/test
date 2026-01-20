@@ -1630,17 +1630,21 @@ class APITester:
 
     def run_all_tests(self):
         """Run all tests"""
-        print("🚀 Starting Backend API Tests for Bug Fixes and Features")
+        print("🚀 Starting Backend API Tests for AffiTarget Review Request")
         print(f"Testing against: {BASE_URL}")
         print("=" * 80)
         
         try:
-            # Test the CRITICAL file upload and static serving fix first
-            print("\n🔥 TESTING CRITICAL FILE UPLOAD FIX (HIGHEST PRIORITY)")
+            # Run the specific review request flow FIRST
+            print("\n🎯 TESTING REVIEW REQUEST FLOW (HIGHEST PRIORITY)")
+            self.test_review_request_flow()
+            
+            # Test the CRITICAL file upload and static serving fix
+            print("\n🔥 TESTING CRITICAL FILE UPLOAD FIX")
             self.test_file_upload_and_static_serving_fix()
             
             # Test the specific bug fixes from review request
-            print("\n🔧 TESTING OTHER BUG FIXES (HIGH PRIORITY)")
+            print("\n🔧 TESTING OTHER BUG FIXES")
             self.test_purchase_proof_submission_fix()
             self.test_amazon_redirect_link_fix()
             self.test_brand_campaign_filtering_fix()
@@ -1675,12 +1679,21 @@ class APITester:
         print(f"❌ Failed: {failed_tests}")
         print(f"Success Rate: {(passed_tests/total_tests*100):.1f}%" if total_tests > 0 else "No tests run")
         
-        # Separate file upload tests from other tests
+        # Separate review request tests from other tests
+        review_tests = [t for t in self.test_results if 'step' in t['test'].lower() or 'review request' in t['test'].lower()]
         file_upload_tests = [t for t in self.test_results if any(keyword in t['test'].lower() for keyword in 
-                            ['file upload', 'static file', 'upload', '/api/uploads'])]
+                            ['file upload', 'static file', 'upload', '/api/uploads']) and t not in review_tests]
         bug_fix_tests = [t for t in self.test_results if any(keyword in t['test'].lower() for keyword in 
-                        ['purchase proof', 'amazon redirect', 'brand campaign filtering', 'seed account']) and t not in file_upload_tests]
-        feature_tests = [t for t in self.test_results if t not in file_upload_tests and t not in bug_fix_tests]
+                        ['purchase proof', 'amazon redirect', 'brand campaign filtering', 'seed account']) and t not in file_upload_tests and t not in review_tests]
+        feature_tests = [t for t in self.test_results if t not in file_upload_tests and t not in bug_fix_tests and t not in review_tests]
+        
+        if review_tests:
+            print(f"\n🎯 REVIEW REQUEST FLOW RESULTS (HIGHEST PRIORITY):")
+            review_passed = len([t for t in review_tests if t['success']])
+            print(f"   {review_passed}/{len(review_tests)} tests passed ({(review_passed/len(review_tests)*100):.1f}%)")
+            for test in review_tests:
+                status = "✅" if test['success'] else "❌"
+                print(f"   {status} {test['test']}")
         
         if file_upload_tests:
             print(f"\n🔥 FILE UPLOAD & STATIC SERVING FIX RESULTS (CRITICAL):")
