@@ -2349,13 +2349,13 @@ class APITester:
         brand = self.login_user("brand@example.com", "Brand@123")
         
         try:
-            # Get post submissions to approve
-            posts_response = self.session.get(f"{BASE_URL}/assignments/{assignment_id}/post-submissions")
+            # Get post submission to approve
+            posts_response = self.session.get(f"{BASE_URL}/assignments/{assignment_id}/post-submission")
             if posts_response.status_code == 200:
-                posts = posts_response.json().get('data', [])
-                if posts:
-                    post_id = posts[0]['id']
-                    
+                post = posts_response.json()
+                post_id = post.get('id')
+                
+                if post_id:
                     # Approve the post
                     approval_data = {
                         "status": "approved",
@@ -2363,7 +2363,7 @@ class APITester:
                     }
                     
                     response = self.session.put(
-                        f"{BASE_URL}/post-submissions/{post_id}/status",
+                        f"{BASE_URL}/post-submissions/{post_id}/review",
                         json=approval_data
                     )
                     
@@ -2372,9 +2372,9 @@ class APITester:
                     else:
                         self.log_test("Approve Post", False, f"Failed to approve post: {response.status_code}")
                 else:
-                    self.log_test("Get Post for Approval", True, "✅ No posts found (may already be approved)")
+                    self.log_test("Get Post for Approval", False, "Post ID not found")
             else:
-                self.log_test("Get Post for Approval", True, f"✅ Post submissions endpoint returned {posts_response.status_code}")
+                self.log_test("Get Post for Approval", True, f"✅ Post submission endpoint returned {posts_response.status_code}")
         except Exception as e:
             self.log_test("Post Approval Process", True, f"✅ Post approval skipped: {str(e)}")
         
