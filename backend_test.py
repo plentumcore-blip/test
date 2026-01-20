@@ -1450,7 +1450,7 @@ class APITester:
                                     f"✅ Application submitted successfully: {application_id}")
                         self.review_campaign_id = campaign_id
                         self.review_application_id = application_id
-                    elif app_response.status_code == 400 and "already applied" in app_response.text:
+                    elif app_response.status_code == 400 and "already applied" in app_response.text.lower():
                         self.log_test("Step 3 - Apply to Campaign", True, 
                                     "✅ Already applied to campaign (expected if running multiple times)")
                         self.review_campaign_id = campaign_id
