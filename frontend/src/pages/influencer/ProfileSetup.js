@@ -50,7 +50,8 @@ export default function InfluencerProfileSetup() {
           avatar_url: meRes.data.profile.avatar_url || '',
           portfolio_images: meRes.data.profile.portfolio_images || [],
           portfolio_videos: meRes.data.profile.portfolio_videos || [],
-          public_profile_slug: meRes.data.profile.public_profile_slug || ''
+          public_profile_slug: meRes.data.profile.public_profile_slug || '',
+          paypal_email: meRes.data.profile.paypal_email || ''
         });
       }
       
