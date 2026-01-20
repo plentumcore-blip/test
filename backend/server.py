@@ -1577,10 +1577,38 @@ async def submit_product_review(
     
     await log_audit(user["id"], "create", "product_review", product_review["id"])
     
-    # Send notification email to brand
+    # Get campaign and brand info for review bonus payout
     campaign = await db.campaigns.find_one({"id": assignment["campaign_id"]})
+    brand = await db.brands.find_one({"id": campaign["brand_id"]}) if campaign else None
+    
+    # Create review bonus payout when review is submitted
+    if campaign and brand:
+        review_bonus = campaign.get("review_bonus", 0)
+        if review_bonus > 0:
+            # Check if review bonus payout already exists
+            existing_bonus = await db.payouts.find_one({
+                "assignment_id": assignment_id,
+                "payout_type": "review_bonus"
+            })
+            
+            if not existing_bonus:
+                bonus_payout = Payout(
+                    assignment_id=assignment_id,
+                    influencer_id=influencer["id"],
+                    brand_id=brand["id"],
+                    campaign_id=campaign["id"],
+                    payout_type="review_bonus",
+                    amount=review_bonus,
+                    paypal_email=influencer.get("paypal_email"),
+                    notes=f"Review bonus for Amazon review - {campaign['title']}"
+                )
+                payout_doc = bonus_payout.model_dump()
+                payout_doc['created_at'] = payout_doc['created_at'].isoformat()
+                payout_doc['updated_at'] = payout_doc['updated_at'].isoformat()
+                await db.payouts.insert_one(payout_doc)
+    
+    # Send notification email to brand
     if campaign:
-        brand = await db.brands.find_one({"id": campaign["brand_id"]})
         brand_user = await db.users.find_one({"id": brand["user_id"]}) if brand else None
         
         if brand_user:
