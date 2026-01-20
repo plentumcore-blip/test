@@ -17,7 +17,8 @@ export default function InfluencerProfileSetup() {
     avatar_url: '',
     portfolio_images: [],
     portfolio_videos: [],
-    public_profile_slug: ''
+    public_profile_slug: '',
+    paypal_email: ''
   });
   const [platforms, setPlatforms] = useState([]);
   const [showAddDialog, setShowAddDialog] = useState(false);
