@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { Search, Trash2, Eye, Edit, AlertTriangle, ChevronDown, Filter, Building, Calendar, Users, ClipboardList } from 'lucide-react';
 import { toast } from 'sonner';
@@ -22,7 +22,7 @@ export default function AdminCampaigns() {
   });
   const [saving, setSaving] = useState(false);
 
-  const fetchCampaigns = async () => {
+  const fetchCampaigns = useCallback(async () => {
     try {
       const params = new URLSearchParams();
       if (statusFilter) params.append('status', statusFilter);
@@ -36,11 +36,11 @@ export default function AdminCampaigns() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [statusFilter]);
 
   useEffect(() => {
     fetchCampaigns();
-  }, [statusFilter]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [fetchCampaigns]);
 
   const handleDelete = async (campaign, forceDelete = false) => {
     setDeleting(true);
