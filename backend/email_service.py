@@ -27,24 +27,24 @@ BRAND_DARK = "#1F2937"
 # Primary application URL - production domain (hardcoded)
 APP_URL = "https://influiv.com"
 
-# Email Templates
+# Email Templates - all URLs hardcoded to https://influiv.com
 EMAIL_TEMPLATES = {
     # ============ INFLUENCER EMAILS ============
     "influencer_welcome": {
         "subject": "Welcome to Influiv!",
-        "html": f"""
+        "html": """
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-            <div style="background: linear-gradient(135deg, {BRAND_PRIMARY} 0%, {BRAND_PRIMARY_DARK} 100%); padding: 40px 20px; text-align: center;">
+            <div style="background: linear-gradient(135deg, #CE3427 0%, #A32B20 100%); padding: 40px 20px; text-align: center;">
                 <h1 style="color: white; margin: 0;">Welcome to Influiv!</h1>
             </div>
             <div style="padding: 30px 20px; background: #f9fafb;">
-                <p style="font-size: 16px; color: #333;">Hi <strong>{{name}}</strong>,</p>
+                <p style="font-size: 16px; color: #333;">Hi <strong>{name}</strong>,</p>
                 <p style="font-size: 16px; color: #333;">
                     Thanks for joining Influiv! You're now part of our community of influencers 
                     who earn money by creating authentic content for top brands.
                 </p>
                 <div style="background: white; border-radius: 12px; padding: 20px; margin: 20px 0;">
-                    <h3 style="color: {BRAND_PRIMARY}; margin-top: 0;">What's Next?</h3>
+                    <h3 style="color: #CE3427; margin-top: 0;">What's Next?</h3>
                     <ul style="color: #555; line-height: 1.8;">
                         <li>Complete your profile with your social media handles</li>
                         <li>Browse available campaigns</li>
@@ -52,7 +52,7 @@ EMAIL_TEMPLATES = {
                         <li>Start earning!</li>
                     </ul>
                 </div>
-                <a href="{{app_url}}/influencer/dashboard" style="display: inline-block; background: {BRAND_PRIMARY}; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: bold;">
+                <a href="https://influiv.com/influencer/dashboard" style="display: inline-block; background: #CE3427; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: bold;">
                     Go to Dashboard
                 </a>
             </div>
@@ -65,18 +65,18 @@ EMAIL_TEMPLATES = {
     
     "application_approved": {
         "subject": "Your Application Has Been Approved!",
-        "html": f"""
+        "html": """
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-            <div style="background: linear-gradient(135deg, {BRAND_SUCCESS} 0%, {BRAND_SUCCESS_DARK} 100%); padding: 40px 20px; text-align: center;">
+            <div style="background: linear-gradient(135deg, #10B981 0%, #059669 100%); padding: 40px 20px; text-align: center;">
                 <h1 style="color: white; margin: 0;">Application Approved!</h1>
             </div>
             <div style="padding: 30px 20px; background: #f9fafb;">
-                <p style="font-size: 16px; color: #333;">Hi <strong>{{influencer_name}}</strong>,</p>
+                <p style="font-size: 16px; color: #333;">Hi <strong>{influencer_name}</strong>,</p>
                 <p style="font-size: 16px; color: #333;">
-                    Great news! Your application for <strong>{{campaign_title}}</strong> has been approved!
+                    Great news! Your application for <strong>{campaign_title}</strong> has been approved!
                 </p>
                 <div style="background: white; border-radius: 12px; padding: 20px; margin: 20px 0;">
-                    <h3 style="color: {BRAND_SUCCESS}; margin-top: 0;">Next Steps</h3>
+                    <h3 style="color: #10B981; margin-top: 0;">Next Steps</h3>
                     <ol style="color: #555; line-height: 1.8;">
                         <li>Use the Amazon link provided to purchase the product</li>
                         <li>Submit your purchase proof (Order ID + screenshot)</li>
@@ -84,7 +84,7 @@ EMAIL_TEMPLATES = {
                         <li>Submit your post for review</li>
                     </ol>
                 </div>
-                <a href="{{app_url}}/influencer/assignments" style="display: inline-block; background: {BRAND_SUCCESS}; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: bold;">
+                <a href="https://influiv.com/influencer/assignments" style="display: inline-block; background: #10B981; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: bold;">
                     View Assignment
                 </a>
             </div>
@@ -97,15 +97,15 @@ EMAIL_TEMPLATES = {
     
     "application_rejected": {
         "subject": "Update on Your Campaign Application",
-        "html": f"""
+        "html": """
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-            <div style="background: {BRAND_GRAY}; padding: 40px 20px; text-align: center;">
+            <div style="background: #6B7280; padding: 40px 20px; text-align: center;">
                 <h1 style="color: white; margin: 0;">Application Update</h1>
             </div>
             <div style="padding: 30px 20px; background: #f9fafb;">
-                <p style="font-size: 16px; color: #333;">Hi <strong>{{influencer_name}}</strong>,</p>
+                <p style="font-size: 16px; color: #333;">Hi <strong>{influencer_name}</strong>,</p>
                 <p style="font-size: 16px; color: #333;">
-                    Thank you for your interest in <strong>{{campaign_title}}</strong>. 
+                    Thank you for your interest in <strong>{campaign_title}</strong>. 
                     Unfortunately, the brand has decided to move forward with other applicants at this time.
                 </p>
                 <div style="background: white; border-radius: 12px; padding: 20px; margin: 20px 0;">
@@ -114,7 +114,7 @@ EMAIL_TEMPLATES = {
                         Keep applying and improving your profile.
                     </p>
                 </div>
-                <a href="{{app_url}}/influencer/campaigns" style="display: inline-block; background: {BRAND_PRIMARY}; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: bold;">
+                <a href="https://influiv.com/influencer/campaigns" style="display: inline-block; background: #CE3427; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: bold;">
                     Browse More Campaigns
                 </a>
             </div>
@@ -127,24 +127,24 @@ EMAIL_TEMPLATES = {
     
     "purchase_proof_approved": {
         "subject": "Purchase Proof Approved - Ready to Post!",
-        "html": f"""
+        "html": """
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-            <div style="background: linear-gradient(135deg, {BRAND_SUCCESS} 0%, {BRAND_SUCCESS_DARK} 100%); padding: 40px 20px; text-align: center;">
+            <div style="background: linear-gradient(135deg, #10B981 0%, #059669 100%); padding: 40px 20px; text-align: center;">
                 <h1 style="color: white; margin: 0;">Purchase Verified!</h1>
             </div>
             <div style="padding: 30px 20px; background: #f9fafb;">
-                <p style="font-size: 16px; color: #333;">Hi <strong>{{influencer_name}}</strong>,</p>
+                <p style="font-size: 16px; color: #333;">Hi <strong>{influencer_name}</strong>,</p>
                 <p style="font-size: 16px; color: #333;">
-                    Your purchase proof for <strong>{{campaign_title}}</strong> has been verified!
+                    Your purchase proof for <strong>{campaign_title}</strong> has been verified!
                 </p>
                 <div style="background: white; border-radius: 12px; padding: 20px; margin: 20px 0;">
-                    <h3 style="color: {BRAND_SUCCESS}; margin-top: 0;">Time to Create Content!</h3>
+                    <h3 style="color: #10B981; margin-top: 0;">Time to Create Content!</h3>
                     <p style="color: #555;">
                         Once you receive your product, create your content and submit it for review. 
                         Remember to follow the campaign guidelines for hashtags and mentions.
                     </p>
                 </div>
-                <a href="{{app_url}}/influencer/assignments/{{assignment_id}}" style="display: inline-block; background: {BRAND_SUCCESS}; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: bold;">
+                <a href="https://influiv.com/influencer/assignments/{assignment_id}" style="display: inline-block; background: #10B981; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: bold;">
                     Submit Your Post
                 </a>
             </div>
@@ -157,22 +157,22 @@ EMAIL_TEMPLATES = {
     
     "purchase_proof_rejected": {
         "subject": "Purchase Proof Needs Revision",
-        "html": f"""
+        "html": """
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-            <div style="background: {BRAND_ERROR}; padding: 40px 20px; text-align: center;">
+            <div style="background: #EF4444; padding: 40px 20px; text-align: center;">
                 <h1 style="color: white; margin: 0;">Revision Needed</h1>
             </div>
             <div style="padding: 30px 20px; background: #f9fafb;">
-                <p style="font-size: 16px; color: #333;">Hi <strong>{{influencer_name}}</strong>,</p>
+                <p style="font-size: 16px; color: #333;">Hi <strong>{influencer_name}</strong>,</p>
                 <p style="font-size: 16px; color: #333;">
-                    Your purchase proof for <strong>{{campaign_title}}</strong> needs some updates.
+                    Your purchase proof for <strong>{campaign_title}</strong> needs some updates.
                 </p>
-                <div style="background: #FEF2F2; border-radius: 12px; padding: 20px; margin: 20px 0; border-left: 4px solid {BRAND_ERROR};">
-                    <h4 style="color: {BRAND_ERROR}; margin-top: 0;">Feedback from Brand:</h4>
-                    <p style="color: #555; margin-bottom: 0;">{{feedback}}</p>
+                <div style="background: #FEF2F2; border-radius: 12px; padding: 20px; margin: 20px 0; border-left: 4px solid #EF4444;">
+                    <h4 style="color: #EF4444; margin-top: 0;">Feedback from Brand:</h4>
+                    <p style="color: #555; margin-bottom: 0;">{feedback}</p>
                 </div>
                 <p style="color: #555;">Please resubmit your purchase proof with the required corrections.</p>
-                <a href="{{app_url}}/influencer/assignments/{{assignment_id}}" style="display: inline-block; background: {BRAND_PRIMARY}; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: bold;">
+                <a href="https://influiv.com/influencer/assignments/{assignment_id}" style="display: inline-block; background: #CE3427; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: bold;">
                     Resubmit Proof
                 </a>
             </div>
@@ -185,24 +185,24 @@ EMAIL_TEMPLATES = {
     
     "post_approved": {
         "subject": "Your Post Has Been Approved!",
-        "html": f"""
+        "html": """
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-            <div style="background: linear-gradient(135deg, {BRAND_SUCCESS} 0%, {BRAND_SUCCESS_DARK} 100%); padding: 40px 20px; text-align: center;">
+            <div style="background: linear-gradient(135deg, #10B981 0%, #059669 100%); padding: 40px 20px; text-align: center;">
                 <h1 style="color: white; margin: 0;">Post Approved!</h1>
             </div>
             <div style="padding: 30px 20px; background: #f9fafb;">
-                <p style="font-size: 16px; color: #333;">Hi <strong>{{influencer_name}}</strong>,</p>
+                <p style="font-size: 16px; color: #333;">Hi <strong>{influencer_name}</strong>,</p>
                 <p style="font-size: 16px; color: #333;">
-                    Amazing work! Your content post for <strong>{{campaign_title}}</strong> has been approved!
+                    Amazing work! Your content post for <strong>{campaign_title}</strong> has been approved!
                 </p>
                 <div style="background: white; border-radius: 12px; padding: 20px; margin: 20px 0;">
-                    <h3 style="color: {BRAND_SUCCESS}; margin-top: 0;">Bonus Opportunity!</h3>
+                    <h3 style="color: #10B981; margin-top: 0;">Bonus Opportunity!</h3>
                     <p style="color: #555;">
                         You can earn an extra <strong>$5</strong> by submitting a product review on Amazon. 
                         This helps the brand and increases your earnings!
                     </p>
                 </div>
-                <a href="{{app_url}}/influencer/assignments/{{assignment_id}}" style="display: inline-block; background: {BRAND_SUCCESS}; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: bold;">
+                <a href="https://influiv.com/influencer/assignments/{assignment_id}" style="display: inline-block; background: #10B981; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: bold;">
                     Submit Product Review
                 </a>
             </div>
@@ -215,22 +215,22 @@ EMAIL_TEMPLATES = {
     
     "post_rejected": {
         "subject": "Your Post Needs Revision",
-        "html": f"""
+        "html": """
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-            <div style="background: {BRAND_ERROR}; padding: 40px 20px; text-align: center;">
+            <div style="background: #EF4444; padding: 40px 20px; text-align: center;">
                 <h1 style="color: white; margin: 0;">Revision Needed</h1>
             </div>
             <div style="padding: 30px 20px; background: #f9fafb;">
-                <p style="font-size: 16px; color: #333;">Hi <strong>{{influencer_name}}</strong>,</p>
+                <p style="font-size: 16px; color: #333;">Hi <strong>{influencer_name}</strong>,</p>
                 <p style="font-size: 16px; color: #333;">
-                    Your content post for <strong>{{campaign_title}}</strong> needs some adjustments.
+                    Your content post for <strong>{campaign_title}</strong> needs some adjustments.
                 </p>
-                <div style="background: #FEF2F2; border-radius: 12px; padding: 20px; margin: 20px 0; border-left: 4px solid {BRAND_ERROR};">
-                    <h4 style="color: {BRAND_ERROR}; margin-top: 0;">Feedback from Brand:</h4>
-                    <p style="color: #555; margin-bottom: 0;">{{feedback}}</p>
+                <div style="background: #FEF2F2; border-radius: 12px; padding: 20px; margin: 20px 0; border-left: 4px solid #EF4444;">
+                    <h4 style="color: #EF4444; margin-top: 0;">Feedback from Brand:</h4>
+                    <p style="color: #555; margin-bottom: 0;">{feedback}</p>
                 </div>
                 <p style="color: #555;">Please update your post and resubmit for review.</p>
-                <a href="{{app_url}}/influencer/assignments/{{assignment_id}}" style="display: inline-block; background: {BRAND_PRIMARY}; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: bold;">
+                <a href="https://influiv.com/influencer/assignments/{assignment_id}" style="display: inline-block; background: #CE3427; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: bold;">
                     Resubmit Post
                 </a>
             </div>
@@ -243,22 +243,22 @@ EMAIL_TEMPLATES = {
     
     "review_approved": {
         "subject": "Product Review Approved - Bonus Earned!",
-        "html": f"""
+        "html": """
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-            <div style="background: linear-gradient(135deg, {BRAND_WARNING} 0%, {BRAND_WARNING_DARK} 100%); padding: 40px 20px; text-align: center;">
+            <div style="background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%); padding: 40px 20px; text-align: center;">
                 <h1 style="color: white; margin: 0;">Review Approved!</h1>
             </div>
             <div style="padding: 30px 20px; background: #f9fafb;">
-                <p style="font-size: 16px; color: #333;">Hi <strong>{{influencer_name}}</strong>,</p>
+                <p style="font-size: 16px; color: #333;">Hi <strong>{influencer_name}</strong>,</p>
                 <p style="font-size: 16px; color: #333;">
-                    Your product review for <strong>{{campaign_title}}</strong> has been approved!
+                    Your product review for <strong>{campaign_title}</strong> has been approved!
                 </p>
                 <div style="background: #FFFBEB; border-radius: 12px; padding: 20px; margin: 20px 0; text-align: center;">
-                    <h3 style="color: {BRAND_WARNING_DARK}; margin-top: 0;">Bonus Earned!</h3>
+                    <h3 style="color: #D97706; margin-top: 0;">Bonus Earned!</h3>
                     <p style="font-size: 24px; font-weight: bold; color: #333; margin: 0;">+$5.00</p>
                     <p style="color: #555; margin-top: 10px;">This will be added to your payout.</p>
                 </div>
-                <a href="{{app_url}}/influencer/earnings" style="display: inline-block; background: {BRAND_WARNING}; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: bold;">
+                <a href="https://influiv.com/influencer/earnings" style="display: inline-block; background: #F59E0B; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: bold;">
                     View Earnings
                 </a>
             </div>
@@ -271,22 +271,22 @@ EMAIL_TEMPLATES = {
     
     "review_rejected": {
         "subject": "Product Review Needs Revision",
-        "html": f"""
+        "html": """
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-            <div style="background: {BRAND_ERROR}; padding: 40px 20px; text-align: center;">
+            <div style="background: #EF4444; padding: 40px 20px; text-align: center;">
                 <h1 style="color: white; margin: 0;">Revision Needed</h1>
             </div>
             <div style="padding: 30px 20px; background: #f9fafb;">
-                <p style="font-size: 16px; color: #333;">Hi <strong>{{influencer_name}}</strong>,</p>
+                <p style="font-size: 16px; color: #333;">Hi <strong>{influencer_name}</strong>,</p>
                 <p style="font-size: 16px; color: #333;">
-                    Your product review for <strong>{{campaign_title}}</strong> needs some updates.
+                    Your product review for <strong>{campaign_title}</strong> needs some updates.
                 </p>
-                <div style="background: #FEF2F2; border-radius: 12px; padding: 20px; margin: 20px 0; border-left: 4px solid {BRAND_ERROR};">
-                    <h4 style="color: {BRAND_ERROR}; margin-top: 0;">Feedback from Brand:</h4>
-                    <p style="color: #555; margin-bottom: 0;">{{feedback}}</p>
+                <div style="background: #FEF2F2; border-radius: 12px; padding: 20px; margin: 20px 0; border-left: 4px solid #EF4444;">
+                    <h4 style="color: #EF4444; margin-top: 0;">Feedback from Brand:</h4>
+                    <p style="color: #555; margin-bottom: 0;">{feedback}</p>
                 </div>
                 <p style="color: #555;">Please update your review and resubmit.</p>
-                <a href="{{app_url}}/influencer/assignments/{{assignment_id}}" style="display: inline-block; background: {BRAND_PRIMARY}; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: bold;">
+                <a href="https://influiv.com/influencer/assignments/{assignment_id}" style="display: inline-block; background: #CE3427; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: bold;">
                     Resubmit Review
                 </a>
             </div>
@@ -299,26 +299,26 @@ EMAIL_TEMPLATES = {
     
     "payment_processed": {
         "subject": "Payment Processed!",
-        "html": f"""
+        "html": """
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-            <div style="background: linear-gradient(135deg, {BRAND_SUCCESS} 0%, {BRAND_SUCCESS_DARK} 100%); padding: 40px 20px; text-align: center;">
+            <div style="background: linear-gradient(135deg, #10B981 0%, #059669 100%); padding: 40px 20px; text-align: center;">
                 <h1 style="color: white; margin: 0;">Payment Sent!</h1>
             </div>
             <div style="padding: 30px 20px; background: #f9fafb;">
-                <p style="font-size: 16px; color: #333;">Hi <strong>{{influencer_name}}</strong>,</p>
+                <p style="font-size: 16px; color: #333;">Hi <strong>{influencer_name}</strong>,</p>
                 <p style="font-size: 16px; color: #333;">
                     Great news! Your payment has been processed.
                 </p>
                 <div style="background: white; border-radius: 12px; padding: 20px; margin: 20px 0; text-align: center;">
                     <p style="color: #888; margin: 0;">Amount</p>
-                    <p style="font-size: 32px; font-weight: bold; color: {BRAND_SUCCESS}; margin: 10px 0;">${{amount}}</p>
-                    <p style="color: #555;">For campaign: <strong>{{campaign_title}}</strong></p>
+                    <p style="font-size: 32px; font-weight: bold; color: #10B981; margin: 10px 0;">${amount}</p>
+                    <p style="color: #555;">For campaign: <strong>{campaign_title}</strong></p>
                 </div>
                 <p style="color: #555;">
                     The payment has been sent to your registered payment method. 
                     Please allow 1-3 business days for the funds to appear.
                 </p>
-                <a href="{{app_url}}/influencer/earnings" style="display: inline-block; background: {BRAND_SUCCESS}; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: bold;">
+                <a href="https://influiv.com/influencer/earnings" style="display: inline-block; background: #10B981; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: bold;">
                     View Earnings
                 </a>
             </div>
@@ -332,19 +332,19 @@ EMAIL_TEMPLATES = {
     # ============ BRAND EMAILS ============
     "brand_welcome": {
         "subject": "Welcome to Influiv!",
-        "html": f"""
+        "html": """
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-            <div style="background: linear-gradient(135deg, {BRAND_PRIMARY} 0%, {BRAND_PRIMARY_DARK} 100%); padding: 40px 20px; text-align: center;">
+            <div style="background: linear-gradient(135deg, #CE3427 0%, #A32B20 100%); padding: 40px 20px; text-align: center;">
                 <h1 style="color: white; margin: 0;">Welcome to Influiv!</h1>
             </div>
             <div style="padding: 30px 20px; background: #f9fafb;">
-                <p style="font-size: 16px; color: #333;">Hi <strong>{{name}}</strong>,</p>
+                <p style="font-size: 16px; color: #333;">Hi <strong>{name}</strong>,</p>
                 <p style="font-size: 16px; color: #333;">
                     Welcome to Influiv! You're now ready to connect with thousands of 
                     authentic influencers and scale your brand with UGC.
                 </p>
                 <div style="background: white; border-radius: 12px; padding: 20px; margin: 20px 0;">
-                    <h3 style="color: {BRAND_PRIMARY}; margin-top: 0;">Getting Started</h3>
+                    <h3 style="color: #CE3427; margin-top: 0;">Getting Started</h3>
                     <ul style="color: #555; line-height: 1.8;">
                         <li>Create your first campaign</li>
                         <li>Set your target audience and requirements</li>
@@ -352,7 +352,7 @@ EMAIL_TEMPLATES = {
                         <li>Approve content and manage payouts</li>
                     </ul>
                 </div>
-                <a href="{{app_url}}/brand/dashboard" style="display: inline-block; background: {BRAND_PRIMARY}; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: bold;">
+                <a href="https://influiv.com/brand/dashboard" style="display: inline-block; background: #CE3427; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: bold;">
                     Create Your First Campaign
                 </a>
             </div>
@@ -365,22 +365,22 @@ EMAIL_TEMPLATES = {
     
     "new_application": {
         "subject": "New Application for {campaign_title}",
-        "html": f"""
+        "html": """
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-            <div style="background: linear-gradient(135deg, {BRAND_PRIMARY} 0%, {BRAND_PRIMARY_DARK} 100%); padding: 40px 20px; text-align: center;">
+            <div style="background: linear-gradient(135deg, #CE3427 0%, #A32B20 100%); padding: 40px 20px; text-align: center;">
                 <h1 style="color: white; margin: 0;">New Application!</h1>
             </div>
             <div style="padding: 30px 20px; background: #f9fafb;">
-                <p style="font-size: 16px; color: #333;">Hi <strong>{{brand_name}}</strong>,</p>
+                <p style="font-size: 16px; color: #333;">Hi <strong>{brand_name}</strong>,</p>
                 <p style="font-size: 16px; color: #333;">
-                    You have a new application for <strong>{{campaign_title}}</strong>!
+                    You have a new application for <strong>{campaign_title}</strong>!
                 </p>
                 <div style="background: white; border-radius: 12px; padding: 20px; margin: 20px 0;">
-                    <h3 style="color: {BRAND_PRIMARY}; margin-top: 0;">Applicant Details</h3>
-                    <p style="color: #555;"><strong>Name:</strong> {{influencer_name}}</p>
-                    <p style="color: #555;"><strong>Email:</strong> {{influencer_email}}</p>
+                    <h3 style="color: #CE3427; margin-top: 0;">Applicant Details</h3>
+                    <p style="color: #555;"><strong>Name:</strong> {influencer_name}</p>
+                    <p style="color: #555;"><strong>Email:</strong> {influencer_email}</p>
                 </div>
-                <a href="{{app_url}}/brand/campaigns/{{campaign_id}}/applications" style="display: inline-block; background: {BRAND_PRIMARY}; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: bold;">
+                <a href="https://influiv.com/brand/campaigns/{campaign_id}/applications" style="display: inline-block; background: #CE3427; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: bold;">
                     Review Application
                 </a>
             </div>
@@ -393,21 +393,21 @@ EMAIL_TEMPLATES = {
     
     "new_purchase_proof": {
         "subject": "New Purchase Proof Submitted - {campaign_title}",
-        "html": f"""
+        "html": """
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-            <div style="background: linear-gradient(135deg, {BRAND_PRIMARY} 0%, {BRAND_PRIMARY_DARK} 100%); padding: 40px 20px; text-align: center;">
+            <div style="background: linear-gradient(135deg, #CE3427 0%, #A32B20 100%); padding: 40px 20px; text-align: center;">
                 <h1 style="color: white; margin: 0;">Purchase Proof Submitted</h1>
             </div>
             <div style="padding: 30px 20px; background: #f9fafb;">
-                <p style="font-size: 16px; color: #333;">Hi <strong>{{brand_name}}</strong>,</p>
+                <p style="font-size: 16px; color: #333;">Hi <strong>{brand_name}</strong>,</p>
                 <p style="font-size: 16px; color: #333;">
-                    <strong>{{influencer_name}}</strong> has submitted their purchase proof for <strong>{{campaign_title}}</strong>.
+                    <strong>{influencer_name}</strong> has submitted their purchase proof for <strong>{campaign_title}</strong>.
                 </p>
                 <div style="background: white; border-radius: 12px; padding: 20px; margin: 20px 0;">
-                    <p style="color: #555;"><strong>Order ID:</strong> {{order_id}}</p>
+                    <p style="color: #555;"><strong>Order ID:</strong> {order_id}</p>
                     <p style="color: #555; margin-bottom: 0;">Please review and verify the purchase.</p>
                 </div>
-                <a href="{{app_url}}/brand/assignments" style="display: inline-block; background: {BRAND_PRIMARY}; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: bold;">
+                <a href="https://influiv.com/brand/assignments" style="display: inline-block; background: #CE3427; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: bold;">
                     Review Proof
                 </a>
             </div>
@@ -420,20 +420,20 @@ EMAIL_TEMPLATES = {
     
     "new_post_submission": {
         "subject": "New Content Submitted - {campaign_title}",
-        "html": f"""
+        "html": """
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-            <div style="background: linear-gradient(135deg, {BRAND_PRIMARY} 0%, {BRAND_PRIMARY_DARK} 100%); padding: 40px 20px; text-align: center;">
+            <div style="background: linear-gradient(135deg, #CE3427 0%, #A32B20 100%); padding: 40px 20px; text-align: center;">
                 <h1 style="color: white; margin: 0;">New Content Submitted!</h1>
             </div>
             <div style="padding: 30px 20px; background: #f9fafb;">
-                <p style="font-size: 16px; color: #333;">Hi <strong>{{brand_name}}</strong>,</p>
+                <p style="font-size: 16px; color: #333;">Hi <strong>{brand_name}</strong>,</p>
                 <p style="font-size: 16px; color: #333;">
-                    <strong>{{influencer_name}}</strong> has submitted their content post for <strong>{{campaign_title}}</strong>.
+                    <strong>{influencer_name}</strong> has submitted their content post for <strong>{campaign_title}</strong>.
                 </p>
                 <div style="background: white; border-radius: 12px; padding: 20px; margin: 20px 0;">
                     <p style="color: #555;">Review the submitted content to approve or request revisions.</p>
                 </div>
-                <a href="{{app_url}}/brand/assignments" style="display: inline-block; background: {BRAND_PRIMARY}; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: bold;">
+                <a href="https://influiv.com/brand/assignments" style="display: inline-block; background: #CE3427; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: bold;">
                     Review Content
                 </a>
             </div>
@@ -446,21 +446,21 @@ EMAIL_TEMPLATES = {
     
     "new_product_review": {
         "subject": "New Product Review Submitted - {campaign_title}",
-        "html": f"""
+        "html": """
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-            <div style="background: linear-gradient(135deg, {BRAND_WARNING} 0%, {BRAND_WARNING_DARK} 100%); padding: 40px 20px; text-align: center;">
+            <div style="background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%); padding: 40px 20px; text-align: center;">
                 <h1 style="color: white; margin: 0;">Product Review Submitted!</h1>
             </div>
             <div style="padding: 30px 20px; background: #f9fafb;">
-                <p style="font-size: 16px; color: #333;">Hi <strong>{{brand_name}}</strong>,</p>
+                <p style="font-size: 16px; color: #333;">Hi <strong>{brand_name}</strong>,</p>
                 <p style="font-size: 16px; color: #333;">
-                    <strong>{{influencer_name}}</strong> has submitted a product review for <strong>{{campaign_title}}</strong>.
+                    <strong>{influencer_name}</strong> has submitted a product review for <strong>{campaign_title}</strong>.
                 </p>
                 <div style="background: white; border-radius: 12px; padding: 20px; margin: 20px 0;">
-                    <p style="color: #555;"><strong>Rating:</strong> {{rating}}/5</p>
+                    <p style="color: #555;"><strong>Rating:</strong> {rating}/5</p>
                     <p style="color: #555; margin-bottom: 0;">Review the submission to approve for bonus payout.</p>
                 </div>
-                <a href="{{app_url}}/brand/assignments" style="display: inline-block; background: {BRAND_WARNING}; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: bold;">
+                <a href="https://influiv.com/brand/assignments" style="display: inline-block; background: #F59E0B; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: bold;">
                     Review Submission
                 </a>
             </div>
@@ -474,20 +474,20 @@ EMAIL_TEMPLATES = {
     # ============ ADMIN EMAILS ============
     "admin_new_user": {
         "subject": "New User Registration - {role}",
-        "html": f"""
+        "html": """
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-            <div style="background: {BRAND_DARK}; padding: 40px 20px; text-align: center;">
+            <div style="background: #1F2937; padding: 40px 20px; text-align: center;">
                 <h1 style="color: white; margin: 0;">New User Registered</h1>
             </div>
             <div style="padding: 30px 20px; background: #f9fafb;">
                 <p style="font-size: 16px; color: #333;">A new user has registered on Influiv.</p>
                 <div style="background: white; border-radius: 12px; padding: 20px; margin: 20px 0;">
-                    <p style="color: #555;"><strong>Name:</strong> {{name}}</p>
-                    <p style="color: #555;"><strong>Email:</strong> {{email}}</p>
-                    <p style="color: #555;"><strong>Role:</strong> {{role}}</p>
-                    <p style="color: #555; margin-bottom: 0;"><strong>Registered:</strong> {{registered_at}}</p>
+                    <p style="color: #555;"><strong>Name:</strong> {name}</p>
+                    <p style="color: #555;"><strong>Email:</strong> {email}</p>
+                    <p style="color: #555;"><strong>Role:</strong> {role}</p>
+                    <p style="color: #555; margin-bottom: 0;"><strong>Registered:</strong> {registered_at}</p>
                 </div>
-                <a href="{{app_url}}/admin/users" style="display: inline-block; background: {BRAND_DARK}; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: bold;">
+                <a href="https://influiv.com/admin/users" style="display: inline-block; background: #1F2937; color: white; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: bold;">
                     View Users
                 </a>
             </div>
@@ -501,19 +501,19 @@ EMAIL_TEMPLATES = {
     # ============ PASSWORD RESET EMAILS ============
     "password_reset": {
         "subject": "Reset Your Influiv Password",
-        "html": f"""
+        "html": """
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-            <div style="background: linear-gradient(135deg, {BRAND_PRIMARY} 0%, {BRAND_PRIMARY_DARK} 100%); padding: 40px 20px; text-align: center;">
+            <div style="background: linear-gradient(135deg, #CE3427 0%, #A32B20 100%); padding: 40px 20px; text-align: center;">
                 <h1 style="color: white; margin: 0;">Password Reset Request</h1>
             </div>
             <div style="padding: 30px 20px; background: #f9fafb;">
-                <p style="font-size: 16px; color: #333;">Hi <strong>{{name}}</strong>,</p>
+                <p style="font-size: 16px; color: #333;">Hi <strong>{name}</strong>,</p>
                 <p style="font-size: 16px; color: #333;">
                     We received a request to reset your password for your Influiv account. 
                     Click the button below to create a new password.
                 </p>
                 <div style="text-align: center; margin: 30px 0;">
-                    <a href="{{reset_url}}" style="display: inline-block; background: {BRAND_PRIMARY}; color: white; padding: 16px 32px; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 16px;">
+                    <a href="{reset_url}" style="display: inline-block; background: #CE3427; color: white; padding: 16px 32px; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 16px;">
                         Reset Password
                     </a>
                 </div>
@@ -526,7 +526,7 @@ EMAIL_TEMPLATES = {
                 </div>
                 <p style="font-size: 14px; color: #888;">
                     If the button doesn't work, copy and paste this link into your browser:<br>
-                    <a href="{{reset_url}}" style="color: {BRAND_PRIMARY}; word-break: break-all;">{{reset_url}}</a>
+                    <a href="{reset_url}" style="color: #CE3427; word-break: break-all;">{reset_url}</a>
                 </p>
             </div>
             <div style="padding: 20px; text-align: center; color: #888; font-size: 12px;">
@@ -538,22 +538,22 @@ EMAIL_TEMPLATES = {
     
     "password_reset_success": {
         "subject": "Your Password Has Been Reset",
-        "html": f"""
+        "html": """
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-            <div style="background: linear-gradient(135deg, {BRAND_SUCCESS} 0%, {BRAND_SUCCESS_DARK} 100%); padding: 40px 20px; text-align: center;">
+            <div style="background: linear-gradient(135deg, #10B981 0%, #059669 100%); padding: 40px 20px; text-align: center;">
                 <h1 style="color: white; margin: 0;">Password Reset Successful</h1>
             </div>
             <div style="padding: 30px 20px; background: #f9fafb;">
-                <p style="font-size: 16px; color: #333;">Hi <strong>{{name}}</strong>,</p>
+                <p style="font-size: 16px; color: #333;">Hi <strong>{name}</strong>,</p>
                 <p style="font-size: 16px; color: #333;">
                     Your password has been successfully reset. You can now log in with your new password.
                 </p>
                 <div style="text-align: center; margin: 30px 0;">
-                    <a href="{{app_url}}/login" style="display: inline-block; background: {BRAND_SUCCESS}; color: white; padding: 16px 32px; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 16px;">
+                    <a href="https://influiv.com/login" style="display: inline-block; background: #10B981; color: white; padding: 16px 32px; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 16px;">
                         Log In Now
                     </a>
                 </div>
-                <div style="background: #FEF2F2; border-radius: 12px; padding: 20px; margin: 20px 0; border-left: 4px solid {BRAND_ERROR};">
+                <div style="background: #FEF2F2; border-radius: 12px; padding: 20px; margin: 20px 0; border-left: 4px solid #EF4444;">
                     <p style="color: #991B1B; margin: 0; font-size: 14px;">
                         <strong>Didn't reset your password?</strong><br>
                         If you didn't make this change, please contact our support team immediately 
@@ -607,10 +607,7 @@ class EmailService:
                 logger.error(f"Email template not found: {template_name}")
                 return False
             
-            # Always use production URL
-            template_data["app_url"] = APP_URL
-            
-            # Format subject and body
+            # Format subject and body with template data
             subject = template["subject"].format(**template_data)
             html_body = template["html"].format(**template_data)
             
