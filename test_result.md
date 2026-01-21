@@ -393,7 +393,7 @@ frontend:
         comment: "Changed redirect URL from /a/{token} to /api/redirect/{token} to properly route through Kubernetes ingress which requires /api prefix for backend routes. This should fix the issue where clicking 'Buy on Amazon' was redirecting to the wrong URL."
       - working: true
         agent: "testing"
-        comment: "✅ TESTED: Amazon redirect link fix working perfectly! Successfully tested complete flow: 1) Got assignment and called GET /api/v1/assignments/{assignment_id}/amazon-link, 2) Verified redirect_url contains correct /api/redirect/ prefix (https://brandfluence-6.preview.emergentagent.com/api/redirect/5576cd616fa34ca9), 3) Tested redirect endpoint WITHOUT authentication and received 302 redirect to Amazon URL (https://www.amazon.com/dp/B08N5WRWNW?tag=demo-20), 4) Confirmed click logging is working (302 response indicates successful click log creation). The Kubernetes ingress routing fix is working correctly."
+        comment: "✅ TESTED: Amazon redirect link fix working perfectly! Successfully tested complete flow: 1) Got assignment and called GET /api/v1/assignments/{assignment_id}/amazon-link, 2) Verified redirect_url contains correct /api/redirect/ prefix (https://influ-pages.preview.emergentagent.com/api/redirect/5576cd616fa34ca9), 3) Tested redirect endpoint WITHOUT authentication and received 302 redirect to Amazon URL (https://www.amazon.com/dp/B08N5WRWNW?tag=demo-20), 4) Confirmed click logging is working (302 response indicates successful click log creation). The Kubernetes ingress routing fix is working correctly."
 
   - task: "Fix seed database name"
     implemented: true
@@ -441,7 +441,7 @@ frontend:
         comment: "Fixed 404 error for uploaded files. Changed static file mount path from /uploads to /api/uploads for Kubernetes ingress compatibility. Updated file URL construction to use /api/uploads/ prefix. Local curl test confirms 200 OK response."
       - working: true
         agent: "testing"
-        comment: "✅ TESTED: File upload and static file serving fix working perfectly! Successfully tested complete flow: 1) Login as influencer (creator@example.com), 2) Upload test PNG file to POST /api/v1/upload, 3) Verified response contains URL with /api/uploads/ prefix (https://brandfluence-6.preview.emergentagent.com/api/uploads/2274ea0a-5ef4-4871-932c-14e586a035c7.png), 4) Accessed uploaded file URL directly - returns 200 OK with correct content-type (image/png), 5) Tested existing file access - works correctly, 6) Verified file content is valid (287 bytes). Upload endpoint returns all required fields (filename, original_filename, url, size, message). Static file serving with /api/uploads/ prefix is working correctly for Kubernetes ingress routing. Minor: Old /uploads path still returns 200 (likely handled by frontend/ingress) but this doesn't affect the fix functionality."
+        comment: "✅ TESTED: File upload and static file serving fix working perfectly! Successfully tested complete flow: 1) Login as influencer (creator@example.com), 2) Upload test PNG file to POST /api/v1/upload, 3) Verified response contains URL with /api/uploads/ prefix (https://influ-pages.preview.emergentagent.com/api/uploads/2274ea0a-5ef4-4871-932c-14e586a035c7.png), 4) Accessed uploaded file URL directly - returns 200 OK with correct content-type (image/png), 5) Tested existing file access - works correctly, 6) Verified file content is valid (287 bytes). Upload endpoint returns all required fields (filename, original_filename, url, size, message). Static file serving with /api/uploads/ prefix is working correctly for Kubernetes ingress routing. Minor: Old /uploads path still returns 200 (likely handled by frontend/ingress) but this doesn't affect the fix functionality."
       - working: true
         agent: "testing"
         comment: "✅ COMPREHENSIVE FILE UPLOAD TESTING COMPLETED - 100% SUCCESS RATE (37/37 tests passed). Successfully tested ALL file/image upload functionality across AffiTarget platform as requested: 1) CORE FILE UPLOAD ENDPOINT: POST /api/v1/upload working perfectly for images and videos with correct /api/uploads/ prefix, all response fields present, files accessible at returned URLs. 2) INFLUENCER PROFILE SETUP: avatar_url, portfolio_images array, portfolio_videos array all correctly saved and retrieved via PUT /api/v1/influencer/profile and GET /api/v1/auth/me. 3) PURCHASE PROOF SUBMISSION: screenshot_urls array working correctly with POST /api/v1/assignments/{id}/purchase-proof, multiple screenshots uploaded and submitted successfully. 4) CAMPAIGN LANDING PAGE: landing_page_hero_image correctly saved via PUT /api/v1/campaigns/{id}/landing-page and retrieved. 5) ADMIN LANDING CONTENT: portfolio_videos array with different types (upload, youtube, instagram) working via PUT /api/v1/admin/landing-content. 6) POST SUBMISSIONS: screenshot_url field working with POST /api/v1/assignments/{id}/post-submission (validation correctly blocks when purchase not approved). 7) PUBLIC PROFILE ACCESS: GET /api/v1/public/influencers/{slug} returns portfolio media URLs correctly, all URLs accessible (4/4 tested). All file uploads use correct /api/uploads/ prefix, no 404 errors, arrays properly stored, file URLs persist after updates. CRITICAL CHECKS PASSED: No 404 errors when accessing uploaded files ✓, Arrays (portfolio_images, screenshot_urls) properly stored ✓, File URLs persist after profile/content updates ✓, Public endpoints return media URLs correctly ✓."
@@ -632,7 +632,7 @@ agent_communication:
       - Verified GET /api/v1/assignments/{assignment_id}/amazon-link returns correct URL format
       - Tested redirect endpoint WITHOUT authentication: returns 302 to Amazon URL
       - Confirmed click logging functionality working (302 response indicates successful DB logging)
-      - Example redirect: https://brandfluence-6.preview.emergentagent.com/api/redirect/5576cd616fa34ca9 → Amazon
+      - Example redirect: https://influ-pages.preview.emergentagent.com/api/redirect/5576cd616fa34ca9 → Amazon
       
       ✅ BRAND CAMPAIGN FILTERING FIX (HIGH PRIORITY):
       - Successfully tested campaign isolation between brands
@@ -785,9 +785,9 @@ agent_communication:
       - Successfully tested complete file upload flow as requested in review:
         1. ✅ Login as influencer (creator@example.com / Creator@123)
         2. ✅ Upload test PNG file to POST /api/v1/upload
-        3. ✅ Verified response contains URL with /api/uploads/ prefix: https://brandfluence-6.preview.emergentagent.com/api/uploads/2274ea0a-5ef4-4871-932c-14e586a035c7.png
+        3. ✅ Verified response contains URL with /api/uploads/ prefix: https://influ-pages.preview.emergentagent.com/api/uploads/2274ea0a-5ef4-4871-932c-14e586a035c7.png
         4. ✅ Accessed uploaded file URL directly - returns 200 OK with correct content-type: image/png
-        5. ✅ Tested existing file access: https://brandfluence-6.preview.emergentagent.com/api/uploads/06e5e39b-0189-4655-9226-b44c845487cb.png - works correctly
+        5. ✅ Tested existing file access: https://influ-pages.preview.emergentagent.com/api/uploads/06e5e39b-0189-4655-9226-b44c845487cb.png - works correctly
         6. ✅ Verified file content is valid (287 bytes)
       
       ✅ UPLOAD ENDPOINT FUNCTIONALITY:

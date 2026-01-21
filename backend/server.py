@@ -34,7 +34,7 @@ from email_service import EmailService
 email_service = EmailService(db)
 
 # Get app URL for email links
-APP_URL = os.environ.get('APP_URL', 'https://brandfluence-6.preview.emergentagent.com')
+APP_URL = os.environ.get('APP_URL', 'https://influ-pages.preview.emergentagent.com')
 
 # Security
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")

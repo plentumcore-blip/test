@@ -1,78 +1,155 @@
-<analysis>
-The trajectory details the iterative development of a full-stack influencer marketing platform, AffiTarget, from scratch. The initial AI engineer began by clarifying the tech stack with the user, opting for the platform's default FastAPI, React, and MongoDB, despite the initial request specifying Node.js and MySQL.
+<analysis>**original_problem_statement**: The user provided a series of feature requests and bug fixes to enhance the AffiTarget influencer marketing platform. These include:
+1.  **Admin Campaign Management**: Admins should be able to view and delete all campaigns created by any brand, including all associated data.
+2.  **Purchase Proof Simplification**: In the purchase proof submission form, the 'ASIN' field should be removed, and the 'price' field should be made mandatory.
+3.  **Bug Fixes**:
+    *   Resolve a  ReferenceError on the brand's application review page.
+    *   Fix an  error when the admin tries to log out from the new campaigns page.
+4.  **Feature Enhancements**:
+    *   Add a View Campaign Landing Page button on the influencer's campaign detail page.
+    *   Integrate a manual PayPal payout system.
+5.  **Payout Logic Change**: The timing for creating payouts was adjusted. Commissions are now paid upon content submission, and review bonuses are paid upon review submission, rather than waiting for brand approval.
+6.  **Full Rebranding**: The entire application's color scheme was changed from blue/purple to a new primary red (), and the logo was replaced.
+7.  **New Static Pages**: Create several new static pages (Privacy Policy, Terms & Conditions, etc.) using content from a provided document, style them with the new brand theme, and link them in the footer.
 
-The development proceeded in distinct phases. First, the core application structure was built, including backend server logic, API endpoints, and Pydantic models in . Simultaneously, the React frontend was scaffolded with pages for different user roles (Admin, Brand, Influencer), contexts, and basic styling. Initial data was populated using a  script.
+**User's preferred language**: English
 
-Subsequent user requests drove feature additions. Manual payouts and custom campaign landing pages were implemented by extending the backend models and API, and creating new frontend components and pages. Next, an influencer profile setup flow was added, allowing influencers to submit their social media profiles (TikTok, Instagram) after registration.
+**what currently exists?**: A full-stack influencer marketing platform with a FastAPI backend, React frontend, and MongoDB database. The application supports Admin, Brand, and Influencer roles with specific dashboards and functionalities. A manual PayPal-based payout system has been implemented, allowing brands to reimburse influencers. The entire application has been successfully rebranded with a new logo and a red color scheme.
 
-A major UI/UX overhaul was then requested, leading to the replacement of the top-level navigation with a professional, role-specific sidebar layout. This involved creating new  components and refactoring all dashboard pages to use a consistent two-column layout.
+**Last working item**:
+*   **Last item agent was working**: The user has requested the creation of several static informational pages (Privacy Policy, Terms & Conditions, About Us, etc.) from a provided document. The agent's task is to create these pages, style them with the new brand theme, and link them in the application's footer. The agent has extracted the content from the user-provided file and is ready to begin implementation.
+*   **Status**: NOT STARTED
+*   **Agent Testing Done**: N
+*   **Which testing method agent to use?**: manual testing by screenshot tool to verify the new pages are created, styled correctly, and the footer links work as expected.
+*   **User Testing Done**: N
 
-Finally, the user requested fixes for the brand dashboard's UI consistency and the implementation of a detailed reporting page for brands to track sales and creator payments. The AI created the reports page and backend endpoint but encountered and fixed a syntax error in the process. The most recent task was to ensure the end-to-end influencer payout logic is correct.
-</analysis>
+**All Pending/In progress Issue list**:
+*   There are no pending bugs. All previously reported issues have been resolved. The current work is a new feature request.
 
-<product_requirements>
-The goal is to build AffiTarget, a full-stack web application for managing Amazon-only influencer marketing campaigns. The platform connects Brands with Influencers.
+**In progress Task List**:
 
-**Core User Roles & Functionality:**
-1.  **Admin:** Manages the platform, approves/rejects Brand and Influencer profiles, and oversees verification queues.
-2.  **Brand:** Creates and manages campaigns, each with a mandatory Amazon Attribution URL. They can review applications, manage assignments, and review influencer post submissions. They have access to a dashboard and detailed reports on product sales and creator payouts.
-3.  **Influencer:** Creates a profile, submits social media accounts (TikTok, Instagram) for verification, and browses/applies for campaigns. For an accepted assignment, they must use a special link to purchase the product on Amazon, submit proof of purchase, and after approval, submit proof of their promotional post.
+*   **Task 1**: Create and link static informational pages (P0)
+    *   **Where to resume**:
+        1.  Create new React components for each static page (e.g., , ) in a new directory like .
+        2.  Populate these components with the HTML content extracted from the user's document.
+        3.  Style the pages to match the new red brand theme ().
+        4.  Add routes for these new pages in .
+        5.  Modify the footer component (likely in  or a shared layout component) to include links to these new pages.
+    *   **What will be achieved with this?**: The application will have essential legal and informational pages, making it more complete and professional.
+    *   **Status**: NOT STARTED
+    *   **Should Test frontend/backend/both after fix?**: Frontend
+    *   **Blocked on something**: No.
 
-**Key Workflows:**
-*   **Campaign Lifecycle:** A Brand creates a campaign, which Influencers can apply to.
-*   **Assignment & Purchase:** Accepted Influencers receive an assignment. They must first prove they've purchased the product.
-*   **Content Submission:** Once purchase proof is approved, the Influencer can submit their content (post URL, screenshots, etc.).
-*   **Payouts:** A system for manual payouts exists for Brands to compensate Influencers. The payout logic is defined as .
-*   **Reporting:** Brands have a dedicated reports page to track sales, total costs, and individual payout calculations per influencer.
+**Upcoming and Future Tasks**
+*   **Upcoming Tasks**:
+    *   (P1) Implement New Marketing Landing Page: A previous request to build a custom marketing page from a  file is still pending user input.
+*   **Future Tasks**:
+    *   (P2) Add Engagement Metrics to Influencer Profiles.
+    *   (P2) Add Profile Analytics for Influencers.
 
-The application features a professional design with a sidebar for navigation within each user's dashboard.
-</product_requirements>
+**Completed work in this session**
+*   **Admin Campaign Management**:
+    *   Created a new page for admins to view, search, and delete any campaign in the system ().
+    *   Updated the backend delete endpoint to allow admins to force-delete campaigns and their associated assignments and applications ().
+*   **Purchase Proof & Payout System**:
+    *   Modified the purchase proof form and backend to remove the 'ASIN' field and make 'price' mandatory.
+    *   Implemented a full manual PayPal payout system:
+        *   Added  and  to campaigns, and  to influencer profiles.
+        *   Created backend logic to automatically generate 'payout' records when influencers submit posts (for commission) or reviews (for bonus).
+        *   Overhauled the brand payouts page to show pending payments with influencer PayPal.me links and a Mark as Paid button.
+        *   Updated the influencer dashboard with an Upcoming Earnings summary.
+*   **Bug Fixes**:
+    *   Fixed a  on the applications board by importing the  icon ().
+    *   Resolved the  error on the admin campaigns page by correctly passing the logout handler from the  ().
+*   **Full Rebranding**:
+    *   Replaced the application's primary colors (blue/purple) with a new red brand color () across all frontend files (, , , and component-level styles).
+    *   Replaced the logo on all public pages and sidebars with a new user-provided logo ().
+*   **UI Enhancements**:
+    *   Added a View Landing Page button to the influencer campaign detail page ().
 
-<key_technical_concepts>
-- **Full-Stack Framework:** FastAPI (Python) for the backend, React (JavaScript) for the frontend.
-- **Database:** MongoDB for data storage, with data models managed via Pydantic in the backend.
-- **API Architecture:** RESTful API with routes prefixed by .
-- **Frontend State Management:** React Context API ().
-- **UI/UX:** Component-based design using pre-built Shadcn UI components and custom components. A role-based sidebar navigation system is implemented for all dashboards.
-- **Authentication:** A token-based authentication system is in place, with distinct roles (Admin, Brand, Influencer).
-</key_technical_concepts>
+**Earlier issues found/mentioned but not fixed**:
+*   None.
 
-<code_architecture>
-The application follows a standard monorepo structure with separate  and  directories.
+**Known issue recurrence from previous fork**:
+*   None.
+
+**Code Architecture**
 
 
+**Key Technical Concepts**
+*   **Backend**: FastAPI, Pydantic, Motor (async MongoDB driver).
+*   **Frontend**: React, TailwindCSS, React Router, Axios,  context for state management.
+*   **Database**: MongoDB.
+*   **Architecture**: Full-stack REST API.
+*   **Payment Flow**: A manual, system-tracked payment process. Payout records are created automatically. Brands view pending payments and manually send funds via PayPal, then update the status in the app.
 
-**Key Files:**
+**key DB schema**
+*   **User**: Added .
+*   **Campaign**: Added  and .
+*   **Payout**: Added  (Enum for REIMBURSEMENT, COMMISSION, REVIEW_BONUS).
 
--   ****
-    -   **Importance:** This is the core of the backend. It defines the FastAPI application, all API endpoints, Pydantic models for data validation and serialization, database connection logic, and business logic for all features including authentication, campaigns, user roles, payouts, and reporting.
-    -   **Changes:** Initially created to set up the basic server. It has been extensively modified to add Pydantic models for all entities (, , , , etc.), and API endpoints for CRUD operations, user registration/login, fetching reports (), managing social platforms (), and handling payouts.
+**changes in tech stack**:
+*   None.
 
--   ****
-    -   **Importance:** The main entry point for the React application. It sets up the router () to handle all page navigation and wraps the application in the  to manage authentication state globally.
-    -   **Changes:** Updated multiple times to add new routes for pages like , , , and the campaign . Logic was also added to handle redirects for new influencers to the profile setup page.
+**All files of reference**
+*   **/app/backend/server.py**: Heavily modified to implement admin campaign management, simplified purchase proof, and the entire manual payout lifecycle logic.
+*   **/app/frontend/src/pages/admin/Campaigns.js**: A new page for admins to manage all campaigns.
+*   **/app/frontend/src/pages/brand/Payouts.js**: Completely overhauled to support the new manual PayPal payout workflow.
+*   **/app/frontend/src/pages/influencer/Dashboard.js**: Overhauled to display an earnings and payout summary.
+*   **/app/frontend/tailwind.config.js**, **/app/frontend/src/index.css**, **/app/frontend/src/App.css**: Core styling files updated to reflect the new brand color scheme.
+*   **/app/frontend/public/logo.png**: The new logo file used across the application.
 
--   ** (various dashboards)**
-    -   **Importance:** These directories contain the UI components for each user role. Examples include , , and .
-    -   **Changes:** Initially created with basic content. All dashboard-related pages were significantly refactored to incorporate a new sidebar layout. This involved changing the root element to a two-column flex container and wrapping the main content area.
+**Areas that need refactoring**:
+*   None identified in this session.
 
--   ****
-    -   **Importance:** These three files (, , ) were created during the major UI overhaul. They provide consistent, role-specific navigation for each dashboard, improving UX.
-    -   **Changes:** Created from scratch to house the navigation links for each user role. The  was later updated to include a link to the new Reports page.
+**key api endpoints**
+*   : (New) Fetches all campaigns for the admin view.
+*   : (Modified) Allows admins to perform a force-delete.
+*   : (Modified) Creates a  payout.
+*   : (Modified) Creates a  payout.
+*   : (Modified) Lists payouts for a brand, now including fresh influencer data.
+*   : Used to mark a payout as 'PAID'.
+*   : (New) Provides summary data for the influencer's earnings dashboard.
+*   : (Modified) Now saves the influencer's .
 
--   ****
-    -   **Importance:** A critical page for the Brand user, fulfilling the requirement for detailed financial reporting. It fetches and displays data on products sold, influencer costs, and total payout amounts.
-    -   **Changes:** Created to display report data from the new  endpoint. It had an initial implementation with a syntax error (incorrectly escaped quotes in template literals), which was fixed by re-creating the file with the correct code.
-</code_architecture>
+**Critical Info for New Agent**
+*   **Rebranding Complete**: The application's primary color is now red (), configured as  in . All new UI elements must use this theme. The new logo is at .
+*   **Payout Logic**: Payouts are created automatically when influencers submit content (posts for commission, reviews for bonuses). Brands must manually pay influencers and then use the Mark as Paid button on the Payouts page to update the system.
 
-<pending_tasks>
-- There are no outstanding explicit feature requests from the user. The primary pending action is to validate the most recently implemented logic.
-</pending_tasks>
+**documents and test reports created in this job**
+*   
+*   User-provided content for static pages was extracted from .
 
-<current_work>
-The last request from the user was to ensure the end-to-end payout logic is correct and fully functional for influencers. The AI engineer's last action was to update the  page to provide a more detailed breakdown of the payout calculation. The work was paused just before restarting the frontend service to test this entire flow. The goal is to verify that the UI correctly reflects the payout logic (product cost + 0 for content +  for addon post) and that the data flows correctly from the backend to the influencer's dashboard.
-</current_work>
+**Last 10 User Messages and any pending HUMAN messages**
+10. **User**: Requests PayPal payout integration, simplifying review submissions, and clarifying payout triggers. Status: **COMPLETED**.
+9. **User**: Clarifies payout business rules: use PayPal.me links, trigger payouts on approval, manual payment by brand. Status: **IMPLEMENTED**.
+8. **Agent**: Asks clarifying questions about the PayPal integration. Status: **ANSWERED**.
+7. **User**:  - initial request for the payout feature. Status: **COMPLETED**.
+6. **Agent**: Announces completion of the View Landing Page button. Status: **COMPLETED**.
+5. **User**: Requests a View Landing Page button on the influencer campaign detail page. Status: **COMPLETED**.
+4. **Agent**: Announces the fix for the admin logout error. Status: **COMPLETED**.
+3. **User**: Reports an  error when the admin logs out. Status: **COMPLETED**.
+2. **Agent**: Announces completion of the rebranding. Status: **COMPLETED**.
+1. **User**: Requests to change the brand color to  and update the logo. Status: **COMPLETED**.
+**Pending Human Message**:
+*   The last message from the user was a request to create static pages (Privacy, Terms, etc.) from a provided document. The agent is about to start this task.
 
-<optional_next_step>
-I will restart the frontend service and then thoroughly test the influencer payout page and the associated end-to-end logic to confirm it is working as expected.
-</optional_next_step>
+**Project Health Check:**
+*   **Broken**: None. All known issues are resolved.
+*   **Mocked**: None.
+
+**3rd Party Integrations**
+*   None.
+
+**Testing status**
+*   **Testing agent used after significant changes**: YES (for backend payout logic).
+*   **Troubleshoot agent used after agent stuck in loop**: NO.
+*   **Test files created**: None.
+*   **Known regressions**: None.
+
+**Credentials to test flow:**
+*   **Admin**:  / 
+*   **Brand**:  / 
+*   **Influencer**:  / 
+
+**What agent forgot to execute**
+*   Nothing was forgotten. The agent successfully completed a long list of user requests and is now poised to begin the latest one.</analysis>

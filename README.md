@@ -49,7 +49,7 @@ sudo supervisorctl status
 
 ### 4. Access Application
 
-Open browser to: `https://brandfluence-6.preview.emergentagent.com`
+Open browser to: `https://influ-pages.preview.emergentagent.com`
 
 ## Test Accounts
 
