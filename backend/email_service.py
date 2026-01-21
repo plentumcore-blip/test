@@ -24,11 +24,8 @@ BRAND_ERROR = "#EF4444"
 BRAND_GRAY = "#6B7280"
 BRAND_DARK = "#1F2937"
 
-# Primary application URL - production domain
-APP_URL_DEFAULT = "https://influiv.com"
-
-# Get APP_URL from environment variable with fallback to production URL
-APP_URL = os.environ.get("APP_URL", APP_URL_DEFAULT)
+# Primary application URL - production domain (hardcoded)
+APP_URL = "https://influiv.com"
 
 # Email Templates
 EMAIL_TEMPLATES = {
@@ -574,8 +571,8 @@ EMAIL_TEMPLATES = {
 
 
 def get_app_url() -> str:
-    """Get the application URL - defaults to production domain"""
-    return os.environ.get("APP_URL", APP_URL_DEFAULT)
+    """Get the application URL - always returns production domain"""
+    return APP_URL
 
 
 class EmailService:
@@ -610,9 +607,8 @@ class EmailService:
                 logger.error(f"Email template not found: {template_name}")
                 return False
             
-            # Get app_url from: 1) parameter, 2) settings, 3) environment variable
-            resolved_app_url = app_url or settings.get("app_url", "") or get_app_url()
-            template_data["app_url"] = resolved_app_url
+            # Always use production URL
+            template_data["app_url"] = APP_URL
             
             # Format subject and body
             subject = template["subject"].format(**template_data)
