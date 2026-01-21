@@ -97,6 +97,19 @@ Influiv is a full-stack influencer marketing platform connecting brands with inf
 - ✅ Asynchronous email sending using `asyncio.create_task()` for non-blocking operations
 - ✅ Beautiful HTML email templates with branding
 
+### January 21, 2026 - Static Informational Pages
+- ✅ Created 5 new static pages with full content from provided document:
+  - **Privacy Policy** (`/privacy-policy`) - Complete with 16 sections covering data collection, CCPA, GDPR, cookies, etc.
+  - **Terms & Conditions** (`/terms-and-conditions`) - Complete with 19 sections covering service terms, liability, etc.
+  - **About Us** (`/about`) - Company mission, values, story, and CTA sections
+  - **FAQ** (`/faq`) - Comprehensive FAQ organized by category (General, Brands, Creators, Security, Support)
+  - **Contact Us** (`/contact`) - Contact form with email, location info, and success state
+- ✅ All pages styled with red brand theme (#CE3427)
+- ✅ Consistent navigation with logo and "Back to Home" link
+- ✅ Added routes in App.js for all new pages
+- ✅ Updated footer in MarketingLandingPage.js with working links to all pages
+- ✅ Pages located in `/app/frontend/src/pages/legal/`
+
 ### January 16, 2026 - Marketing Landing Page & Campaign Landing Page Editor
 - ✅ Created new marketing landing page (`MarketingLandingPage.js`)
 - ✅ Backend-manageable video section and stats
@@ -195,9 +208,16 @@ Influiv is a full-stack influencer marketing platform connecting brands with inf
 │       │   │   ├── Verification.js
 │       │   │   ├── Settings.js
 │       │   │   ├── Reports.js
-│       │   │   └── LandingContent.js    # NEW
+│       │   │   ├── LandingContent.js
+│       │   │   └── Campaigns.js
 │       │   ├── brand/
-│       │   └── influencer/
+│       │   ├── influencer/
+│       │   └── legal/                   # NEW
+│       │       ├── PrivacyPolicy.js
+│       │       ├── TermsAndConditions.js
+│       │       ├── AboutUs.js
+│       │       ├── FAQ.js
+│       │       └── ContactUs.js
 │       └── contexts/
 │           └── AuthContext.js
 └── test_reports/
@@ -218,16 +238,14 @@ Influiv is a full-stack influencer marketing platform connecting brands with inf
 - None (all critical features implemented)
 
 ### P1 - High Priority
-- Full user verification of file uploads across all flows
+- New Marketing Landing Page from `Stackinfluence Landing page.txt` file (pending user input)
 
 ### P2 - Medium Priority
-- Create custom `useFileUpload` React hook to reduce boilerplate
-- Payment integration (Stripe/PayPal)
-- Email notifications for key events
+- Add Engagement Metrics to Influencer Profiles
+- Add Profile Analytics for Influencers
 
 ### P3 - Future Enhancements
 - Analytics dashboard with charts
 - Bulk campaign operations
-- Influencer portfolio/profile pages
 - Campaign performance metrics
 - A/B testing for campaign landing pages
