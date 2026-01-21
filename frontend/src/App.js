@@ -32,6 +32,11 @@ import AdminLandingContent from './pages/admin/LandingContent';
 import AdminCampaigns from './pages/admin/Campaigns';
 import CampaignLandingPage from './pages/CampaignLandingPage';
 import InfluencerPublicProfile from './pages/InfluencerPublicProfile';
+import PrivacyPolicy from './pages/legal/PrivacyPolicy';
+import TermsAndConditions from './pages/legal/TermsAndConditions';
+import AboutUs from './pages/legal/AboutUs';
+import FAQ from './pages/legal/FAQ';
+import ContactUs from './pages/legal/ContactUs';
 
 const ProtectedRoute = ({ children, allowedRoles }) => {
   const { user, loading } = useAuth();
@@ -67,6 +72,13 @@ function App() {
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/campaigns/:slug" element={<CampaignLandingPage />} />
           <Route path="/influencer-profile/:slug" element={<InfluencerPublicProfile />} />
+          
+          {/* Legal/Static Pages */}
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
+          <Route path="/about" element={<AboutUs />} />
+          <Route path="/faq" element={<FAQ />} />
+          <Route path="/contact" element={<ContactUs />} />
 
           {/* Admin Routes */}
           <Route
