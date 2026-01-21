@@ -644,27 +644,25 @@ const MarketingLandingPage = () => {
             <div>
               <h4 className="font-bold text-slate-900 mb-6">Company</h4>
               <ul className="space-y-4 text-sm text-slate-600">
-                <li><a href="#" className="hover:text-red-600">About Us</a></li>
-                <li><a href="#" className="hover:text-red-600">Careers</a></li>
-                <li><a href="#" className="hover:text-red-600">Blog</a></li>
-                <li><a href="#" className="hover:text-red-600">Contact</a></li>
+                <li><button onClick={() => navigate('/about')} className="hover:text-red-600" data-testid="footer-about-link">About Us</button></li>
+                <li><button onClick={() => navigate('/faq')} className="hover:text-red-600" data-testid="footer-faq-link">FAQ</button></li>
+                <li><button onClick={() => navigate('/contact')} className="hover:text-red-600" data-testid="footer-contact-link">Contact</button></li>
               </ul>
             </div>
             <div>
               <h4 className="font-bold text-slate-900 mb-6">Legal</h4>
               <ul className="space-y-4 text-sm text-slate-600">
-                <li><a href="#" className="hover:text-red-600">Privacy Policy</a></li>
-                <li><a href="#" className="hover:text-red-600">Terms of Service</a></li>
-                <li><a href="#" className="hover:text-red-600">Creator Guidelines</a></li>
+                <li><button onClick={() => navigate('/privacy-policy')} className="hover:text-red-600" data-testid="footer-privacy-link">Privacy Policy</button></li>
+                <li><button onClick={() => navigate('/terms-and-conditions')} className="hover:text-red-600" data-testid="footer-terms-link">Terms of Service</button></li>
               </ul>
             </div>
           </div>
           <div className="border-t border-slate-100 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-sm text-slate-400">© 2025 Influiv Inc. All rights reserved.</p>
             <div className="flex gap-6 text-sm text-slate-400">
-              <a href="#" className="hover:text-slate-900">Privacy</a>
-              <a href="#" className="hover:text-slate-900">Terms</a>
-              <a href="#" className="hover:text-slate-900">Sitemap</a>
+              <button onClick={() => navigate('/privacy-policy')} className="hover:text-slate-900">Privacy</button>
+              <button onClick={() => navigate('/terms-and-conditions')} className="hover:text-slate-900">Terms</button>
+              <button onClick={() => navigate('/faq')} className="hover:text-slate-900">FAQ</button>
             </div>
           </div>
         </div>
