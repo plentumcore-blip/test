@@ -24,8 +24,11 @@ BRAND_ERROR = "#EF4444"
 BRAND_GRAY = "#6B7280"
 BRAND_DARK = "#1F2937"
 
-# Get APP_URL from environment variable with fallback
-APP_URL = os.environ.get("APP_URL", os.environ.get("REACT_APP_BACKEND_URL", ""))
+# Primary application URL - production domain
+APP_URL_DEFAULT = "https://influiv.com"
+
+# Get APP_URL from environment variable with fallback to production URL
+APP_URL = os.environ.get("APP_URL", APP_URL_DEFAULT)
 
 # Email Templates
 EMAIL_TEMPLATES = {
@@ -571,8 +574,8 @@ EMAIL_TEMPLATES = {
 
 
 def get_app_url() -> str:
-    """Get the application URL from environment variables"""
-    return os.environ.get("APP_URL", os.environ.get("REACT_APP_BACKEND_URL", ""))
+    """Get the application URL - defaults to production domain"""
+    return os.environ.get("APP_URL", APP_URL_DEFAULT)
 
 
 class EmailService:
