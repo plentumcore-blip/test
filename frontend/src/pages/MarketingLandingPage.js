@@ -438,24 +438,33 @@ const MarketingLandingPage = () => {
           {/* Feature 2 */}
           <div className="grid md:grid-cols-2 gap-16 items-center">
             <div className="order-2 md:order-1 bg-slate-100 rounded-2xl p-8 border border-slate-200 shadow-lg -rotate-2 hover:rotate-0 transition-transform duration-500">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="bg-white p-2 rounded-lg shadow-sm">
-                  <div className="aspect-[9/16] bg-gradient-to-br from-slate-200 to-slate-300 rounded mb-2 relative">
-                    <div className="absolute bottom-2 right-2 bg-black/50 p-1 rounded">
-                      <Video size={12} className="text-white" />
+              {landingContent.assetOwnershipImage ? (
+                <img 
+                  src={getFileUrl(landingContent.assetOwnershipImage)} 
+                  alt="Asset Library"
+                  className="w-full h-full object-cover rounded-lg"
+                  data-testid="asset-ownership-image"
+                />
+              ) : (
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="bg-white p-2 rounded-lg shadow-sm">
+                    <div className="aspect-[9/16] bg-gradient-to-br from-slate-200 to-slate-300 rounded mb-2 relative">
+                      <div className="absolute bottom-2 right-2 bg-black/50 p-1 rounded">
+                        <Video size={12} className="text-white" />
+                      </div>
                     </div>
+                    <div className="h-2 w-16 bg-slate-100 rounded"></div>
                   </div>
-                  <div className="h-2 w-16 bg-slate-100 rounded"></div>
-                </div>
-                <div className="bg-white p-2 rounded-lg shadow-sm mt-8">
-                  <div className="aspect-[9/16] bg-gradient-to-br from-slate-200 to-slate-300 rounded mb-2 relative">
-                    <div className="absolute bottom-2 right-2 bg-black/50 p-1 rounded">
-                      <Video size={12} className="text-white" />
+                  <div className="bg-white p-2 rounded-lg shadow-sm mt-8">
+                    <div className="aspect-[9/16] bg-gradient-to-br from-slate-200 to-slate-300 rounded mb-2 relative">
+                      <div className="absolute bottom-2 right-2 bg-black/50 p-1 rounded">
+                        <Video size={12} className="text-white" />
+                      </div>
                     </div>
+                    <div className="h-2 w-16 bg-slate-100 rounded"></div>
                   </div>
-                  <div className="h-2 w-16 bg-slate-100 rounded"></div>
                 </div>
-              </div>
+              )}
             </div>
             <div className="order-1 md:order-2">
               <div className="text-red-600 font-bold tracking-wide uppercase mb-3">Asset Ownership</div>
