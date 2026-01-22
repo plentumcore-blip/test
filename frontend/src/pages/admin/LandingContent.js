@@ -133,6 +133,30 @@ export default function AdminLandingContent() {
     }
   };
 
+  const handleSectionImageUpload = async (sectionKey, file) => {
+    const setUploading = sectionKey === 'brandsSectionImage' 
+      ? setUploadingBrandsImage 
+      : setUploadingCreatorsImage;
+    
+    setUploading(true);
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const response = await axios.post(`${API_BASE}/upload`, formData, {
+        withCredentials: true,
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+
+      setContent(prev => ({ ...prev, [sectionKey]: response.data.url }));
+      toast.success('Image uploaded successfully!');
+    } catch (error) {
+      toast.error('Failed to upload image');
+    } finally {
+      setUploading(false);
+    }
+  };
+
   return (
     <div className="flex min-h-screen bg-gray-50">
       <AdminSidebar onLogout={logout} />
