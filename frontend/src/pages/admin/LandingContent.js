@@ -20,10 +20,12 @@ export default function AdminLandingContent() {
     portfolioVideos: [],
     // Section images
     brandsSectionImage: "",
-    creatorsSectionImage: ""
+    creatorsSectionImage: "",
+    assetOwnershipImage: ""
   });
   const [uploadingBrandsImage, setUploadingBrandsImage] = useState(false);
   const [uploadingCreatorsImage, setUploadingCreatorsImage] = useState(false);
+  const [uploadingAssetImage, setUploadingAssetImage] = useState(false);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const { logout } = useAuth();
