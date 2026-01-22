@@ -421,6 +421,62 @@ export default function AdminLandingContent() {
                     )}
                   </div>
                 </div>
+
+                {/* Asset Ownership Section Image */}
+                <div className="mt-6 p-4 border border-gray-200 rounded-lg">
+                  <h3 className="font-semibold text-[#0B1220] mb-3">Asset Ownership Section</h3>
+                  <p className="text-xs text-gray-500 mb-4">
+                    This image appears in the "Asset Ownership" section (Content Library mockup)
+                  </p>
+                  
+                  {content.assetOwnershipImage ? (
+                    <div className="space-y-3">
+                      <div className="relative aspect-video bg-slate-100 rounded-lg overflow-hidden">
+                        <img 
+                          src={content.assetOwnershipImage} 
+                          alt="Asset Ownership Section"
+                          className="w-full h-full object-cover"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setContent(prev => ({ ...prev, assetOwnershipImage: '' }))}
+                          className="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                      <p className="text-xs text-green-600 flex items-center gap-1">
+                        <Check className="w-4 h-4" />
+                        Image uploaded
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="border-2 border-dashed border-gray-200 rounded-lg p-6 text-center">
+                      <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+                      <p className="text-sm text-gray-500 mb-3">Upload an image</p>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => {
+                          const file = e.target.files[0];
+                          if (file) {
+                            if (file.size > 5 * 1024 * 1024) {
+                              toast.error('Image must be under 5MB');
+                              return;
+                            }
+                            handleSectionImageUpload('assetOwnershipImage', file);
+                          }
+                        }}
+                        className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-[#CE3427] file:text-white hover:file:bg-red-700 cursor-pointer"
+                        data-testid="asset-ownership-image-input"
+                      />
+                      <p className="text-xs text-gray-400 mt-2">Recommended: 600x400px (3:2 aspect ratio)</p>
+                    </div>
+                  )}
+                  {uploadingAssetImage && (
+                    <p className="text-sm text-blue-600 mt-2">Uploading...</p>
+                  )}
+                </div>
               </div>
 
               {/* Portfolio Videos Section */}
