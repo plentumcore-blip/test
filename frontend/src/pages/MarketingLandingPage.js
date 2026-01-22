@@ -359,22 +359,33 @@ const MarketingLandingPage = () => {
                   </div>
                 </div>
                 <div className="order-1 md:order-2 bg-white rounded-2xl p-6 shadow-xl border border-slate-100">
-                  <div className="flex gap-3 mb-4">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-400 to-pink-400"></div>
-                    <div>
-                      <div className="text-sm font-bold text-slate-900">@creator_sarah</div>
-                      <div className="text-xs text-slate-500">Top Creator • 52k followers</div>
-                    </div>
-                  </div>
-                  <div className="space-y-3">
-                    <div className="bg-green-50 border border-green-200 rounded-lg p-3 text-sm text-green-800">
-                      <span className="font-semibold">+$85.00</span> payout received
-                    </div>
-                    <div className="bg-slate-50 rounded-lg p-3">
-                      <div className="text-xs text-slate-500 mb-1">Current Balance</div>
-                      <div className="text-2xl font-bold text-slate-900">$1,247.50</div>
-                    </div>
-                  </div>
+                  {landingContent.creatorsSectionImage ? (
+                    <img 
+                      src={getFileUrl(landingContent.creatorsSectionImage)} 
+                      alt="Creator Dashboard"
+                      className="rounded-lg w-full h-64 object-cover mb-4"
+                      data-testid="creators-section-image"
+                    />
+                  ) : (
+                    <>
+                      <div className="flex gap-3 mb-4">
+                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-400 to-pink-400"></div>
+                        <div>
+                          <div className="text-sm font-bold text-slate-900">@creator_sarah</div>
+                          <div className="text-xs text-slate-500">Top Creator • 52k followers</div>
+                        </div>
+                      </div>
+                      <div className="space-y-3">
+                        <div className="bg-green-50 border border-green-200 rounded-lg p-3 text-sm text-green-800">
+                          <span className="font-semibold">+$85.00</span> payout received
+                        </div>
+                        <div className="bg-slate-50 rounded-lg p-3">
+                          <div className="text-xs text-slate-500 mb-1">Current Balance</div>
+                          <div className="text-2xl font-bold text-slate-900">$1,247.50</div>
+                        </div>
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
             )}
