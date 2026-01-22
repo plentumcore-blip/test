@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Save, Plus, Trash2, Video, BarChart3, Upload, Check } from 'lucide-react';
+import { Save, Plus, Trash2, Video, BarChart3, Upload, Check, Image } from 'lucide-react';
 import { toast } from 'sonner';
 import AdminSidebar from '../../components/AdminSidebar';
 import { useAuth } from '../../contexts/AuthContext';
@@ -17,8 +17,13 @@ export default function AdminLandingContent() {
     ],
     videoUrl: "",
     videoTitle: "How Influiv Works",
-    portfolioVideos: []
+    portfolioVideos: [],
+    // Section images
+    brandsSectionImage: "",
+    creatorsSectionImage: ""
   });
+  const [uploadingBrandsImage, setUploadingBrandsImage] = useState(false);
+  const [uploadingCreatorsImage, setUploadingCreatorsImage] = useState(false);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const { logout } = useAuth();
