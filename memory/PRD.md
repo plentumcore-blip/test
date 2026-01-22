@@ -97,18 +97,19 @@ Influiv is a full-stack influencer marketing platform connecting brands with inf
 - ✅ Asynchronous email sending using `asyncio.create_task()` for non-blocking operations
 - ✅ Beautiful HTML email templates with branding
 
-### January 21, 2026 - Email Templates Rebranding
-- ✅ Updated all 16 email templates to use brand colors:
-  - Primary: `#CE3427` (red) - replaced all blue `#1F66FF` colors
-  - Primary Dark: `#A32B20` - replaced `#0E2C7E`
-  - Success: `#10B981` (green) - kept for approval emails
-  - Warning: `#F59E0B` (amber) - kept for bonus/review emails
-  - Error: `#EF4444` (red) - kept for rejection emails
-- ✅ Dynamic URLs now fetched from environment variables:
-  - Priority: 1) `app_url` parameter, 2) DB settings, 3) `APP_URL` env var, 4) `REACT_APP_BACKEND_URL` env var
-  - Added `get_app_url()` helper function
-- ✅ Removed emojis from email subjects for cleaner look
-- ✅ Brand color constants defined at top of file for easy maintenance
+### January 22, 2026 - Section Images & Email Rebranding
+- ✅ Added admin-uploadable images for landing page sections:
+  - **For Brands Section** (Campaign Performance card)
+  - **For Creators Section** (Creator dashboard card)
+  - Admin can upload images from `/admin/landing-content` page
+  - Falls back to default placeholder if no image uploaded
+- ✅ Updated all 16 email templates with brand colors:
+  - Primary: `#CE3427` (red)
+  - All URLs hardcoded to `https://influiv.com`
+- ✅ Files modified:
+  - `/app/frontend/src/pages/admin/LandingContent.js` - Added Section Images upload UI
+  - `/app/frontend/src/pages/MarketingLandingPage.js` - Display uploaded images
+  - `/app/backend/email_service.py` - Brand colors & hardcoded URL
 
 ### January 21, 2026 - Static Informational Pages
 - ✅ Created 5 new static pages with full content from provided document:
