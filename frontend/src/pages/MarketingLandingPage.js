@@ -309,9 +309,18 @@ const MarketingLandingPage = () => {
                   </div>
                 </div>
                 <div className="order-1 md:order-2 bg-white rounded-2xl p-6 shadow-xl border border-slate-100">
-                  <div className="rounded-lg w-full h-64 bg-gradient-to-br from-indigo-100 to-slate-100 flex items-center justify-center">
-                    <TrendingUp size={80} className="text-indigo-300" />
-                  </div>
+                  {landingContent.brandsSectionImage ? (
+                    <img 
+                      src={getFileUrl(landingContent.brandsSectionImage)} 
+                      alt="Campaign Performance"
+                      className="rounded-lg w-full h-64 object-cover"
+                      data-testid="brands-section-image"
+                    />
+                  ) : (
+                    <div className="rounded-lg w-full h-64 bg-gradient-to-br from-indigo-100 to-slate-100 flex items-center justify-center">
+                      <TrendingUp size={80} className="text-indigo-300" />
+                    </div>
+                  )}
                   <div className="mt-4 flex items-center justify-between">
                     <div className="text-sm font-bold text-slate-900">Campaign Performance</div>
                     <div className="text-xs text-green-600 font-medium flex items-center gap-1"><TrendingUp size={12} /> +124% Growth</div>
