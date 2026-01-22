@@ -41,7 +41,8 @@ const MarketingLandingPage = () => {
     videoTitle: "How Influiv Works",
     portfolioVideos: [],
     brandsSectionImage: "",
-    creatorsSectionImage: ""
+    creatorsSectionImage: "",
+    assetOwnershipImage: ""
   });
 
   // Redirect authenticated users to their dashboard
