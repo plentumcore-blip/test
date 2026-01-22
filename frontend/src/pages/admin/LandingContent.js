@@ -292,6 +292,133 @@ export default function AdminLandingContent() {
                 </div>
               </div>
 
+              {/* Section Images */}
+              <div className="card">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+                    <Image className="w-5 h-5 text-purple-600" />
+                  </div>
+                  <div>
+                    <h2 className="text-xl font-bold text-[#0B1220]">Section Images</h2>
+                    <p className="text-sm text-gray-500">Images displayed in the "For Brands" and "For Creators" tabs</p>
+                  </div>
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-6">
+                  {/* Brands Section Image */}
+                  <div className="p-4 border border-gray-200 rounded-lg">
+                    <h3 className="font-semibold text-[#0B1220] mb-3">For Brands Section</h3>
+                    <p className="text-xs text-gray-500 mb-4">
+                      This image appears in the "Campaign Performance" card (For Brands tab)
+                    </p>
+                    
+                    {content.brandsSectionImage ? (
+                      <div className="space-y-3">
+                        <div className="relative aspect-video bg-slate-100 rounded-lg overflow-hidden">
+                          <img 
+                            src={content.brandsSectionImage} 
+                            alt="Brands Section"
+                            className="w-full h-full object-cover"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setContent(prev => ({ ...prev, brandsSectionImage: '' }))}
+                            className="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                        <p className="text-xs text-green-600 flex items-center gap-1">
+                          <Check className="w-4 h-4" />
+                          Image uploaded
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="border-2 border-dashed border-gray-200 rounded-lg p-6 text-center">
+                        <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+                        <p className="text-sm text-gray-500 mb-3">Upload an image</p>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => {
+                            const file = e.target.files[0];
+                            if (file) {
+                              if (file.size > 5 * 1024 * 1024) {
+                                toast.error('Image must be under 5MB');
+                                return;
+                              }
+                              handleSectionImageUpload('brandsSectionImage', file);
+                            }
+                          }}
+                          className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-[#CE3427] file:text-white hover:file:bg-red-700 cursor-pointer"
+                          data-testid="brands-section-image-input"
+                        />
+                        <p className="text-xs text-gray-400 mt-2">Recommended: 600x400px (3:2 aspect ratio)</p>
+                      </div>
+                    )}
+                    {uploadingBrandsImage && (
+                      <p className="text-sm text-blue-600 mt-2">Uploading...</p>
+                    )}
+                  </div>
+
+                  {/* Creators Section Image */}
+                  <div className="p-4 border border-gray-200 rounded-lg">
+                    <h3 className="font-semibold text-[#0B1220] mb-3">For Creators Section</h3>
+                    <p className="text-xs text-gray-500 mb-4">
+                      This image appears in the "Asset Library" card (For Creators tab)
+                    </p>
+                    
+                    {content.creatorsSectionImage ? (
+                      <div className="space-y-3">
+                        <div className="relative aspect-video bg-slate-100 rounded-lg overflow-hidden">
+                          <img 
+                            src={content.creatorsSectionImage} 
+                            alt="Creators Section"
+                            className="w-full h-full object-cover"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setContent(prev => ({ ...prev, creatorsSectionImage: '' }))}
+                            className="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                        <p className="text-xs text-green-600 flex items-center gap-1">
+                          <Check className="w-4 h-4" />
+                          Image uploaded
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="border-2 border-dashed border-gray-200 rounded-lg p-6 text-center">
+                        <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+                        <p className="text-sm text-gray-500 mb-3">Upload an image</p>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => {
+                            const file = e.target.files[0];
+                            if (file) {
+                              if (file.size > 5 * 1024 * 1024) {
+                                toast.error('Image must be under 5MB');
+                                return;
+                              }
+                              handleSectionImageUpload('creatorsSectionImage', file);
+                            }
+                          }}
+                          className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-[#CE3427] file:text-white hover:file:bg-red-700 cursor-pointer"
+                          data-testid="creators-section-image-input"
+                        />
+                        <p className="text-xs text-gray-400 mt-2">Recommended: 600x400px (3:2 aspect ratio)</p>
+                      </div>
+                    )}
+                    {uploadingCreatorsImage && (
+                      <p className="text-sm text-blue-600 mt-2">Uploading...</p>
+                    )}
+                  </div>
+                </div>
+              </div>
+
               {/* Portfolio Videos Section */}
               <div className="card">
                 <div className="flex items-center justify-between mb-6">
