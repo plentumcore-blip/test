@@ -138,7 +138,9 @@ export default function AdminLandingContent() {
   const handleSectionImageUpload = async (sectionKey, file) => {
     const setUploading = sectionKey === 'brandsSectionImage' 
       ? setUploadingBrandsImage 
-      : setUploadingCreatorsImage;
+      : sectionKey === 'creatorsSectionImage'
+      ? setUploadingCreatorsImage
+      : setUploadingAssetImage;
     
     setUploading(true);
     const formData = new FormData();
