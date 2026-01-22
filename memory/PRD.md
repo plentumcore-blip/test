@@ -101,6 +101,7 @@ Influiv is a full-stack influencer marketing platform connecting brands with inf
 - ✅ Added admin-uploadable images for landing page sections:
   - **For Brands Section** (Campaign Performance card)
   - **For Creators Section** (Creator dashboard card)
+  - **Asset Ownership Section** (Content Library mockup)
   - Admin can upload images from `/admin/landing-content` page
   - Falls back to default placeholder if no image uploaded
 - ✅ Updated all 16 email templates with brand colors:
